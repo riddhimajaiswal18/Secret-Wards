@@ -11,8 +11,8 @@ rapidfuzz
 jellyfish
 
 # Validation and format support (fhir.resources 7+ uses Pydantic 2)
-"pydantic>=2,<3"
-"fhir.resources>=7,<9"
+pydantic>=2,<3
+fhir.resources>=7,<9
 jsonschema
 
 # Scanned documents: PDF text layers, image metadata, OCR (all optional at run time)
