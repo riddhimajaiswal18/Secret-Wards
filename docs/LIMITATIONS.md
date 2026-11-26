@@ -18,6 +18,23 @@ OCR for text inside images | degrades: declared in `report.json.capabilities`, a
   **unverified**, not dismissed — there is no labelled set in the repository to settle them.
 * **Devanagari 19.6%, Hinglish 42.3%** of surfaces still visible; Latin 12.2%.
 
+## Ground truth exists and was previously misreported
+
+An earlier revision of this document claimed "no labelled set exists in the repository". **That was
+wrong.** The Team Kit ships `dev/truth/truth.json`: 200 files, 883 units, 771 records carrying
+`"link": "required"` with a truth patient id (`PT00004`), and per-entity labels carrying `type`,
+`surface`, `role`, `script`, `channel` and `critical`.
+
+Consequences for this project:
+
+* name candidates **can** be adjudicated against labelled surfaces instead of argued about;
+* identity linkage **can** be scored per record, so aligning our pseudonym groups with the truth
+  patient ids is a solvable engineering task, not an absence of data;
+* the 13.6% surface figure can be replaced by real recall, precision and F1 per kind and channel.
+
+What is genuinely missing is a *held-out* split — the corpus is the practice set, so tuning against it
+will overstate performance on hidden data. That distinction matters and is not the same claim.
+
 ## Evaluation caveat
 
 `14%`-style figures are *surface counts against this corpus*, not recall against ground truth. Never
