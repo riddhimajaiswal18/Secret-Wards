@@ -14,6 +14,8 @@ class QuarantineReason(str, Enum):
     TOO_LARGE = "too-large"
     EXCESSIVE_DEPTH = "excessive_depth"
     MALFORMED_JSON = "malformed_json"
+    NON_FINITE_NUMBER = "non_finite_number"
+    DUPLICATE_KEYS = "duplicate_keys"
     MALFORMED_XML = "malformed_xml"
     XML_ENTITY_FORBIDDEN = "xml_entity_forbidden"
     MALFORMED_DELIMITED = "malformed_delimited_file"
@@ -44,7 +46,25 @@ def binary_reason(raw: bytes) -> QuarantineReason | None:
     return None
 
 
+_ALIASES = {
+    "empty_file": "empty",
+    "not_text": "not-text",
+    "too_large": "too-large",
+    "input_not_found": "unreadable",
+    "input_read_error": "unreadable",
+    "depth_limit_exceeded": "excessive_depth",
+    "xml_depth_limit_exceeded": "excessive_depth",
+    "malformed_or_unsupported_content": "unparsed",
+    "not_fhir_bundle": "unsupported_format",
+    "invalid_fhir_bundle": "malformed_json",
+    "xml_entity_forbidden": "xml_entity_forbidden",
+    "unsupported_encoding": "unsupported_encoding",
+}
+
+
 def normalise_reason(raw: str) -> str:
     """Fold parser text into the enum vocabulary; unknown values become `unparsed`."""
     cleaned = raw.replace("ERROR:", "").strip().lower().replace(" ", "_")
+    if cleaned in _ALIASES:
+        return _ALIASES[cleaned]
     return cleaned if cleaned in {r.value for r in QuarantineReason} else QuarantineReason.UNPARSED.value

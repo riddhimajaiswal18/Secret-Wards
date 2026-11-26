@@ -15,7 +15,8 @@ from src.ingestion.ir_json import json_layout, parse_json_ir
 from src.ingestion.text_parser import parse_text_ir
 
 _REASONS = {
-    "depth_limit_exceeded": "excessive_depth",
+    "non_finite_number": "non_finite_number",
+    "depth_limit_exceeded": "depth_limit_exceeded",
     "malformed_json": "malformed_json",
     "malformed_fhir_json": "malformed_fhir_json",
     "invalid_fhir_bundle_structure": "invalid_fhir_bundle",
@@ -28,8 +29,13 @@ _REASONS = {
 
 
 def _reason(exc: Exception) -> str:
-    """Map a parser exception to a stable reason code. Never carries source text."""
-    return _REASONS.get(str(exc), "malformed_or_unsupported_content")
+    """Pass a parser's own code through verbatim; unknown text becomes a generic bucket.
+
+    `parse_status` is a parser-level fact (depth_limit_exceeded); the release vocabulary
+    (excessive_depth) is applied later, in the report layer, by normalise_reason().
+    """
+    code = str(exc)
+    return code if code in _REASONS else "malformed_or_unsupported_content"
 from src.ingestion.xml_parser import parse_xml_ir
 
 
@@ -91,10 +97,7 @@ def parse_document_file(path: str | Path, *, document_id: str | None = None,
                                        encoding=encoding, bom=bom))
         return finish(_json_or_fhir(text, document_id, source_path.name, encoding, bom=bom))
     except (ValueError, RecursionError) as exc:
-        reason = str(exc) if str(exc) in {"depth_limit_exceeded", "malformed_xml",
-                                          "xml_depth_limit_exceeded", "xml_dtd_or_entity_forbidden", "malformed_delimited_file",
-                                          "invalid_fhir_bundle_structure", "invalid_fhir_bundle_entry"} \
-            else "malformed_or_unsupported_content"
+        reason = _reason(exc)
         return finish(_parse_error(document_id, source_path.name, suffix[1:], reason))
 
 

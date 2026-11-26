@@ -22,6 +22,11 @@ def json_layout(text: str, bom: bool = False) -> dict:
     return {"bom": bom, "indent": indent, "trailing_newline": text.endswith("\n")}
 
 
+def _reject_non_finite(token: str):
+    """NaN/Infinity are Python extensions, not JSON. Re-emitting them produces invalid output."""
+    raise ValueError("non_finite_number")
+
+
 class JSONIRParseError(ValueError):
     """Sanitized parse failure that does not carry raw patient content."""
 
@@ -51,14 +56,22 @@ def parse_json_ir(text: str, *, document_id: str, filename: str | None = None,
                   encoding: str = "utf-8", bom: bool = False) -> IntermediateRepresentation:
     _check_depth(text)
     try:
-        value: Any = json.loads(text)
-    except (json.JSONDecodeError, RecursionError, ValueError):
-        raise JSONIRParseError("JSON input could not be parsed safely") from None
+        value: Any = json.loads(text, parse_constant=_reject_non_finite)
+    except ValueError as exc:
+        code = str(exc) if str(exc) in {"non_finite_number", "duplicate_keys"} else "malformed_json"
+        raise JSONIRParseError(code) from None
+    except (json.JSONDecodeError, RecursionError):
+        raise JSONIRParseError("malformed_json") from None
     try:
         return build_json_ir(value, document_id=document_id, filename=filename, encoding=encoding,
                              original_layout=json_layout(text, bom))
-    except (RecursionError, TypeError, ValueError):
-        raise JSONIRParseError("JSON structure could not be represented safely") from None
+    except (RecursionError, TypeError):
+        raise JSONIRParseError("malformed_json") from None
+    except ValueError as exc:
+        # Preserve the specific code (depth, duplicate keys, non-finite) instead of collapsing it.
+        code = str(exc)
+        raise JSONIRParseError(code if code in {"depth_limit_exceeded", "duplicate_keys",
+                                                "non_finite_number"} else "malformed_json") from None
 
 
 def _decode_json_bytes(raw: bytes) -> tuple[str, str]:
