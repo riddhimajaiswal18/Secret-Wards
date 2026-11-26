@@ -9,6 +9,12 @@ from typing import Any, Iterator, Literal
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
+# pydantic_core refuses to serialise beyond ~400 nesting levels; a document that parses but
+# cannot be written is worse than one rejected early, so the cap sits well below that limit.
+MAX_DEPTH = 96
+MAX_FILE_MB = 64
+
+
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra="allow", validate_assignment=True)
 
@@ -288,7 +294,7 @@ def build_json_ir(data: Any, *, document_id: str, filename: str | None = None,
                   encoding: str = "utf-8", source_format: str = "json",
                   arrangement: str | None = None,
                   original_layout: dict[str, Any] | None = None,
-                  max_depth: int = 512) -> IntermediateRepresentation:
+                  max_depth: int = MAX_DEPTH) -> IntermediateRepresentation:
     """Build the envelope around one authoritative format-native data core."""
     stack = [(data, 0)]
     seen_containers: set[int] = set()

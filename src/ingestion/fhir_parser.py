@@ -5,6 +5,7 @@ import json
 from typing import Any
 
 from src.ir import IntermediateRepresentation, build_json_ir
+from src.ingestion.ir_json import json_layout
 
 
 def parse_fhir_ir(text: str, *, document_id: str, filename: str,
@@ -22,4 +23,4 @@ def parse_fhir_ir(text: str, *, document_id: str, filename: str,
             raise ValueError("invalid_fhir_bundle_entry") from None
     return build_json_ir(value, document_id=document_id, filename=filename, encoding=encoding,
                          source_format="fhir", arrangement="FHIR_R4_bundle",
-                         original_layout={"bom": bom})
+                         original_layout=json_layout(text, bom))

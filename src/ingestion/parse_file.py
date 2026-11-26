@@ -9,6 +9,12 @@ from pathlib import Path
 from src.ingestion.file_router import parse_document_file
 
 
+def _document_id(relative) -> str:
+    """Stable per-file identity derived from the relative path, never the bare stem."""
+    import hashlib
+    return hashlib.sha256(relative.as_posix().encode()).hexdigest()[:16]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Parse a Team Kit document into Secret Wards IR")
     parser.add_argument("--input", required=True)
@@ -50,8 +56,10 @@ def main() -> int:
                 output_file.write_text(ir.to_deterministic_json(), encoding="utf-8")
                 status = "parsed" if ir.validation.parse_status == "SUCCESS" else "error"
                 reason = ir.validation.parse_status if status == "error" else None
-            except OSError:
-                status, reason = "error", "output_or_input_io_error"
+            except (OSError, ValueError, RecursionError, UnicodeError) as exc:
+                # One hostile file must never take the batch down; a typed reason is enough.
+                status = "error"
+                reason = "unhandled_" + type(exc).__name__.lower()
             results.append({"input": relative.as_posix(),
                             "output": output_file.relative_to(output).as_posix(),
                             "status": status, "reason": reason})

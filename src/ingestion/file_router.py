@@ -6,13 +6,30 @@ import csv
 from pathlib import Path
 from typing import Any
 
-from src.ir import (IntermediateRepresentation, ProcessingStatus, SourceMetadata,
+from src.ir import (MAX_FILE_MB, IntermediateRepresentation, ProcessingStatus, SourceMetadata,
                     SourceStructure, ValidationResult)
 from src.ingestion.csv_tsv import parse_delimited_ir
 from src.ingestion.encoding import DecodeError, decode_bytes
 from src.ingestion.fhir_parser import parse_fhir_ir
-from src.ingestion.ir_json import parse_json_ir
+from src.ingestion.ir_json import json_layout, parse_json_ir
 from src.ingestion.text_parser import parse_text_ir
+
+_REASONS = {
+    "depth_limit_exceeded": "excessive_depth",
+    "malformed_json": "malformed_json",
+    "malformed_fhir_json": "malformed_fhir_json",
+    "invalid_fhir_bundle_structure": "invalid_fhir_bundle",
+    "invalid_fhir_bundle_entry": "invalid_fhir_bundle",
+    "not_fhir_bundle": "not_fhir_bundle",
+    "xml_dtd_or_entity_forbidden": "xml_entity_forbidden",
+    "malformed_xml": "malformed_xml",
+    "malformed_delimited_file": "malformed_delimited_file",
+}
+
+
+def _reason(exc: Exception) -> str:
+    """Map a parser exception to a stable reason code. Never carries source text."""
+    return _REASONS.get(str(exc), "malformed_or_unsupported_content")
 from src.ingestion.xml_parser import parse_xml_ir
 
 
@@ -42,6 +59,8 @@ def parse_document_file(path: str | Path, *, document_id: str | None = None,
                                    "unsupported_format"))
     try:
         raw = source_path.read_bytes()
+        if len(raw) > MAX_FILE_MB * 1024 * 1024:
+            return _parse_error(document_id, source_path.name, suffix[1:], "too-large")
         if not raw:
             return finish(_parse_error(document_id, source_path.name, suffix[1:], "empty_file"))
         text, encoding = decode_bytes(raw)

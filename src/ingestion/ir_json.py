@@ -10,6 +10,18 @@ from typing import Any
 from src.ir import IntermediateRepresentation, build_json_ir
 
 
+def json_layout(text: str, bom: bool = False) -> dict:
+    """Capture the whitespace contract of a JSON document so re-emission is byte-stable."""
+    indent = None
+    for line in text.splitlines()[1:8]:
+        stripped = line.lstrip()
+        if not stripped:
+            continue
+        indent = len(line) - len(stripped) or None
+        break
+    return {"bom": bom, "indent": indent, "trailing_newline": text.endswith("\n")}
+
+
 class JSONIRParseError(ValueError):
     """Sanitized parse failure that does not carry raw patient content."""
 
@@ -44,7 +56,7 @@ def parse_json_ir(text: str, *, document_id: str, filename: str | None = None,
         raise JSONIRParseError("JSON input could not be parsed safely") from None
     try:
         return build_json_ir(value, document_id=document_id, filename=filename, encoding=encoding,
-                             original_layout={"bom": bom})
+                             original_layout=json_layout(text, bom))
     except (RecursionError, TypeError, ValueError):
         raise JSONIRParseError("JSON structure could not be represented safely") from None
 

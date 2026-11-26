@@ -1,6 +1,14 @@
 # Secret Wards
 
-An offline, CPU-only Python privacy firewall for synthetic multilingual healthcare exports. The repository currently implements file ingestion into an intermediate representation (IR), but not PII detection, linkage, privacy transformations, or the final release-output pipeline. No anonymization or output-contract success is claimed.
+An offline, CPU-only Python privacy firewall for synthetic multilingual healthcare exports.
+
+**Current state (honest):** ingestion, the intermediate representation, the locator-based edit
+engine and the release-output pipeline are implemented and verified. `validate_output.py` reports
+**CONTRACT OK** on the practice set: 195 of 200 files are sanitized, 5 are quarantined with typed
+reasons, two runs are byte-identical, and `parse → serialize` reproduces the input for 189 of the
+195 emitted files. PII detection, linkage, pseudonymization and the privacy transformations are
+**still stubs**, so the release currently removes nothing — the practice self-check reports
+**99.8% of personal data still visible**. Nothing here is yet a privacy guarantee.
 
 ## Challenge constraints
 
@@ -18,7 +26,7 @@ The official Team Kit describes challenging encodings (UTF-8 BOM, UTF-16, cp1252
 python main.py --input {input} --output {output}
 ```
 
-The initial `main.py` only parses these arguments and reports that processing is not implemented. It does not create sanitized output.
+`main.py` runs the pipeline and writes `sanitized/`, `report.json` and `records.jsonl`.
 
 ## Setup
 

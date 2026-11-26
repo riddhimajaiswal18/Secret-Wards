@@ -202,8 +202,15 @@ def serialize_ir(ir: IntermediateRepresentation) -> bytes:
     if ir.processing_status == ProcessingStatus.QUARANTINED:
         raise EditFailure("quarantined_document_cannot_be_serialized")
     fmt, data = ir.source.format, ir.structure.data
+    layout = ir.structure.original_layout or {}
     if fmt in {"json", "fhir"}:
-        text = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
+        indent = layout.get("indent", 2)
+        if indent is None:
+            text = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+        else:
+            text = json.dumps(data, ensure_ascii=False, indent=int(indent))
+        if layout.get("trailing_newline", True):
+            text += "\n"
     elif fmt in {"csv", "tsv"}:
         layout = ir.structure.original_layout
         buffer = io.StringIO(newline="")
@@ -212,13 +219,18 @@ def serialize_ir(ir: IntermediateRepresentation) -> bytes:
                             doublequote=layout.get("doublequote", True),
                             escapechar=layout.get("escapechar"),
                             quoting=layout.get("quoting", csv.QUOTE_MINIMAL),
-                            lineterminator=layout.get("lineterminator", "\r\n"))
+                            lineterminator=layout.get("lineterminator", "\n"))
         writer.writerow(data["header"])
         writer.writerows(data["rows"])
         text = buffer.getvalue()
     elif fmt == "text":
         text = data
     elif fmt == "xml":
+        for prefix, uri in (layout.get("namespaces") or []):
+            try:
+                ET.register_namespace(prefix, uri)
+            except ValueError:
+                pass
         text = ET.tostring(_xml_element(data), encoding="unicode")
         declaration = ir.structure.original_layout.get("xml_declaration")
         if isinstance(declaration, str) and declaration:
