@@ -19,7 +19,7 @@ htmlcov/
 *.pem
 data/
 input/
-output/
+/output/
 outputs/
 batch-ir/
 output-ir.json
