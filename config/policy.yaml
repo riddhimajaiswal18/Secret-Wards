@@ -6,7 +6,16 @@ supported_formats:
   extensions: [.csv, .tsv, .json, .txt, .xml]
   content_sniffing: required
   fhir_release: R4
-  unsupported_formats: [pdf, jpg]
+  scanned_documents:
+    # PDF/image inputs are extracted, scrubbed and released as declared derived text.
+    enabled: true
+    backends: [pdf-text-layer, pdf-raw-stream, exif, ocr]
+    export_derived_text: true # -> sanitized/<original name>.txt, declared in report.json
+    max_pages: 5
+    max_chars: 200000
+    ocr_dpi: 200
+    # A missing OCR backend must never fail the run: the file is quarantined with this reason.
+    degrade_reason: ocr_unavailable
 
 languages:
   supported: [English, Hindi-Devanagari, Hinglish]

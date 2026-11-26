@@ -415,7 +415,9 @@
 {"file": "sanitized/misc/hl7_cda_discharge.xml", "loc": "span:0:0", "patient": null}
 {"file": "sanitized/misc/mislabeled_export.csv", "loc": "path:$", "patient": null}
 {"file": "sanitized/misc/patient_index.json", "loc": "path:$", "patient": null}
+{"file": "sanitized/misc/photo_rx.jpg.txt", "loc": "span:0:0", "patient": null}
 {"file": "sanitized/misc/scanned_consent_form.json", "loc": "path:$", "patient": null}
+{"file": "sanitized/misc/scanned_discharge.pdf.txt", "loc": "span:0:0", "patient": null}
 {"file": "sanitized/misc/ward_vitals_sheet.csv", "loc": "row:0", "patient": null}
 {"file": "sanitized/misc/ward_vitals_sheet.csv", "loc": "row:1", "patient": null}
 {"file": "sanitized/misc/ward_vitals_sheet.csv", "loc": "row:2", "patient": null}

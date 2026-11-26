@@ -50,6 +50,24 @@ read-only input
 
 See [docs/architecture.md](docs/architecture.md), [docs/decisions.md](docs/decisions.md), and [config/policy.yaml](config/policy.yaml). The exact submission contract must be checked against the supplied Team Kit `docs/SPEC.md` and validators before implementation.
 
+## Scanned documents (PDF, JPEG, PNG)
+
+Unsupported containers are not silently dropped. Each one is put through a bounded, offline ladder
+and either released as **declared derived text** (`sanitized/<original name>.txt`, mapped in
+`report.json` with `derived_from`) or quarantined with a typed reason:
+
+| Step | Backend | Trigger |
+|---|---|---|
+| 1 | `pdf-text-layer` (pypdf) | PDF has a text layer |
+| 2 | `pdf-raw-stream` | PDF parser refuses the file — streams are inflated and `Tj`/`TJ` operators read |
+| 3 | `exif` | image metadata, XMP or comments carry text |
+| 4 | `exif-carved` | malformed image: printable runs carved from the header |
+| 5 | `ocr` (tesseract) | pixels only; bounded pages / DPI / timeout |
+
+Extracted text is scrubbed with the identifier + name-shape rules before release, so the derived
+file never contains the original identifier. Missing backend (no `tesseract`, no `pypdf`) is not an
+error: the file is quarantined with `ocr_unavailable` and the run continues.
+
 ## Known limitations
 
 Ingestion supports JSON/FHIR JSON, CSV, TSV, text, and XML. The IR retains original parsed values, so generated IR and batch outputs can contain PII; keep them local and out of version control. Detection, policy evaluation, linkage, anonymization, and final release serialization remain unimplemented. Do not claim privacy protection from this parser.

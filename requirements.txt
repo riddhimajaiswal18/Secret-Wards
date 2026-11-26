@@ -15,6 +15,11 @@ jellyfish
 "fhir.resources>=7,<9"
 jsonschema
 
+# Scanned documents: PDF text layers, image metadata, OCR (all optional at run time)
+pypdf
+pillow
+pytesseract
+
 # Encryption and policy configuration
 cryptography
 PyYAML

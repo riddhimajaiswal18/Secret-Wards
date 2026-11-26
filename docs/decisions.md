@@ -44,3 +44,20 @@ The Team Kit starter itself uses only the Python standard library, so it establi
 ## Canonical source representation
 
 `structure.data` is the single authoritative store of parsed source values. Its shape is format-specific: native ordered JSON objects/lists, CSV/TSV header and row arrays, a complete text string, or the XML element tree. `original_layout` stores source-format context needed to interpret the core. The serialized `fields[]` list was removed because it held no unique source values or populated schema/sensitivity data; names, types, parent relationships, and presence can be derived. `iter_field_metadata(ir)` supplies those details on demand, including missing-cell metadata for ragged delimited rows. Findings remain sparse in locator-indexed annotations.
+
+## ADR-7 — Scanned documents are extracted, scrubbed and released as derived text
+
+**Context.** PDF/JPEG inputs are marked "either" by the kit: quarantining is accepted, copying is
+penalised. In the practice set one PDF carries a text layer (`Patient: … Mob …`) and one JPEG hides
+a patient name in its EXIF description, so "unsupported" does not mean "unreadable".
+
+**Decision.** A bounded offline ladder (text layer → raw stream carve → EXIF → printable-run carve →
+OCR) extracts text; the tier-0 scrubber removes identifiers and name-shaped runs; the result is
+written as `sanitized/<name>.txt` and declared in the report with its backend. Absent tooling
+degrades to quarantine, never to failure.
+
+**Consequences.** Two additional inputs are now processed instead of dropped, with zero raw copies.
+OCR is a system dependency (tesseract) and is optional by design; page count, character count, DPI
+and timeout are capped so a hostile file cannot exhaust the sandbox. Pixel-level redaction of the
+original image is deliberately **not** attempted: writing a partially sanitised bitmap risks
+publishing the identifier it could not detect.

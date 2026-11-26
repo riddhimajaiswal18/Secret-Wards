@@ -1,13 +1,13 @@
 {
   "counts": {
-    "files_quarantined": 5,
-    "files_sanitized": 195,
+    "files_quarantined": 3,
+    "files_sanitized": 197,
     "files_total": 200,
-    "identifiers_detected": 0,
+    "identifiers_detected": 3,
     "records_generalized": 0,
     "records_linked": 0,
-    "records_processed": 604,
-    "records_quarantined": 5,
+    "records_processed": 606,
+    "records_quarantined": 3,
     "records_suppressed": 0
   },
   "files": [
@@ -726,11 +726,14 @@
       "status": "sanitized"
     },
     {
+      "derived_from": "exif-carved",
       "input_sha256": "545d612719ef21751e821337a9a72f5d8afcd8f5929d140808c4e37fc76314e6",
-      "kind": "jpg",
+      "kind": "derived-text",
+      "output": "sanitized/misc/photo_rx.jpg.txt",
+      "pages": 1,
       "path": "misc/photo_rx.jpg",
-      "reason": "binary-image",
-      "status": "quarantined"
+      "records": 1,
+      "status": "sanitized"
     },
     {
       "input_sha256": "9bb202a4edf99099e28f8cdb1be0c8df7f681625dfb071445849d8d1612aab68",
@@ -740,11 +743,14 @@
       "status": "sanitized"
     },
     {
+      "derived_from": "pdf-raw-stream",
       "input_sha256": "03ba7a3e2ee45aef33e292a0e60a9ff8acd96ce37a12f226a6a1e4a5e5c873c0",
-      "kind": "pdf",
+      "kind": "derived-text",
+      "output": "sanitized/misc/scanned_discharge.pdf.txt",
+      "pages": 1,
       "path": "misc/scanned_discharge.pdf",
-      "reason": "binary-pdf",
-      "status": "quarantined"
+      "records": 1,
+      "status": "sanitized"
     },
     {
       "input_sha256": "b4bebb0bd74872503fa6166007f412d6398a091dd603c869a43b62e186d20770",
@@ -1430,27 +1436,17 @@
       "reason": "unparsed"
     },
     {
-      "input_sha256": "545d612719ef21751e821337a9a72f5d8afcd8f5929d140808c4e37fc76314e6",
-      "path": "misc/photo_rx.jpg",
-      "reason": "binary-image"
-    },
-    {
-      "input_sha256": "03ba7a3e2ee45aef33e292a0e60a9ff8acd96ce37a12f226a6a1e4a5e5c873c0",
-      "path": "misc/scanned_discharge.pdf",
-      "reason": "binary-pdf"
-    },
-    {
       "input_sha256": "b4bebb0bd74872503fa6166007f412d6398a091dd603c869a43b62e186d20770",
       "path": "misc/truncated_opd.json",
       "reason": "unparsed"
     }
   ],
   "resources": {
-    "peak_rss_mb": 30.6
+    "peak_rss_mb": 63.6
   },
   "schema_version": "1.0",
   "submission": "secret-wards",
   "timing": {
-    "seconds": 0.082
+    "seconds": 0.157
   }
 }
