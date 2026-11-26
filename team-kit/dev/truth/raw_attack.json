@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "result": {
+    "records_attacked": 773,
+    "patients_present": 48,
+    "direct_exposure": 1.0,
+    "record_linkage_risk": 0.9218304819183674,
+    "unique_records": 0.7011642949547219,
+    "confident_record_reid": 0.8357050452781372,
+    "patients_reidentified": 0.9791666666666666,
+    "targeted_success": 0.9999995249167136,
+    "targets": 14,
+    "attribute_disclosure": 0.6428571428571429,
+    "decoy_false_claims": 0.0,
+    "recovered_global_shift_days": 0,
+    "targeted_signal_hits": {
+      "date": 20,
+      "condition": 18,
+      "stay": 3
+    },
+    "clusters": 209,
+    "pseudonym_inversion": {
+      "rate": 0.0
+    },
+    "cross_release": null
+  }
+}
