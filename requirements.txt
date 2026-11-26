@@ -2,9 +2,9 @@
 charset-normalizer
 indic-transliteration
 
-# Phone and date parsing
+# Phone and country metadata; dates use Python's standard library
 phonenumbers
-dateparser
+pycountry
 
 # Record comparison
 rapidfuzz

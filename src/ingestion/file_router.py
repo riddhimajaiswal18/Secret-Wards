@@ -29,50 +29,54 @@ def _parse_error(document_id: str, filename: str, source_format: str,
     )
 
 
-def parse_document_file(path: str | Path, *, document_id: str | None = None) -> IntermediateRepresentation:
+def parse_document_file(path: str | Path, *, document_id: str | None = None,
+                        source_identity: str | None = None) -> IntermediateRepresentation:
     source_path = Path(path)
     suffix = source_path.suffix.lower()
     document_id = document_id or source_path.stem
+    def finish(ir: IntermediateRepresentation) -> IntermediateRepresentation:
+        ir.source.source_identity = source_identity
+        return ir
     if suffix not in {".csv", ".tsv", ".json", ".txt", ".xml"}:
-        return _parse_error(document_id, source_path.name, suffix.lstrip(".") or "unknown",
-                            "unsupported_format")
+        return finish(_parse_error(document_id, source_path.name, suffix.lstrip(".") or "unknown",
+                                   "unsupported_format"))
     try:
         raw = source_path.read_bytes()
         if not raw:
-            return _parse_error(document_id, source_path.name, suffix[1:], "empty_file")
+            return finish(_parse_error(document_id, source_path.name, suffix[1:], "empty_file"))
         text, encoding = decode_bytes(raw)
         bom = raw.startswith((b"\xef\xbb\xbf", b"\xff\xfe", b"\xfe\xff"))
     except FileNotFoundError:
-        return _parse_error(document_id, source_path.name, suffix[1:], "input_not_found")
+        return finish(_parse_error(document_id, source_path.name, suffix[1:], "input_not_found"))
     except OSError:
-        return _parse_error(document_id, source_path.name, suffix[1:], "input_read_error")
+        return finish(_parse_error(document_id, source_path.name, suffix[1:], "input_read_error"))
     except DecodeError:
-        return _parse_error(document_id, source_path.name, suffix[1:], "unsupported_encoding")
+        return finish(_parse_error(document_id, source_path.name, suffix[1:], "unsupported_encoding"))
 
     try:
         if suffix == ".csv":
             # The kit contains a JSON export mislabeled as CSV; content wins over suffix.
             if text.lstrip().startswith(("{", "[")):
-                return _json_or_fhir(text, document_id, source_path.name, encoding, bom=bom)
+                return finish(_json_or_fhir(text, document_id, source_path.name, encoding, bom=bom))
             delimiter = _sniff_delimiter(text)
-            return parse_delimited_ir(text, document_id=document_id, filename=source_path.name,
-                                      encoding=encoding, delimiter=delimiter, bom=bom)
+            return finish(parse_delimited_ir(text, document_id=document_id, filename=source_path.name,
+                                             encoding=encoding, delimiter=delimiter, bom=bom))
         if suffix == ".tsv":
-            return parse_delimited_ir(text, document_id=document_id, filename=source_path.name,
-                                      encoding=encoding, delimiter="\t", bom=bom)
+            return finish(parse_delimited_ir(text, document_id=document_id, filename=source_path.name,
+                                             encoding=encoding, delimiter="\t", bom=bom))
         if suffix == ".txt":
-            return parse_text_ir(text, document_id=document_id, filename=source_path.name,
-                                 encoding=encoding, bom=bom)
+            return finish(parse_text_ir(text, document_id=document_id, filename=source_path.name,
+                                        encoding=encoding, bom=bom))
         if suffix == ".xml":
-            return parse_xml_ir(text, document_id=document_id, filename=source_path.name,
-                                encoding=encoding, bom=bom)
-        return _json_or_fhir(text, document_id, source_path.name, encoding, bom=bom)
+            return finish(parse_xml_ir(text, document_id=document_id, filename=source_path.name,
+                                       encoding=encoding, bom=bom))
+        return finish(_json_or_fhir(text, document_id, source_path.name, encoding, bom=bom))
     except (ValueError, RecursionError) as exc:
         reason = str(exc) if str(exc) in {"depth_limit_exceeded", "malformed_xml",
                                           "xml_depth_limit_exceeded", "xml_dtd_or_entity_forbidden", "malformed_delimited_file",
                                           "invalid_fhir_bundle_structure", "invalid_fhir_bundle_entry"} \
             else "malformed_or_unsupported_content"
-        return _parse_error(document_id, source_path.name, suffix[1:], reason)
+        return finish(_parse_error(document_id, source_path.name, suffix[1:], reason))
 
 
 def _check_nesting(text: str, limit: int = 512) -> None:

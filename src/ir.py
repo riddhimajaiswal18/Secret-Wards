@@ -37,6 +37,8 @@ class LinkageStatus(str, Enum):
 
 class SourceMetadata(StrictModel):
     format: str
+    # Optional upstream/source-system identity is distinct from document_id.
+    source_identity: str | None = None
     encoding: str | None = None
     detected_arrangement: str | None = None
     original_filename: str | None = None
@@ -108,6 +110,24 @@ class TransformationRecord(StrictModel):
     reversible: bool
 
 
+class NormalizationStatus(str, Enum):
+    SUCCESS = "success"
+    AMBIGUOUS = "ambiguous"
+    INVALID = "invalid"
+    UNSUPPORTED = "unsupported"
+    NOT_APPLICABLE = "not_applicable"
+
+
+class NormalizationResult(StrictModel):
+    """Sparse derived value; ``locator`` references the untouched source value."""
+    locator: str
+    normalization_type: str
+    normalized_value: Any = None
+    status: NormalizationStatus
+    warnings: list[str] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)
+
+
 class ValidationResult(StrictModel):
     parse_status: str
     structure_preserved: bool | None = None
@@ -168,6 +188,8 @@ class IntermediateRepresentation(StrictModel):
     linkage: LinkageResult = Field(default_factory=LinkageResult)
     transformations: list[TransformationRecord] = Field(default_factory=list)
     annotations: dict[str, list[Annotation]] = Field(default_factory=dict)
+    # Sparse derived values only; the original remains in structure.data.
+    normalizations: dict[str, list[NormalizationResult]] = Field(default_factory=dict)
     pending_edits: dict[str, list[PendingEdit]] = Field(default_factory=dict)
     edit_audit: list[EditAudit] = Field(default_factory=list)
     processing_status: ProcessingStatus = ProcessingStatus.PARSED
@@ -192,6 +214,17 @@ class IntermediateRepresentation(StrictModel):
         for locator, edits in self.pending_edits.items():
             if any(edit.locator != locator for edit in edits):
                 raise ValueError("pending edit locator must match its locator index")
+        for locator, results in self.normalizations.items():
+            if any(result.locator != locator for result in results):
+                raise ValueError("normalization locator must match its locator index")
+        if self.normalizations:
+            available = {item.locator for item in iter_field_metadata(self)}
+            if any(locator not in available for locator in self.normalizations):
+                raise ValueError("normalization locator must resolve in the format core")
+            for results in self.normalizations.values():
+                kinds = [item.normalization_type for item in results]
+                if len(kinds) != len(set(kinds)):
+                    raise ValueError("normalization types must be unique per locator")
         return self
 
     def add_annotation(self, annotation: Annotation) -> None:
@@ -213,6 +246,11 @@ class IntermediateRepresentation(StrictModel):
             locator: sorted((item.model_dump(mode="json") for item in items),
                             key=lambda item: item["edit_id"])
             for locator, items in sorted(self.pending_edits.items())
+        }
+        payload["normalizations"] = {
+            locator: sorted((item.model_dump(mode="json") for item in items),
+                            key=lambda item: item["normalization_type"])
+            for locator, items in sorted(self.normalizations.items())
         }
         return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 
@@ -238,7 +276,9 @@ def json_path(parent: str, key: str | int) -> str:
     """Build a JSONPath, escaping property tokens without changing source keys."""
     if isinstance(key, int):
         return f"{parent}[{key}]"
-    if key.isidentifier():
+    # The locator parser's dotted-name grammar is intentionally ASCII. Quote
+    # non-ASCII keys so the same locator always resolves losslessly.
+    if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", key):
         return f"{parent}.{key}"
     escaped = key.replace("\\", "\\\\").replace("'", "\\'")
     return f"{parent}['{escaped}']"
