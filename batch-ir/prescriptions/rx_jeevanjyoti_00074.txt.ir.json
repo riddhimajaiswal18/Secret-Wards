@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "rx_jeevanjyoti_00074",
+  "document_id": "prescriptions/rx_jeevanjyoti_00074.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "Jeevan Jyoti Charitable Hospital - OPD Prescription\nName: Suneel Lodhi   Age: 31/M   Reg No: JJH-0077463\nDate: 10-03-2026\nMob: 79519-90358\nC/O: fever x 2 days, body ache\nK/C/O: I10\nRx\n1. Tab Amlodipine 5mg 0-0-1 x 2 wks\n2. Tab Telmisartan 40mg 1-0-0 x 1 month\n3. Tab Ramipril 5 mg 0-0-1 x 2 wks\n4. Tab Pantoprazole 40mg 1-0-0 x 1 month\nAdv: Low salt diet. Review after 2 wks.\nDr. Vandana Kulshrestha (MD Medicine)\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

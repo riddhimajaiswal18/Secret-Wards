@@ -1,6 +1,6 @@
 # Secret Wards
 
-An offline, CPU-only Python privacy firewall for synthetic multilingual healthcare exports. This repository is at the initial scaffolding stage: ingestion, detection, linkage, privacy transformations, security, and serialization are not implemented yet. No output contract or validation result is claimed.
+An offline, CPU-only Python privacy firewall for synthetic multilingual healthcare exports. The repository currently implements file ingestion into an intermediate representation (IR), but not PII detection, linkage, privacy transformations, or the final release-output pipeline. No anonymization or output-contract success is claimed.
 
 ## Challenge constraints
 
@@ -26,7 +26,7 @@ The initial `main.py` only parses these arguments and reports that processing is
 python -m pip install -r requirements.txt
 ```
 
-Dependencies are candidates for planned modules and are not used by this scaffold. No models are downloaded or required.
+Pydantic is used to validate IR models. Other listed dependencies are planned for later modules. No models are downloaded or required.
 
 ## Architecture
 
@@ -44,4 +44,4 @@ See [docs/architecture.md](docs/architecture.md), [docs/decisions.md](docs/decis
 
 ## Known limitations
 
-Nothing in this initial repository processes or sanitizes records yet. Policies and matching thresholds are provisional and unvalidated. Do not use this scaffold to handle real patient data or claim privacy protection.
+Ingestion supports JSON/FHIR JSON, CSV, TSV, text, and XML. The IR retains original parsed values, so generated IR and batch outputs can contain PII; keep them local and out of version control. Detection, policy evaluation, linkage, anonymization, and final release serialization remain unimplemented. Do not claim privacy protection from this parser.

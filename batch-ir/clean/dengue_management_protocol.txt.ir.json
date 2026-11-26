@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "dengue_management_protocol",
+  "document_id": "clean/dengue_management_protocol.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "DENGUE MANAGEMENT PROTOCOL (Version 3.1)\n\n1. Any patient presenting with C/O fever for 2-7 days should be tested for NS1 antigen.\n2. Platelet count below 20000 /uL requires admission to Ward 5 (Medicine).\n3. Paracetamol 650 mg every 6 hours; avoid NSAIDs.\n4. ASHA workers should follow up discharged patients on day 3.\n5. Differential diagnosis includes typhoid, malaria and, rarely, Addison's disease crisis.\n6. Dr. Ramesh Srivastava is the nodal officer.\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

@@ -30,3 +30,17 @@ These are initial choices, not validated implementation results.
 ## Dependency/version notes
 
 The Team Kit starter itself uses only the Python standard library, so it establishes no dependency conflicts. This repository lists unpinned utility packages except a compatibility constraint pairing `fhir.resources` 7.x–8.x with Pydantic 2.x. Versions must be resolved on the target Python/Linux environment before the first implementation milestone. spaCy, scikit-learn, CRF libraries, Splink/recordlinkage, anonymeter and pycanon are not included yet: overlap, model/runtime cost, API compatibility and need should be assessed first. No pretrained models are required or downloaded.
+
+## IR write-back decisions
+
+- Keep JSON/FHIR values native, CSV/TSV as ordered header and row arrays, text as its original string, and XML as an ordered element/attribute/text/tail tree.
+- Index annotations and pending edits by explicit source locator. Transformation code—not parsers or annotations—mutates the source core.
+- Guard edits with optional expected values. Text spans apply from highest offset down; overlapping edits quarantine the document.
+- Capture delimited dialect, encoding and BOM for re-serialization. Original byte-level whitespace/quoting and JSON number lexemes are not retained.
+- Enforce a JSON nesting cap of 512 and return a controlled error instead of raising the recursion limit.
+- FHIR validation remains structural; full R4 validation and reference-resolution checks are follow-up work.
+- The policy package currently exposes an interface only; policy rules and PII detection remain unimplemented.
+
+## Canonical source representation
+
+`structure.data` is the single authoritative store of parsed source values. Its shape is format-specific: native ordered JSON objects/lists, CSV/TSV header and row arrays, a complete text string, or the XML element tree. `original_layout` stores source-format context needed to interpret the core. The serialized `fields[]` list was removed because it held no unique source values or populated schema/sensitivity data; names, types, parent relationships, and presence can be derived. `iter_field_metadata(ir)` supplies those details on demand, including missing-cell metadata for ragged delimited rows. Findings remain sparse in locator-indexed annotations.

@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "Discharge_Summary_Kavita_Pandey_SNJ-26-064371",
+  "document_id": "discharge/Discharge_Summary_Kavita_Pandey_SNJ-26-064371.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "SANJEEVANI MULTISPECIALITY HOSPITAL, LUCKNOW\nDISCHARGE SUMMARY\n\nPatient Name: Kavita Pandey        Age/Sex: 48 Yrs/F\nUHID: SNJ/26/064371        IPD No: IPD-2026-00450\nW/o Mohan Pandey\nAddress: Makan No. 182, Vill. Bhimganj, Tehsil Malihabad, Distt. Lucknow - 226183\nMobile: +91 73579 32472\nConsultant: Dr. Ramesh Srivastava (MD Medicine)\nWard/Bed: Ward 8 (Medicine) / Bed 23\nDate of Admission: 24/01/2026\nDate of Discharge: 02/02/2026\nDOB: 17/08/1977\n\nDiagnosis: Essential (primary) hypertension (I10); Type 2 diabetes mellitus without complications (E11.9); \nPresenting complaints: C/O fever for 3 days, generalised weakness.\nHistory: K/C/O DM2 x 6 yrs. No significant past history.\nCourse in hospital: Patient admitted with above complaints. BP 161/93 mmHg, Pulse 82/min, Temp 98.9 F, SpO2 92%. Haemoglobin 7.6 g/dL. HbA1c 9.9 %. Random Blood Sugar 284 mg/dL. Treated conservatively. Kavita didi ki condition ab stable hai.\n\nMedications on discharge:\n 1. Tab Amlodipine 5 mg 0-0-1 x 30 days\n 2. Tab Telmisartan 40 mg 1-0-0 x 15 days\n 3. Tab Ramipril 5 mg 0-0-1 x 30 days\n 4. Tab Metformin 500 mg 1-0-1 x 30 days\n 5. Tab Glimepiride 1 mg 1-0-0 x 30 days\n 6. Tab Pantoprazole 40 mg 1-0-0 x 15 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Ramesh Srivastava.\nAttendant: Mohan Pandey, Mob. 7357932472\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

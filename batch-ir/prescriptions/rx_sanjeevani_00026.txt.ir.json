@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "rx_sanjeevani_00026",
+  "document_id": "prescriptions/rx_sanjeevani_00026.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "Sanjeevani Multispeciality Hospital - OPD Prescription\nName: Shyam Chaudhary   Age: 91/M   Reg No: SNJ/26/064211\nDate: 25/05/2026\nMob: 83762-59281\nC/O: fever x 9 days, body ache\nK/C/O: J45.9\nRx\n1. Inh Salbutamol inhaler 100 mcg 2 puffs x 5 days\nAdv: Low salt diet. Review after 2 wks.\nDr. Harjeet Bedi (MD Pulmonary Medicine)\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

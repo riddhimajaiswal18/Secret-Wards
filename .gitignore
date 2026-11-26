@@ -21,6 +21,9 @@ data/
 input/
 output/
 outputs/
+batch-ir/
+output-ir.json
+xml-ir.json
 notes/
 out/
 sanitized/

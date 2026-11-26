@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "sanjeevani_ds_IPD-2026-00459",
+  "document_id": "discharge/sanjeevani_ds_IPD-2026-00459.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "SANJEEVANI MULTISPECIALITY HOSPITAL, LUCKNOW\r\nDISCHARGE SUMMARY\r\n\r\nPatient Name: Zainab Bano        Age/Sex: 35 Yrs/F\r\nUHID: SNJ/26/064427        IPD No: IPD-2026-00459\r\nW/o Javed Siddiqui\r\nAddress: House 231, Ward 2, Mohalla Harijan Basti, Ramkhera, Tehsil Purwa, Distt. Unnao - 209088\r\nMobile: +91 68862 87537\r\nABHA No: 91-1786-8785-9280\r\nConsultant: Dr. Sameer Rizvi (DM Neurology)\r\nWard/Bed: Ward 3 (Neurology) / Bed 24\r\nDate of Admission: 08/06/2026\r\nDate of Discharge: 18/06/2026\r\nDOB: 23/07/1990\r\n\r\nDiagnosis: Bell's palsy (G51.0); Type 2 diabetes mellitus without complications (E11.9); \r\nPresenting complaints: C/O fever for 4 days, generalised weakness.\r\nHistory: K/C/O DM2 x 11 yrs. H/O TB 7 yrs back (completed ATT).\r\nCourse in hospital: Patient admitted with above complaints. BP 114/84 mmHg, Pulse 100/min, Temp 98.2 F, SpO2 94%. Haemoglobin 7.9 g/dL. HbA1c 10.2 %. Random Blood Sugar 96 mg/dL. Treated conservatively. Zainab amma ki condition ab stable hai.\r\n\r\nMedications on discharge:\r\n 1. Tab Metformin 500 mg 1-0-1 x 30 days\r\n 2. Tab Glimepiride 1 mg 1-0-0 x 30 days\r\n 3. Tab Pantoprazole 40 mg 1-0-0 x 15 days\r\n\r\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Sameer Rizvi.\r\nAttendant: Javed Siddiqui, Mob. 6886287537\r\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

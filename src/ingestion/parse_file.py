@@ -20,7 +20,7 @@ def main() -> int:
         try:
             ir = parse_document_file(source)
             output.parent.mkdir(parents=True, exist_ok=True)
-            output.write_text(ir.model_dump_json(indent=2) + "\n", encoding="utf-8")
+            output.write_text(ir.to_deterministic_json(), encoding="utf-8")
         except OSError:
             print("Could not write IR output.", file=sys.stderr)
             return 2
@@ -45,9 +45,9 @@ def main() -> int:
             # Keep the entire input filename so different extensions cannot collide.
             output_file = output / relative.parent / f"{relative.name}.ir.json"
             try:
-                ir = parse_document_file(path)
+                ir = parse_document_file(path, document_id=relative.as_posix())
                 output_file.parent.mkdir(parents=True, exist_ok=True)
-                output_file.write_text(ir.model_dump_json(indent=2) + "\n", encoding="utf-8")
+                output_file.write_text(ir.to_deterministic_json(), encoding="utf-8")
                 status = "parsed" if ir.validation.parse_status == "SUCCESS" else "error"
                 reason = ir.validation.parse_status if status == "error" else None
             except OSError:

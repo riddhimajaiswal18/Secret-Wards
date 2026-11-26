@@ -14,14 +14,37 @@ class JSONIRParseError(ValueError):
     """Sanitized parse failure that does not carry raw patient content."""
 
 
+def _check_depth(text: str, limit: int = 512) -> None:
+    depth = 0
+    quoted = escaped = False
+    for char in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in "[{":
+            depth += 1
+            if depth > limit:
+                raise JSONIRParseError("JSON input exceeds supported nesting depth") from None
+        elif char in "]}":
+            depth = max(0, depth - 1)
+
+
 def parse_json_ir(text: str, *, document_id: str, filename: str | None = None,
-                  encoding: str = "utf-8") -> IntermediateRepresentation:
+                  encoding: str = "utf-8", bom: bool = False) -> IntermediateRepresentation:
+    _check_depth(text)
     try:
         value: Any = json.loads(text)
     except (json.JSONDecodeError, RecursionError, ValueError):
         raise JSONIRParseError("JSON input could not be parsed safely") from None
     try:
-        return build_json_ir(value, document_id=document_id, filename=filename, encoding=encoding)
+        return build_json_ir(value, document_id=document_id, filename=filename, encoding=encoding,
+                             original_layout={"bom": bom})
     except (RecursionError, TypeError, ValueError):
         raise JSONIRParseError("JSON structure could not be represented safely") from None
 
@@ -49,7 +72,8 @@ def main(argv: list[str] | None = None) -> int:
         raw = source_path.read_bytes()
         text, encoding = _decode_json_bytes(raw)
         ir = parse_json_ir(text, document_id=args.document_id or source_path.stem,
-                           filename=source_path.name, encoding=encoding)
+                           filename=source_path.name, encoding=encoding,
+                           bom=raw.startswith(b"\xef\xbb\xbf"))
         serialized = ir.model_dump_json(indent=2) + "\n"
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(serialized, encoding="utf-8")

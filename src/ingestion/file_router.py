@@ -2,42 +2,18 @@
 from __future__ import annotations
 
 import json
+import csv
 from pathlib import Path
 from typing import Any
-import xml.etree.ElementTree as ET
 
-from src.ir import (FieldRecord, IntermediateRepresentation, PresenceStatus,
-                    SourceMetadata, SourceStructure, ValidationResult, build_json_ir)
+from src.ir import (IntermediateRepresentation, ProcessingStatus, SourceMetadata,
+                    SourceStructure, ValidationResult)
 from src.ingestion.csv_tsv import parse_delimited_ir
 from src.ingestion.encoding import DecodeError, decode_bytes
 from src.ingestion.fhir_parser import parse_fhir_ir
 from src.ingestion.ir_json import parse_json_ir
 from src.ingestion.text_parser import parse_text_ir
-
-
-def _xml_node(element: ET.Element) -> dict[str, Any]:
-    """Represent XML without collapsing repeated child tags or their order."""
-    return {
-        "tag": element.tag,
-        "attributes": [[key, value] for key, value in element.attrib.items()],
-        "text": element.text,
-        "children": [_xml_node(child) for child in list(element)],
-        "tail": element.tail,
-    }
-
-
-def _parse_xml(text: str, *, document_id: str, filename: str,
-               encoding: str) -> IntermediateRepresentation:
-    if "<!DOCTYPE" in text.upper() or "<!ENTITY" in text.upper():
-        raise ValueError("xml_dtd_or_entity_forbidden") from None
-    try:
-        root = ET.fromstring(text)
-    except (ET.ParseError, RecursionError, ValueError):
-        raise ValueError("malformed_xml") from None
-    data = _xml_node(root)
-    ir = build_json_ir(data, document_id=document_id, filename=filename, encoding=encoding,
-                       source_format="xml", arrangement="ordered_xml_tree")
-    return ir
+from src.ingestion.xml_parser import parse_xml_ir
 
 
 def _parse_error(document_id: str, filename: str, source_format: str,
@@ -46,18 +22,17 @@ def _parse_error(document_id: str, filename: str, source_format: str,
         document_id=document_id,
         source=SourceMetadata(format=source_format, original_filename=filename),
         structure=SourceStructure(root_type="null", original_layout={}, data=None),
-        fields=[FieldRecord(field_id="f_000001", field_name="root", field_path="$",
-                            field_kind="leaf", expected_dtype=None, actual_dtype=None,
-                            presence_status=PresenceStatus.PARSE_ERROR)],
         validation=ValidationResult(parse_status=f"ERROR:{reason}", privacy_validation="NOT_EVALUATED",
                                     serialization_status="NOT_STARTED"),
+        processing_status=ProcessingStatus.QUARANTINED,
+        errors=[reason],
     )
 
 
-def parse_document_file(path: str | Path) -> IntermediateRepresentation:
+def parse_document_file(path: str | Path, *, document_id: str | None = None) -> IntermediateRepresentation:
     source_path = Path(path)
     suffix = source_path.suffix.lower()
-    document_id = source_path.stem
+    document_id = document_id or source_path.stem
     if suffix not in {".csv", ".tsv", ".json", ".txt", ".xml"}:
         return _parse_error(document_id, source_path.name, suffix.lstrip(".") or "unknown",
                             "unsupported_format")
@@ -66,6 +41,7 @@ def parse_document_file(path: str | Path) -> IntermediateRepresentation:
         if not raw:
             return _parse_error(document_id, source_path.name, suffix[1:], "empty_file")
         text, encoding = decode_bytes(raw)
+        bom = raw.startswith((b"\xef\xbb\xbf", b"\xff\xfe", b"\xfe\xff"))
     except FileNotFoundError:
         return _parse_error(document_id, source_path.name, suffix[1:], "input_not_found")
     except OSError:
@@ -77,30 +53,106 @@ def parse_document_file(path: str | Path) -> IntermediateRepresentation:
         if suffix == ".csv":
             # The kit contains a JSON export mislabeled as CSV; content wins over suffix.
             if text.lstrip().startswith(("{", "[")):
-                return _json_or_fhir(text, document_id, source_path.name, encoding)
+                return _json_or_fhir(text, document_id, source_path.name, encoding, bom=bom)
+            delimiter = _sniff_delimiter(text)
             return parse_delimited_ir(text, document_id=document_id, filename=source_path.name,
-                                      encoding=encoding, delimiter=",")
+                                      encoding=encoding, delimiter=delimiter, bom=bom)
         if suffix == ".tsv":
             return parse_delimited_ir(text, document_id=document_id, filename=source_path.name,
-                                      encoding=encoding, delimiter="\t")
+                                      encoding=encoding, delimiter="\t", bom=bom)
         if suffix == ".txt":
             return parse_text_ir(text, document_id=document_id, filename=source_path.name,
-                                 encoding=encoding)
+                                 encoding=encoding, bom=bom)
         if suffix == ".xml":
-            return _parse_xml(text, document_id=document_id, filename=source_path.name,
-                              encoding=encoding)
-        return _json_or_fhir(text, document_id, source_path.name, encoding)
-    except (ValueError, RecursionError):
-        return _parse_error(document_id, source_path.name, suffix[1:], "malformed_or_unsupported_content")
+            return parse_xml_ir(text, document_id=document_id, filename=source_path.name,
+                                encoding=encoding, bom=bom)
+        return _json_or_fhir(text, document_id, source_path.name, encoding, bom=bom)
+    except (ValueError, RecursionError) as exc:
+        reason = str(exc) if str(exc) in {"depth_limit_exceeded", "malformed_xml",
+                                          "xml_depth_limit_exceeded", "xml_dtd_or_entity_forbidden", "malformed_delimited_file",
+                                          "invalid_fhir_bundle_structure", "invalid_fhir_bundle_entry"} \
+            else "malformed_or_unsupported_content"
+        return _parse_error(document_id, source_path.name, suffix[1:], reason)
+
+
+def _check_nesting(text: str, limit: int = 512) -> None:
+    depth = 0
+    quoted = escaped = False
+    for char in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+            continue
+        if char == '"':
+            quoted = True
+        elif char in "[{":
+            depth += 1
+            if depth > limit:
+                raise ValueError("depth_limit_exceeded") from None
+        elif char in "]}":
+            depth = max(0, depth - 1)
+
+
+def _sniff_delimiter(text: str) -> str:
+    """Count candidate separators outside CSV-quoted cells, with stable tie-breaking."""
+    counts = {candidate: 0 for candidate in (",", ";", "|", "\t")}
+    sample = text[:65536]
+    quoted = False
+    i = 0
+    while i < len(sample):
+        char = sample[i]
+        if quoted:
+            if char == '"' and i + 1 < len(sample) and sample[i + 1] == '"':
+                i += 2
+                continue
+            if char == '"':
+                quoted = False
+            i += 1
+            continue
+        if char == '"':
+            quoted = True
+        elif char in counts:
+            counts[char] += 1
+        i += 1
+    best = max(counts, key=lambda candidate: (counts[candidate], candidate == ","))
+    return best if counts[best] else ","
 
 
 def _json_or_fhir(text: str, document_id: str, filename: str,
-                  encoding: str) -> IntermediateRepresentation:
+                  encoding: str, bom: bool = False) -> IntermediateRepresentation:
     try:
+        _check_nesting(text)
         obj: Any = json.loads(text)
     except (ValueError, RecursionError):
+        if _exceeds_json_depth(text):
+            raise ValueError("depth_limit_exceeded") from None
         raise ValueError("malformed_json") from None
     if isinstance(obj, dict) and obj.get("resourceType") == "Bundle":
-        return parse_fhir_ir(text, document_id=document_id, filename=filename, encoding=encoding)
-    return build_json_ir(obj, document_id=document_id, filename=filename, encoding=encoding,
-                         source_format="json")
+        return parse_fhir_ir(text, document_id=document_id, filename=filename, encoding=encoding, bom=bom)
+    return parse_json_ir(text, document_id=document_id, filename=filename, encoding=encoding, bom=bom)
+
+
+def _exceeds_json_depth(text: str, limit: int = 512) -> bool:
+    depth = 0
+    quoted = escaped = False
+    for char in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in "[{":
+            depth += 1
+            if depth > limit:
+                return True
+        elif char in "]}":
+            depth = max(0, depth - 1)
+    return False

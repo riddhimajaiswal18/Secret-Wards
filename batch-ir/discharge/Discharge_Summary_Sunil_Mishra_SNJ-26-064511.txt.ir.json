@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "Discharge_Summary_Sunil_Mishra_SNJ-26-064511",
+  "document_id": "discharge/Discharge_Summary_Sunil_Mishra_SNJ-26-064511.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "Sanjeevani Multispeciality Hospital, Lucknow\r\nडिस्चार्ज सारांश\r\n\r\nमरीज़ का नाम: सुनील मिश्रा    आयु: 69 वर्ष / पुरुष\r\nपिता का नाम: बृजेश ठाकुर\r\nपंजीकरण सं.: SNJ/26/064511    आईपीडी सं.: IPD-2026-00470\r\nपता: मकान नं. 33, पंचायत भवन के पास, ग्राम गोविंदखेड़ा कलां, तहसील मलिहाबाद, जिला लखनऊ - 226099\r\nमोबाइल: ८७१७१४२३१२\r\nभर्ती की तारीख: 29/05/2026\r\nछुट्टी की तारीख: 08/06/2026\r\n\r\nनिदान: उच्च रक्तचाप (I10); किडनी की पुरानी बीमारी (N18.3); दस्त और उल्टी (A09); \r\nमरीज़ को 7 दिन से बुखार था। BP 147/93, Pulse 90/min।\r\n\r\nMedications on discharge:\r\n 1. Tab Amlodipine 5 mg 0-0-1 x 15 days\r\n 2. Tab Telmisartan 40 mg 1-0-0 x 15 days\r\n 3. Tab Ramipril 5 mg 0-0-1 x 30 days\r\n 4. Sachet ORS 1 sachet after each loose stool x 15 days\r\n 5. Tab Pantoprazole 40 mg 1-0-0 x 30 days\r\n\r\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Vandana Kulshrestha.\r\nAttendant: Brijesh Thakur, Mob. 8717142312\r\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

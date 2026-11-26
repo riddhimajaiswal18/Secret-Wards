@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Literal
+import json
+import re
+from typing import Any, Iterator, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -47,25 +49,22 @@ class SourceStructure(StrictModel):
     data: Any
 
 
-class FieldRecord(StrictModel):
-    field_id: str
+class FieldMetadata(StrictModel):
+    """Derived, value-free metadata for one location in a format core."""
+    locator: str
     field_name: str
-    field_path: str
-    parent_field_id: str | None = None
+    parent_locator: str | None = None
     field_kind: Literal["object", "array", "leaf"]
     expected_dtype: str | None = None
     actual_dtype: str | None = None
     presence_status: PresenceStatus
-    sensitivity: str | None = None
-    detection_status: DetectionStatus = DetectionStatus.NOT_EVALUATED
-    expected_masking_technique: str | None = None
 
     @model_validator(mode="after")
-    def consistent_presence_value(self) -> "FieldRecord":
+    def consistent_kind(self) -> "FieldMetadata":
         if self.field_kind == "object" and self.actual_dtype not in (None, "object"):
-            raise ValueError("object fields must have object actual_dtype")
+            raise ValueError("object metadata must have object actual_dtype")
         if self.field_kind == "array" and self.actual_dtype not in (None, "array"):
-            raise ValueError("array fields must have array actual_dtype")
+            raise ValueError("array metadata must have array actual_dtype")
         return self
 
 
@@ -117,44 +116,105 @@ class ValidationResult(StrictModel):
     serialization_status: str
 
 
+class ProcessingStatus(str, Enum):
+    PARSED = "PARSED"
+    ANNOTATED = "ANNOTATED"
+    EDITED = "EDITED"
+    SERIALIZED = "SERIALIZED"
+    QUARANTINED = "QUARANTINED"
+
+
+class Annotation(StrictModel):
+    annotation_id: str
+    finding_type: str
+    locator: str
+    entity_type: str | None = None
+    pii_classification: str | None = None
+    confidence: float | None = Field(default=None, ge=0, le=1)
+    detection_method: str | None = None
+    detection_status: DetectionStatus = DetectionStatus.NOT_EVALUATED
+    actual_dtype: str | None = None
+    expected_dtype: str | None = None
+    validation_result: str | None = None
+    uncertain: bool = False
+    review_required: bool = False
+    details: dict[str, Any] = Field(default_factory=dict)
+
+
+class PendingEdit(StrictModel):
+    edit_id: str
+    locator: str
+    operation: Literal["replace"] = "replace"
+    replacement: Any
+    expected_value: Any = None
+    technique: str
+    entity_id: str | None = None
+
+
+class EditAudit(StrictModel):
+    edit_id: str
+    locator: str
+    status: Literal["SUCCESS", "FAILED"]
+    technique: str
+    error_code: str | None = None
+
+
 class IntermediateRepresentation(StrictModel):
     ir_version: str = "1.0"
     document_id: str
     source: SourceMetadata
     structure: SourceStructure
-    fields: list[FieldRecord] = Field(default_factory=list)
     entities: list[EntityRecord] = Field(default_factory=list)
     linkage: LinkageResult = Field(default_factory=LinkageResult)
     transformations: list[TransformationRecord] = Field(default_factory=list)
+    annotations: dict[str, list[Annotation]] = Field(default_factory=dict)
+    pending_edits: dict[str, list[PendingEdit]] = Field(default_factory=dict)
+    edit_audit: list[EditAudit] = Field(default_factory=list)
+    processing_status: ProcessingStatus = ProcessingStatus.PARSED
+    errors: list[str] = Field(default_factory=list)
     validation: ValidationResult
 
     @model_validator(mode="after")
     def validate_references(self) -> "IntermediateRepresentation":
-        field_paths = {f.field_path for f in self.fields}
-        fields_by_id = {f.field_id: f for f in self.fields}
-        if len(fields_by_id) != len(self.fields):
-            raise ValueError("field_id values must be unique")
-        for field in self.fields:
-            if field.parent_field_id is not None:
-                parent = fields_by_id.get(field.parent_field_id)
-                if parent is None:
-                    raise ValueError("parent_field_id must reference an existing field")
-                if parent.field_kind not in ("object", "array"):
-                    raise ValueError("a field parent must be an object or array")
-                if not field.field_path.startswith(parent.field_path):
-                    raise ValueError("field_path must be nested under its parent path")
-        if self.fields and not any(f.field_path == "$" and f.parent_field_id is None for f in self.fields):
-            raise ValueError("field tree must contain a root field at '$'")
+        if self.entities:
+            available = {item.locator for item in iter_field_metadata(self)}
+            if any(entity.field_path not in available for entity in self.entities):
+                raise ValueError("entity field_path must resolve in the format core")
         entity_ids = {e.entity_id for e in self.entities}
-        for entity in self.entities:
-            if entity.field_path not in field_paths:
-                raise ValueError("entity field_path must reference a field record")
         for transform in self.transformations:
-            if transform.field_path not in field_paths:
-                raise ValueError("transformation field_path must reference a field record")
+            if not transform.field_path:
+                raise ValueError("transformation field_path/locator cannot be empty")
             if transform.entity_id is not None and transform.entity_id not in entity_ids:
                 raise ValueError("transformation entity_id must reference an entity")
+        for locator, annotations in self.annotations.items():
+            if any(annotation.locator != locator for annotation in annotations):
+                raise ValueError("annotation locator must match its locator index")
+        for locator, edits in self.pending_edits.items():
+            if any(edit.locator != locator for edit in edits):
+                raise ValueError("pending edit locator must match its locator index")
         return self
+
+    def add_annotation(self, annotation: Annotation) -> None:
+        self.annotations.setdefault(annotation.locator, []).append(annotation)
+        self.processing_status = ProcessingStatus.ANNOTATED
+
+    def add_pending_edit(self, edit: PendingEdit) -> None:
+        self.pending_edits.setdefault(edit.locator, []).append(edit)
+
+    def to_deterministic_json(self) -> str:
+        """Serialize the IR envelope deterministically without reordering source data."""
+        payload = self.model_dump(mode="json")
+        payload["annotations"] = {
+            locator: sorted((item.model_dump(mode="json") for item in items),
+                            key=lambda item: item["annotation_id"])
+            for locator, items in sorted(self.annotations.items())
+        }
+        payload["pending_edits"] = {
+            locator: sorted((item.model_dump(mode="json") for item in items),
+                            key=lambda item: item["edit_id"])
+            for locator, items in sorted(self.pending_edits.items())
+        }
+        return json.dumps(payload, ensure_ascii=False, indent=2) + "\n"
 
 
 def json_dtype(value: Any) -> str:
@@ -186,36 +246,142 @@ def json_path(parent: str, key: str | int) -> str:
 
 def build_json_ir(data: Any, *, document_id: str, filename: str | None = None,
                   encoding: str = "utf-8", source_format: str = "json",
-                  arrangement: str | None = None) -> IntermediateRepresentation:
-    """Create a path/parent index for JSON nodes; original values live only in structure.data."""
-    fields: list[FieldRecord] = []
-
-    def walk(value: Any, path: str, name: str, parent_id: str | None) -> None:
-        dtype = json_dtype(value)
-        kind = "object" if dtype == "object" else "array" if dtype == "array" else "leaf"
-        field_id = f"f_{len(fields) + 1:06d}"
-        fields.append(FieldRecord(
-            field_id=field_id, field_name=name, field_path=path, parent_field_id=parent_id,
-            field_kind=kind,
-            expected_dtype=dtype, actual_dtype=dtype,
-            presence_status=PresenceStatus.NULL if value is None else PresenceStatus.PRESENT,
-        ))
-        if isinstance(value, dict):
-            for key, child in value.items():
-                walk(child, json_path(path, key), key, field_id)
-        elif isinstance(value, list):
-            for index, child in enumerate(value):
-                walk(child, json_path(path, index), str(index), field_id)
-
-    walk(data, "$", "root", None)
+                  arrangement: str | None = None,
+                  original_layout: dict[str, Any] | None = None,
+                  max_depth: int = 512) -> IntermediateRepresentation:
+    """Build the envelope around one authoritative format-native data core."""
+    stack = [(data, 0)]
+    seen_containers: set[int] = set()
+    while stack:
+        value, depth = stack.pop()
+        if depth > max_depth:
+            raise ValueError("depth_limit_exceeded")
+        if isinstance(value, (dict, list)):
+            identity = id(value)
+            if identity in seen_containers:
+                raise ValueError("cyclic_structure_unsupported")
+            seen_containers.add(identity)
+            children = value.values() if isinstance(value, dict) else value
+            stack.extend((child, depth + 1) for child in children)
     root_type = json_dtype(data)
     return IntermediateRepresentation(
         document_id=document_id,
         source=SourceMetadata(format=source_format, encoding=encoding,
                               detected_arrangement=arrangement or ("nested_object" if root_type == "object" else root_type),
                               original_filename=filename, schema_detected=False),
-        structure=SourceStructure(root_type=root_type, original_layout={}, data=data),
-        fields=fields,
+        structure=SourceStructure(root_type=root_type, original_layout=original_layout or {}, data=data),
         validation=ValidationResult(parse_status="SUCCESS", privacy_validation="NOT_EVALUATED",
                                     serialization_status="PENDING"),
     )
+
+
+def iter_field_metadata(ir: IntermediateRepresentation) -> Iterator[FieldMetadata]:
+    """Derive value-free locator metadata on demand from the authoritative document core."""
+    if ir.processing_status == ProcessingStatus.QUARANTINED:
+        yield FieldMetadata(locator="$", field_name="root", field_kind="leaf",
+                            presence_status=PresenceStatus.PARSE_ERROR)
+        return
+    data, fmt = ir.structure.data, ir.source.format
+    if fmt == "text":
+        yield FieldMetadata(locator="doc", field_name="document", field_kind="leaf",
+                            actual_dtype="string", presence_status=PresenceStatus.PRESENT)
+        return
+    if fmt in {"csv", "tsv"}:
+        header, rows = data.get("header", []), data.get("rows", [])
+        yield FieldMetadata(locator="doc", field_name="table", field_kind="object",
+                            actual_dtype="object", presence_status=PresenceStatus.PRESENT)
+        for column, name in enumerate(header):
+            yield FieldMetadata(locator=f"header:col:{column}", field_name=name,
+                                parent_locator="doc", field_kind="leaf", actual_dtype="string",
+                                presence_status=PresenceStatus.PRESENT)
+        for row_index, row in enumerate(rows):
+            yield FieldMetadata(locator=f"row:{row_index}", field_name="row",
+                                parent_locator="doc", field_kind="array", actual_dtype="array",
+                                presence_status=PresenceStatus.PRESENT)
+            for column in range(max(len(header), len(row))):
+                exists = column < len(row)
+                name = header[column] if column < len(header) else str(column)
+                yield FieldMetadata(locator=f"row:{row_index},col:{column}", field_name=name,
+                                    parent_locator=f"row:{row_index}", field_kind="leaf",
+                                    actual_dtype="string" if exists else None,
+                                    presence_status=PresenceStatus.PRESENT if exists else PresenceStatus.NOT_FOUND)
+        return
+
+    stack: list[tuple[Any, str, str, str | None, int]] = [(data, "$", "root", None, 0)]
+    while stack:
+        value, locator, name, parent, depth = stack.pop()
+        if depth > 512:
+            raise ValueError("field_metadata_depth_exceeded")
+        dtype = json_dtype(value)
+        kind = "object" if dtype == "object" else "array" if dtype == "array" else "leaf"
+        yield FieldMetadata(locator=locator, field_name=name, parent_locator=parent,
+                            field_kind=kind, actual_dtype=dtype,
+                            presence_status=PresenceStatus.NULL if value is None else PresenceStatus.PRESENT)
+        if isinstance(value, dict):
+            children = [(child, json_path(locator, key), key, locator, depth + 1)
+                        for key, child in value.items()]
+            stack.extend(reversed(children))
+        elif isinstance(value, list):
+            children = [(child, json_path(locator, index), str(index), locator, depth + 1)
+                        for index, child in enumerate(value)]
+            stack.extend(reversed(children))
+
+
+_PATH_TOKEN = re.compile(r"\.([A-Za-z_][A-Za-z0-9_]*)|\[(\d+)\]|\['((?:\\.|[^'])*)'\]")
+
+
+class LocatorResolutionError(ValueError):
+    """A source locator does not resolve in the document's format core."""
+
+
+def get_value(ir: IntermediateRepresentation, locator: str) -> Any:
+    """Read a value by its format-specific locator without copying it into metadata."""
+    if ir.processing_status == ProcessingStatus.QUARANTINED:
+        raise LocatorResolutionError("document has no parsed source core")
+    data, fmt = ir.structure.data, ir.source.format
+    try:
+        if fmt == "text":
+            if locator == "doc":
+                return data
+            match = re.fullmatch(r"span:(\d+):(\d+)", locator)
+            if not match:
+                raise LocatorResolutionError("invalid text locator")
+            start, end = map(int, match.groups())
+            if end < start or end > len(data):
+                raise LocatorResolutionError("text locator is out of bounds")
+            return data[start:end]
+        if fmt in {"csv", "tsv"}:
+            if locator == "doc":
+                return data
+            match = re.fullmatch(r"header:col:(\d+)", locator)
+            if match:
+                return data["header"][int(match.group(1))]
+            match = re.fullmatch(r"row:(\d+),col:(\d+)", locator)
+            if match:
+                row, col = map(int, match.groups())
+                return data["rows"][row][col]
+            match = re.fullmatch(r"row:(\d+)", locator)
+            if match:
+                return data["rows"][int(match.group(1))]
+            raise LocatorResolutionError("invalid table locator")
+        if not locator.startswith("$"):
+            raise LocatorResolutionError("invalid structured-data locator")
+        tokens: list[str | int] = []
+        position = 1
+        while position < len(locator):
+            match = _PATH_TOKEN.match(locator, position)
+            if not match:
+                raise LocatorResolutionError("invalid structured-data locator")
+            if match.group(1) is not None:
+                tokens.append(match.group(1))
+            elif match.group(2) is not None:
+                tokens.append(int(match.group(2)))
+            else:
+                tokens.append(match.group(3).replace("\\'", "'").replace("\\\\", "\\"))
+            position = match.end()
+        value = data
+        for token in tokens:
+            value = value[token]
+        return value
+    except (KeyError, IndexError, TypeError):
+        raise LocatorResolutionError("locator does not resolve in the source core") from None

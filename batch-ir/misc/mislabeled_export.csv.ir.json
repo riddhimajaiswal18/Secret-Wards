@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "mislabeled_export",
+  "document_id": "misc/mislabeled_export.csv",
   "source": {
     "format": "json",
     "encoding": "utf-8",
@@ -10,53 +10,14 @@
   },
   "structure": {
     "root_type": "object",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": {
       "patient": "Vikas Kumar",
       "aadhaar": "8265 7330 7111"
     }
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "object",
-      "expected_dtype": "object",
-      "actual_dtype": "object",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    },
-    {
-      "field_id": "f_000002",
-      "field_name": "patient",
-      "field_path": "$.patient",
-      "parent_field_id": "f_000001",
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    },
-    {
-      "field_id": "f_000003",
-      "field_name": "aadhaar",
-      "field_path": "$.aadhaar",
-      "parent_field_id": "f_000001",
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -66,6 +27,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

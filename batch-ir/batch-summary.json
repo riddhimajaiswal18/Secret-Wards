@@ -578,7 +578,7 @@
       "input": "misc/deep_export.json",
       "output": "misc/deep_export.json.ir.json",
       "status": "error",
-      "reason": "ERROR:malformed_or_unsupported_content"
+      "reason": "ERROR:depth_limit_exceeded"
     },
     {
       "input": "misc/empty_export.csv",

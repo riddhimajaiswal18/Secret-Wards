@@ -3,10 +3,12 @@ from pydantic import ValidationError
 
 from src.ingestion.ir_json import JSONIRParseError, parse_json_ir
 from src.ir import (
-    FieldRecord,
+    FieldMetadata,
     IntermediateRepresentation,
     PresenceStatus,
     build_json_ir,
+    get_value,
+    iter_field_metadata,
 )
 
 
@@ -17,38 +19,40 @@ def test_nested_json_preserves_order_types_and_unknown_fields():
     assert list(ir.structure.data) == ["patient", "unknown"]
     assert ir.structure.data["patient"]["age"] == 0
     assert ir.structure.data["patient"]["active"] is False
-    assert {field.field_path for field in ir.fields} >= {
+    metadata = list(iter_field_metadata(ir))
+    assert {field.locator for field in metadata} >= {
         "$.patient.name", "$.patient.age", "$.unknown[0]", "$.unknown[1]"
     }
     assert ir.model_dump(mode="json")["structure"]["data"] == source
-    assert all("value" not in field.model_dump() for field in ir.fields)
-    by_id = {field.field_id: field for field in ir.fields}
-    name_field = next(f for f in ir.fields if f.field_path == "$.patient.name")
-    assert by_id[name_field.parent_field_id].field_path == "$.patient"
-    assert by_id[name_field.parent_field_id].field_kind == "object"
+    assert "fields" not in ir.model_dump(mode="json")
+    name_field = next(f for f in metadata if f.locator == "$.patient.name")
+    assert name_field.parent_locator == "$.patient"
+    assert name_field.field_kind == "leaf"
+    assert get_value(ir, name_field.locator) == "Asha"
+    assert "value" not in name_field.model_dump()
 
 
 def test_null_and_not_found_are_distinct():
     ir = build_json_ir({"patient": {"name": None}}, document_id="d2")
-    null_field = next(f for f in ir.fields if f.field_path == "$.patient.name")
+    null_field = next(f for f in iter_field_metadata(ir) if f.locator == "$.patient.name")
     assert null_field.presence_status is PresenceStatus.NULL
-    missing = FieldRecord(field_id="f_missing", field_name="dob", field_path="$.patient.dob",
-                          parent_field_id="f_parent", field_kind="leaf",
-                          presence_status="not_found")
-    assert missing.presence_status is PresenceStatus.NOT_FOUND
+    empty = build_json_ir({"patient": {"middle_name": ""}}, document_id="d2-empty")
+    empty_field = next(f for f in iter_field_metadata(empty) if f.locator == "$.patient.middle_name")
+    assert empty_field.presence_status is PresenceStatus.PRESENT
+    assert empty_field.actual_dtype == "string"
 
 
 def test_wrong_top_level_field_types_are_rejected():
     with pytest.raises(ValidationError):
         IntermediateRepresentation.model_validate({"document_id": 3})
     with pytest.raises(ValidationError):
-        FieldRecord(field_id="f", field_name="x", field_path="$.x",
-                    field_kind="object", actual_dtype="array", presence_status="present")
+        FieldMetadata(locator="$.x", field_name="x", field_kind="object",
+                      actual_dtype="array", presence_status="present")
 
 
 def test_arrays_and_quoted_property_paths():
     ir = build_json_ir([{"a.b": "x"}, {"n": [1, 2]}], document_id="d3")
-    paths = {field.field_path for field in ir.fields}
+    paths = {field.locator for field in iter_field_metadata(ir)}
     assert "$[0]['a.b']" in paths
     assert "$[1].n[1]" in paths
     assert ir.structure.root_type == "array"

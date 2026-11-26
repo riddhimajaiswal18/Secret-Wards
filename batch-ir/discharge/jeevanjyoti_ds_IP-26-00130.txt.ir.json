@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "jeevanjyoti_ds_IP-26-00130",
+  "document_id": "discharge/jeevanjyoti_ds_IP-26-00130.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "JEEVAN JYOTI CHARITABLE HOSPITAL, BARABANKI\nDISCHARGE SUMMARY\n\nPatient Name: Jaspreet Singh        Age/Sex: 46 Yrs/M\nUHID: JJH-0077157        IPD No: IP/26/00130\nS/o Sukhwinder Singh\nAddress: Makan No. 12, Gram Shivmau Khurd, Tehsil Haidergarh, Distt. Barabanki - 225362\nMobile: +91 60043 94755\nConsultant: Dr. Ramesh Srivastava (MD Medicine)\nWard/Bed: Ward 7 (Medicine) / Bed 8\nDate of Admission: 15-05-2026\nDate of Discharge: 23-05-2026\nDOB: 25-04-1980\n\nDiagnosis: Typhoid fever (A01.0); \nPresenting complaints: C/O fever for 3 days, generalised weakness.\nHistory: No K/C/O DM/HTN. No significant past history.\nCourse in hospital: Patient admitted with above complaints. BP 126/86 mmHg, Pulse 76/min, Temp 101.2 F, SpO2 94%. Haemoglobin 8.6 g/dL. Random Blood Sugar 235 mg/dL. Serum Creatinine 2.0 mg/dL. Treated conservatively. Jaspreet bhai ki condition ab stable hai.\n\nMedications on discharge:\n 1. Inj Ceftriaxone 1 g IV x 30 days\n 2. Tab Paracetamol 650 mg 1-1-1 x 30 days\n 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Ramesh Srivastava.\nAttendant: Sukhwinder Singh, Mob. 6004394755\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

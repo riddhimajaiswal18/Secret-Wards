@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "jeevanjyoti_ds_IP-26-00159",
+  "document_id": "discharge/jeevanjyoti_ds_IP-26-00159.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "Jeevan Jyoti Charitable Hospital, Barabanki\nडिस्चार्ज सारांश\n\nमरीज़ का नाम: इरफ़ान मलिक    आयु: 97 वर्ष / पुरुष\nपिता का नाम: शाहिद मलिक\nपंजीकरण सं.: JJH-0077508    आईपीडी सं.: IP/26/00159\nपता: मकान नं. 295, ग्राम गोपालगंज खुर्द, तहसील नवाबगंज, जिला बाराबंकी - 225035\nमोबाइल: ७४१९४०६२४२\nभर्ती की तारीख: 08-10-2026\nछुट्टी की तारीख: 12-10-2026\n\nनिदान: सीओपीडी (J44.9); काला-अज़ार (B55.0); \nमरीज़ को 7 दिन से बुखार था। BP 116/86, Pulse 85/min।\n\nMedications on discharge:\n 1. Inh Salbutamol inhaler 100 mcg 2 puffs x 15 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Harjeet Bedi.\nAttendant: Shahid Malik, Mob. 7419406242\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

@@ -8,7 +8,7 @@ from src.ir import IntermediateRepresentation, build_json_ir
 
 
 def parse_fhir_ir(text: str, *, document_id: str, filename: str,
-                  encoding: str) -> IntermediateRepresentation:
+                  encoding: str, bom: bool = False) -> IntermediateRepresentation:
     try:
         value: Any = json.loads(text)
     except (ValueError, RecursionError):
@@ -21,4 +21,5 @@ def parse_fhir_ir(text: str, *, document_id: str, filename: str,
         if not isinstance(entry, dict) or not isinstance(entry.get("resource"), dict):
             raise ValueError("invalid_fhir_bundle_entry") from None
     return build_json_ir(value, document_id=document_id, filename=filename, encoding=encoding,
-                         source_format="fhir", arrangement="FHIR_R4_bundle")
+                         source_format="fhir", arrangement="FHIR_R4_bundle",
+                         original_layout={"bom": bom})

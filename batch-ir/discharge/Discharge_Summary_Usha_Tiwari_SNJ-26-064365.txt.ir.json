@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "Discharge_Summary_Usha_Tiwari_SNJ-26-064365",
+  "document_id": "discharge/Discharge_Summary_Usha_Tiwari_SNJ-26-064365.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "SANJEEVANI MULTISPECIALITY HOSPITAL, LUCKNOW\nDISCHARGE SUMMARY\n\nPatient Name: Usha Tiwari        Age/Sex: 55 Yrs/F\nUHID: SNJ/26/064365        IPD No: IPD-2026-00442\nW/o Rahul Tiwari\nAddress: House 371, Vill. Amardih, Tehsil Purwa, Distt. Unnao - 209182\nMobile: +91 62600 89196\nABHA No: 91-7283-7950-6570\nConsultant: Dr. Harjeet Bedi (MD Pulmonary Medicine)\nWard/Bed: Ward 5 (Pulmonology) / Bed 20\nDate of Admission: 10/10/2026\nDate of Discharge: 20/10/2026\n\nDiagnosis: Pneumonia, unspecified organism (J18.9); \nPresenting complaints: C/O fever for 9 days, generalised weakness.\nHistory: No K/C/O DM/HTN. H/O TB 2 yrs back (completed ATT).\nCourse in hospital: Patient admitted with above complaints. BP 108/84 mmHg, Pulse 103/min, Temp 102.4 F, SpO2 93%. Haemoglobin 11.1 g/dL. Random Blood Sugar 99 mg/dL. Serum Creatinine 3.0 mg/dL. Treated conservatively. Usha behenji ki condition ab stable hai.\n\nMedications on discharge:\n 1. Tab Azithromycin 500 mg 1-0-0 x 15 days\n 2. Tab Paracetamol 650 mg 1-1-1 x 30 days\n 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Harjeet Bedi.\nAttendant: Rahul Tiwari, Mob. 6260089196\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

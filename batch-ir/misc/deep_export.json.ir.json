@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "deep_export",
+  "document_id": "misc/deep_export.json",
   "source": {
     "format": "json",
     "encoding": null,
@@ -13,21 +13,6 @@
     "original_layout": {},
     "data": null
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": null,
-      "actual_dtype": null,
-      "presence_status": "parse_error",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,8 +22,15 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "QUARANTINED",
+  "errors": [
+    "depth_limit_exceeded"
+  ],
   "validation": {
-    "parse_status": "ERROR:malformed_or_unsupported_content",
+    "parse_status": "ERROR:depth_limit_exceeded",
     "structure_preserved": null,
     "clinical_utility_preserved": null,
     "privacy_validation": "NOT_EVALUATED",

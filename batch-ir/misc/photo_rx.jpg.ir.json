@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "photo_rx",
+  "document_id": "misc/photo_rx.jpg",
   "source": {
     "format": "jpg",
     "encoding": null,
@@ -13,21 +13,6 @@
     "original_layout": {},
     "data": null
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": null,
-      "actual_dtype": null,
-      "presence_status": "parse_error",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +22,13 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "QUARANTINED",
+  "errors": [
+    "unsupported_format"
+  ],
   "validation": {
     "parse_status": "ERROR:unsupported_format",
     "structure_preserved": null,

@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "jeevanjyoti_ds_IP-26-00134",
+  "document_id": "discharge/jeevanjyoti_ds_IP-26-00134.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "JEEVAN JYOTI CHARITABLE HOSPITAL, BARABANKI\r\nDISCHARGE SUMMARY\r\n\r\nPatient Name: Brijesh Yadav        Age/Sex: 27 Yrs/M\r\nUHID: JJH-0077243        IPD No: IP/26/00134\r\nS/o Manoj Tiwari\r\nAddress: Makan No. 354, Rasooldih Kalan, Tehsil Fatehpur, Distt. Barabanki - 225728\r\nMobile: +91 69398 21446\r\nConsultant: Dr. Vandana Kulshrestha (MD Medicine)\r\nWard/Bed: Ward 9 (Medicine) / Bed 16\r\nDate of Admission: 16-10-2026\r\nDate of Discharge: 25-10-2026\r\n\r\nDiagnosis: Typhoid fever (A01.0); \r\nPresenting complaints: C/O fever for 7 days, generalised weakness.\r\nHistory: No K/C/O DM/HTN. No significant past history.\r\nCourse in hospital: Patient admitted with above complaints. BP 111/86 mmHg, Pulse 96/min, Temp 101.5 F, SpO2 92%. Haemoglobin 10.5 g/dL. Random Blood Sugar 113 mg/dL. Serum Creatinine 1.5 mg/dL. Treated conservatively. Brijesh sahab ki condition ab stable hai.\r\n\r\nMedications on discharge:\r\n 1. Inj Ceftriaxone 1 g IV x 15 days\r\n 2. Tab Paracetamol 650 mg 1-1-1 x 30 days\r\n 3. Tab Pantoprazole 40 mg 1-0-0 x 30 days\r\n\r\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Vandana Kulshrestha.\r\nAttendant: Manoj Tiwari, Mob. 6939821446\r\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,

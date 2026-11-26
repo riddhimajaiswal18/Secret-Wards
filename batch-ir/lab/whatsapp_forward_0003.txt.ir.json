@@ -1,6 +1,6 @@
 {
   "ir_version": "1.0",
-  "document_id": "whatsapp_forward_0003",
+  "document_id": "lab/whatsapp_forward_0003.txt",
   "source": {
     "format": "text",
     "encoding": "utf-8",
@@ -10,24 +10,11 @@
   },
   "structure": {
     "root_type": "string",
-    "original_layout": {},
+    "original_layout": {
+      "bom": false
+    },
     "data": "[30/05/26, 9:32 pm] Kamal Bhaiya: <attachment: report.pdf>\nForwarded\n*Lifeline Pathology*\nReport of Asha ji  48 Y / F\nHaemoglobin 14.0 g/dL | Random Blood Sugar 245 mg/dL | Serum Creatinine 2.5 mg/dL | \nDr ne bola Dolo 650 BD x 5 days lena hai 🙏\nKoi problem ho to call karo 8069773173\n"
   },
-  "fields": [
-    {
-      "field_id": "f_000001",
-      "field_name": "root",
-      "field_path": "$",
-      "parent_field_id": null,
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    }
-  ],
   "entities": [],
   "linkage": {
     "status": "NOT_EVALUATED",
@@ -37,6 +24,11 @@
     "matching_attributes": []
   },
   "transformations": [],
+  "annotations": {},
+  "pending_edits": {},
+  "edit_audit": [],
+  "processing_status": "PARSED",
+  "errors": [],
   "validation": {
     "parse_status": "SUCCESS",
     "structure_preserved": null,
