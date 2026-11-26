@@ -1,0 +1,21 @@
+{
+  "schema": "raksha-dataset/1",
+  "generator_version": "1.0.0",
+  "profile": "small",
+  "chaos": false,
+  "seed_sha256": "b66f297a8127989795d04bb733e7c42b3d99a93369aae307d76c7b946bfc76ae",
+  "ref_date": "2026-11-20",
+  "counts": {
+    "files": 200,
+    "records": 815,
+    "patients": 48,
+    "population": 240,
+    "required_link_units": 771,
+    "ambiguous_link_units": 2
+  },
+  "hashes": {
+    "input": "5ad631640e4432215eba07a9c13e681413800b84aac33c91e01b30dbd67f5967",
+    "truth": "bdf3e802a53ba1cbcec35efb12a2b7df23a42660c8962c2f76b94da0e15c35be",
+    "attacker": "7acdf95c5da60073ef58ec3921aa2f340eac15b4763a4093705c90a948b3c7e9"
+  }
+}

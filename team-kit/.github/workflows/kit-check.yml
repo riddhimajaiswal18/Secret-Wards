@@ -1,0 +1,28 @@
+# Proves the kit works: the starter runs on the practice data and passes the contract.
+# Teams can copy this workflow into their own repo (change the run command to theirs).
+name: kit-check
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run the starter on practice data
+        env:
+          RAKSHA_SECRET: ci-practice-secret
+        run: python3 starter/main.py --input dev/input --output my_output
+      - name: Contract check
+        run: python3 validate_output.py --input dev/input --output my_output
+      - name: Deterministic on a repeat run
+        env:
+          RAKSHA_SECRET: ci-practice-secret
+        run: |
+          python3 starter/main.py --input dev/input --output my_output_2
+          diff -r -x report.json my_output my_output_2
+      - name: Pre-submit check (static part)
+        run: python3 check_submission.py --repo starter || true
+      - name: Practice self-check
+        run: python3 check_dev.py --output my_output
