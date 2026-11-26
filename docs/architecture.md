@@ -55,3 +55,14 @@ The inspected kit includes four encoding/date conventions, duplicate registratio
 ## Contract and validation
 
 The ingestion CLI emits IR JSON; it is not yet the final privacy-firewall output contract. Before implementing release serialization, check the kit's `docs/SPEC.md`, `validate_output.py`, `check_dev.py`, and `check_submission.py`.
+
+## Understand stage
+
+`src.understanding.understand_ir(ir)` runs after Normalize. It uses the shared
+field mapper and Normalize annotations as evidence, then adds `UND-` annotations
+for section context, contextual semantic classification, person roles, and
+relationships. It follows the source format's existing hierarchy and locators;
+plain-text heading/value spans remain attached to the `doc` locator. It never
+changes `structure.data`, `pending_edits`, or existing Normalize findings.
+Unresolved or conflicting evidence remains `AMBIGUOUS` or `UNKNOWN`. This stage
+does not perform cross-document identity resolution.

@@ -11,7 +11,8 @@ from .dates import normalize_date
 from .other import (normalize_country, normalize_email, normalize_measurement,
                     normalize_url)
 from .phones import normalize_phone
-from .semantic import SemanticNormalizationConfig, normalize_semantics
+from .semantic import (SemanticNormalizationConfig, map_field_name,
+                       normalize_field_key, normalize_semantics)
 from .unicode import identify_scripts, normalize_unicode, normalize_whitespace
 
 
@@ -187,7 +188,8 @@ def normalize_document_file(path: str, *, document_id: str | None = None,
                                             source_identity=source_identity), config=config)
 
 
-__all__ = ["NormalizationConfig", "SemanticNormalizationConfig", "normalize_semantics",
+__all__ = ["NormalizationConfig", "SemanticNormalizationConfig", "map_field_name",
+           "normalize_field_key", "normalize_semantics",
            "normalize_ir", "normalize_document_file",
            "normalize_date", "normalize_phone", "normalize_email", "normalize_url",
            "normalize_country", "normalize_measurement"]
