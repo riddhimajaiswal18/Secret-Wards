@@ -1,0 +1,82 @@
+# Initial policy outline only. Every threshold/level is provisional and unvalidated.
+# Do not interpret these settings as proven privacy guarantees.
+
+supported_formats:
+  # FHIR R4 Bundles are JSON resources and must validate after serialization.
+  extensions: [.csv, .tsv, .json, .txt]
+  content_sniffing: required
+  fhir_release: R4
+  unsupported_formats: [xml, pdf, jpg]
+
+languages:
+  supported: [English, Hindi-Devanagari, Hinglish]
+  normalization: Unicode NFKC plus script-aware normalization
+  transliteration: enabled
+
+identifier_detection:
+  categories:
+    - patient_name
+    - relative_name
+    - phone
+    - email
+    - aadhaar_like
+    - abha
+    - uhid
+    - mrn
+    - pan
+    - insurance_id
+    - address
+    - date_of_birth
+  scan_channels: [content, filename, header, json_key, metadata, attachment]
+  # Detection rules and confidence thresholds require evaluation against practice
+  # and held-out synthetic data before being relied upon.
+
+linkage:
+  # Provisional placeholders, not validated thresholds.
+  match_threshold: null
+  review_threshold: null
+  require_independent_evidence: true
+  name_only_linking: false
+  ambiguous_identity: return_null
+  prevent_transitive_overmerge: true
+
+age_bands:
+  width_years: 5 # Provisional; true age must remain inside its assigned band.
+  minor_policy: unresolved
+  oldest_age_policy: unresolved
+
+location_generalization:
+  levels: [village, tehsil, district, state]
+  default_level: district # Provisional; risk assessment may require coarser output.
+  rare_combination_action: suppress_or_generalize
+
+date_shifting:
+  method: deterministic_per_patient_hmac_offset
+  max_days: 180 # Provisional; must be reviewed against attack risk and date validity.
+  preserve_intervals: true
+  same_patient_same_offset: true
+  partial_date_policy: unresolved
+  boundary_date_policy: unresolved
+
+quarantine:
+  malformed: true
+  undecodable: true
+  unsupported: true
+  empty: true
+  excessive_nesting: true
+  resource_limit_exceeded: true
+  never_copy_raw_to_sanitized: true
+
+clinical_preservation:
+  preserve_exactly:
+    - medicines
+    - doses
+    - frequencies
+    - vitals
+    - laboratory_values_and_units
+    - diagnoses
+    - procedures
+    - hospital_stay_durations
+  protect_clinicians: true
+  distinguish_complaints_from_relative_names: true
+  eponymous_diagnoses_are_clinical: true

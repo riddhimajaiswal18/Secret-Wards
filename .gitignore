@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Test and tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local data, outputs, secrets, and temporary files
+.env
+.env.*
+*.key
+*.pem
+data/
+input/
+output/
+outputs/
+notes/
+out/
+sanitized/
+quarantine/
+tmp/
+temp/
+*.tmp
+*.log
+node_modules/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
