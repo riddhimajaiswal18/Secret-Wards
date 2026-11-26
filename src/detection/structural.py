@@ -43,6 +43,31 @@ def _decode(value: str, limit: int = 65536) -> bytes | None:
     return blob
 
 
+_GENERIC_KEY = {"system", "hospital", "exported_by", "generated_at", "source_path", "visits",
+                "meta", "resource", "entry", "patients", "records", "items", "data", "rows",
+                "header", "columns", "fields", "type", "id", "name", "status", "date"}
+
+
+def _index_key_findings(key: str, value, index) -> list:
+    """Keys that are identities: a bare MRN, or a Titlecase token indexing an object/array."""
+    lowered = key.strip().lower()
+    if lowered in _GENERIC_KEY or len(lowered) < 3:
+        return []
+    from src.detection.engine import Finding, UHID, NAME
+    if re.fullmatch(r"\d{4,12}", lowered):
+        return [Finding(UHID, 0, len(key), "patient", 0.8)]
+    parts = [part for part in re.split(r"[_\-\s]+", key) if part]
+    if parts and all(
+            part[:1].isupper() and len(part) >= 3 and part.lower() not in _GENERIC_KEY
+            for part in parts) and len(parts) <= 3:
+        return [Finding(NAME, 0, len(key), "patient", 0.7)]
+    return []
+
+
+def _index_key_is_identity(key: str, value, index) -> bool:
+    return bool(_index_key_findings(key, value, index))
+
+
 def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                        tokens: dict[str, str]) -> dict[str, int]:
     """Sanitise headers, keys and embedded attachments in place; return per-kind counts."""
@@ -97,9 +122,12 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                                 node[key] = tokens.get(findings[0].kind, "[REDACTED]")
                                 bump("BASE64")
                                 continue
+                    # Index-by-patient objects: the key itself is the identity, and it may be a
+                    # single capitalised token ("Anita_Sharma") or a bare numeric MRN ("010565").
                     if isinstance(key, str) and len(key) >= 4 and not classify(key):
                         findings = (find(key, index)
-                                    or find(key.replace("_", " ").replace("-", " "), index))
+                                    or find(key.replace("_", " ").replace("-", " "), index)
+                                    or _index_key_findings(key, child, index))
                         if findings:
                             new_key = tokens.get(findings[0].kind, "[REDACTED]").strip("[]")
                             new_key = new_key.lower() or "redacted"

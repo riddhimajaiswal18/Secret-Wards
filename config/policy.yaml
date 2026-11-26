@@ -67,6 +67,12 @@ date_shifting:
   partial_date_policy: unresolved
   boundary_date_policy: unresolved
 
+capabilities:
+  # Failing closed here prevents a degraded run from being mistaken for a complete one.
+  # Add capability names to `require` to make their absence a hard error.
+  require: []                      # e.g. [transliteration, phone_validation]
+  record_in_report: true
+
 quarantine:
   malformed: true
   undecodable: true

@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 
 from src.output.writer import write_submission
+from src.security.capabilities import enforce
 from src.security.safe_logging import install_log_filter, register
 
 LOG = logging.getLogger("raksha")
@@ -57,6 +58,7 @@ def run(input_dir: str | Path, output_dir: str | Path, *, policy_path: str | Pat
         LOG.warning("no run secret supplied: pseudonyms will not be produced in this pass")
 
     policy = load_policy(policy_path)
+    enforce(policy)                      # fail closed when a required capability is absent
     report = write_submission(input_dir, output_dir, submission=submission,
                               policy_digest=policy_digest(policy_path), policy=policy)
     counts = report["counts"]

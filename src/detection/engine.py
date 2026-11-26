@@ -31,10 +31,27 @@ _ANCHOR_RELATIVE = re.compile(
     re.IGNORECASE)
 _ANCHOR_CLINICIAN = re.compile(
     r"(?:Dr\.?|Doctor|Consultant|RMO|MO|Physician|Surgeon)\s*[:\-–]?\s*", re.IGNORECASE)
+# Romanised Hindi and Devanagari name anchors. The captured run may be lowercase (Hinglish) or a
+# single Devanagari token, which the capitalised-run rule could never match.
+_ANCHOR_LOCAL = re.compile(
+    r"(?:patient\s*ka\s*naam|patient\s*ka\s*name|naam|नाम|मरीज़\s*का\s*नाम|रोगी\s*का\s*नाम)"
+    r"\s*[:\-–]?\s*(?:hai\s+|है\s+)?", re.IGNORECASE)
+_LOCAL_TOKEN = re.compile(r"[A-Za-z][A-Za-z'\-]{2,}|[\u0900-\u0963\u0970-\u097F]{2,}")
+_HINGLISH_STOP = {
+    "hai", "hain", "ka", "ki", "ke", "ko", "se", "aur", "mein", "me", "koi", "nahi", "tha",
+    "the", "patient", "mobile", "number", "phone", "address", "pata", "umar", "age", "ward",
+    "doctor", "dr", "hospital", "admit", "discharge", "fever", "bukhar", "dard", "khansi",
+    "dawa", "goli", "din", "report", "test", "opd", "ipd", "mrn", "uhid",
+}
+
 _ANCHOR_ADDRESS = re.compile(
     r"(?:Address|Addr|पता|Residence)\s*[:\-–]\s*", re.IGNORECASE)
 
 # A name-shaped run: 2–4 capitalised tokens, or Devanagari words of 3+ characters.
+# Hinglish names carry a lowercase kinship suffix: "Kamal bhaiya", "Asha ji", "Mahesh bhai".
+_NAME_KIN = re.compile(r"\b[A-Z][a-z]{2,}\s+(?:bhaiya|bhai|behenji|behen|ji|didi|sahab|sahib|ben)\b",
+                       re.IGNORECASE)
+
 _NAME_RUN = re.compile(r"(?:[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,}){1,3}"
                        r"|[\u0900-\u0963\u0970-\u097F]{3,}"
                        r"(?:\s+[\u0900-\u0963\u0970-\u097F]{3,}){1,3})")
@@ -110,6 +127,12 @@ def find(text: str, index: ProtectionIndex, *, names: bool = True) -> list[Findi
         found.extend(_anchored(text, _ANCHOR_RELATIVE, RELATIVE, 0.9, protected, index))
         found.extend(_anchored(text, _ANCHOR_NAME, NAME, 0.9, protected, index))
         found.extend(_bare_runs(text, protected, index))
+        found.extend(_anchored_local(text, protected, index))
+        for match in _NAME_KIN.finditer(text):
+            candidate = Finding(NAME, match.start(), match.end(), "patient", 0.8)
+            if not candidate.overlaps(protected) and \
+                    not index.is_clinical_text(text, match.start(), match.end()):
+                found.append(candidate)
     return _dedupe(found)
 
 
@@ -129,6 +152,36 @@ def _anchored(text: str, anchor: re.Pattern, kind: str, confidence: float,
         candidate = Finding(kind, start, end, "relative" if kind == RELATIVE else "patient",
                             confidence)
         if candidate.overlaps(protected) or index.is_clinical_text(text, start, end):
+            continue
+        out.append(candidate)
+    return out
+
+
+def _anchored_local(text: str, protected: list[tuple[int, int]],
+                    index: ProtectionIndex) -> list[Finding]:
+    """Names after a Hinglish or Devanagari anchor: lowercase runs and single tokens allowed.
+
+    "Patient ka naam krishna chaitanya hai" and "नाम: सुनीता" are the two shapes that leaked at
+    100% and 21% respectively because they do not look like English names.
+    """
+    out: list[Finding] = []
+    for anchor in _ANCHOR_LOCAL.finditer(text):
+        cursor = anchor.end()
+        run: list[tuple[int, int]] = []
+        for token in _LOCAL_TOKEN.finditer(text, cursor, cursor + 80):
+            value = token.group(0)
+            if len(run) >= 3:
+                break
+            if value.lower() in _HINGLISH_STOP or value.lower() in _NOT_NAMES:
+                break
+            if index.word_is_clinical(value) or index.is_place(value):
+                break
+            run.append(token.span())
+        if not run:
+            continue
+        left, right = run[0][0], run[-1][1]
+        candidate = Finding(NAME, left, right, "patient", 0.75)
+        if candidate.overlaps(protected) or index.is_clinical_text(text, left, right):
             continue
         out.append(candidate)
     return out
@@ -158,7 +211,7 @@ def _bare_runs(text: str, protected: list[tuple[int, int]],
             if keep:
                 group.append((start, end))
                 continue
-            if len(group) >= 2:
+            if len(group) >= 2 or (len(group) == 1 and _devanagari_word(run)):
                 left = match.start() + group[0][0]
                 right = match.start() + group[-1][1]
                 candidate = Finding(NAME, left, right, "patient", 0.6)
@@ -167,6 +220,11 @@ def _bare_runs(text: str, protected: list[tuple[int, int]],
                     out.append(candidate)
             group = []
     return out
+
+
+def _devanagari_word(run: str) -> bool:
+    """A single Devanagari word of 4+ characters is name-shaped; Latin single words are not."""
+    return bool(re.fullmatch(r"[\u0900-\u0963\u0970-\u097F]{4,}", run.strip()))
 
 
 def _dedupe(findings: list[Finding]) -> list[Finding]:
