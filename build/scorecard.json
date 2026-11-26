@@ -1,0 +1,116 @@
+{
+  "canaries": {
+    "denominator": 4,
+    "found": 1
+  },
+  "dependencies": {
+    "PIL": true,
+    "indic_transliteration": false,
+    "interpreter": "/Users/saichaitu/miniconda3/bin/python3",
+    "pdftoppm_binary": false,
+    "phonenumbers": false,
+    "pypdf": true,
+    "pytesseract": true,
+    "tesseract_binary": true,
+    "yaml": true
+  },
+  "determinism": {
+    "differing": [],
+    "files": 197,
+    "identical": true
+  },
+  "direct_pii": {
+    "by_channel": {
+      "base64": 0.0,
+      "content": 0.1791,
+      "filename": 0.0833,
+      "header": 0.0,
+      "key": 0.4167,
+      "metadata": 0.125
+    },
+    "by_script": {
+      "deva": 0.2098,
+      "hinglish": 1.0,
+      "latin": 0.1446
+    },
+    "by_type": {
+      "AADHAAR": 2,
+      "CANARY": 1,
+      "DOB": 9,
+      "HOUSE": 74,
+      "LANDMARK": 12,
+      "LOCALITY": 57,
+      "MRN": 25,
+      "PATIENT_NAME": 212,
+      "PHONE": 57,
+      "PIN": 24,
+      "RELATIVE_NAME": 37,
+      "VILLAGE": 62
+    },
+    "denominator": 3234,
+    "examples": [
+      [
+        "registration/sanjeevani_registration.csv",
+        "VILLAGE",
+        "content"
+      ],
+      [
+        "registration/sanjeevani_registration.csv",
+        "VILLAGE",
+        "content"
+      ],
+      [
+        "registration/sanjeevani_registration.csv",
+        "VILLAGE",
+        "content"
+      ],
+      [
+        "registration/sanjeevani_registration.csv",
+        "VILLAGE",
+        "content"
+      ],
+      [
+        "registration/sanjeevani_registration.csv",
+        "VILLAGE",
+        "content"
+      ],
+      [
+        "registration/sanjeevani_registration.csv",
+        "VILLAGE",
+        "content"
+      ],
+      [
+        "registration/sanjeevani_registration.csv",
+        "VILLAGE",
+        "content"
+      ],
+      [
+        "registration/sanjeevani_registration.csv",
+        "VILLAGE",
+        "content"
+      ]
+    ],
+    "leaked": 572,
+    "rate": 0.1769
+  },
+  "files": {
+    "exported": 197,
+    "input": 200,
+    "quarantined": 3,
+    "unaccounted": 0
+  },
+  "identity": {
+    "linked_records": 0
+  },
+  "integrity": {
+    "exported": 197,
+    "raw_copies": 9,
+    "raw_copies_penalised": 0,
+    "unaccounted_files": []
+  },
+  "utility": {
+    "denominator": 4855,
+    "kept": 4824,
+    "rate": 0.9936
+  }
+}
