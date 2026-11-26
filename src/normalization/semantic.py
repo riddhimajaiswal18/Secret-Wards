@@ -103,6 +103,11 @@ def _key(value: str) -> str:
     return " ".join(value.split())
 
 
+def normalize_field_key(value: str) -> str:
+    """Normalize a field/heading label with the same rules used by Normalize."""
+    return _key(value)
+
+
 def _verhoeff_valid(digits: str) -> bool:
     if not digits or len(set(digits)) == 1:
         return False
@@ -162,6 +167,14 @@ def _map_field(name: str, context: list[str], siblings: dict[str, Any], value: A
     if key in {"value", "type", "description", "name", "id", "identifier"}:
         return None, "UNKNOWN", "generic_field_without_sufficient_context"
     return None, "UNKNOWN", "no_configured_field_mapping"
+
+
+def map_field_name(name: str, *, context: list[str] | None = None,
+                   siblings: dict[str, Any] | None = None, value: Any = None,
+                   config: SemanticNormalizationConfig | None = None) -> tuple[str | None, str, str]:
+    """Public Normalize field mapper reused by later contextual stages."""
+    return _map_field(name, context or [], siblings or {}, value,
+                      _canonical_fields(config or SemanticNormalizationConfig()))
 
 
 def _clinical_lexicon(config: SemanticNormalizationConfig) -> dict[str, dict[str, str]]:
