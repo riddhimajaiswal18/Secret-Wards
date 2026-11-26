@@ -215,7 +215,12 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
         if patient:
             counts["records_linked"] += 1
         for locator in record_locators(ir):
-            records.append({"file": f"{SANITIZED}/{safe_relative}", "loc": locator,
+            # SPEC §6 uses "doc" for a whole text document and a whole FHIR Bundle. Internal
+            # locators (span:0:0, path:$) are correct for editing but do not match the contract,
+            # so the evaluator could not join our records to its own units: identity scored zero
+            # despite correct pseudonyms.
+            published = "doc" if (locator.startswith("span:") or locator == "path:$") else locator
+            records.append({"file": f"{SANITIZED}/{safe_relative}", "loc": published,
                             "patient": patient})
             counts["records_processed"] += 1
 
