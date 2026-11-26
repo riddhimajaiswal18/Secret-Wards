@@ -96,16 +96,27 @@ def _identifier_patterns() -> list[tuple[str, re.Pattern, float]]:
             (UHID, ids._UHID, 0.8), (PIN, ids._PINCODE, 0.7)]
 
 
-_CLINICIAN_PREFIX = re.compile(r"(?:Dr\.?|Doctor|Consultant|RMO|MO)\s*", re.IGNORECASE)
+# Word boundaries are load-bearing: without them "dr" matches inside "Qadri" and "MO" inside
+# "mob", and each false prefix opens a 60-character clinician span that vetoes the real name and
+# phone number next to it. That is how a file full of findings was released unchanged.
+_CLINICIAN_PREFIX = re.compile(r"\b(?:Dr\.?|Doctor|Consultant|RMO|MO)\b\.?\s*", re.IGNORECASE)
 
 
 def _clinician_spans(text: str) -> list[tuple[int, int]]:
     """Roles marked on the page win: a clinician is not the patient and must not be scrubbed."""
     spans: list[tuple[int, int]] = []
     for match in _CLINICIAN_PREFIX.finditer(text):
-        run = _NAME_RUN.search(text[match.end():match.end() + 60])
-        if run:
-            spans.append((match.start(), match.end() + run.end()))
+        window = text[match.end():match.end() + 60]
+        run = _NAME_RUN.search(window)
+        if not run:
+            continue
+        end = match.end() + run.end()
+        # A clinician span protects one name on one line; never let it run past the line end,
+        # otherwise it swallows unrelated text that follows (names, phone numbers, whole rows).
+        newline = text.find("\n", match.end())
+        if newline != -1:
+            end = min(end, newline)
+        spans.append((match.start(), end))
     return spans
 
 
