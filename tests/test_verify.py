@@ -156,3 +156,11 @@ def test_evidence_never_republishes_the_identifier(tmp_path):
                      released={"a.txt": "Sunita Patel 6910522119"})
     blob = json.dumps(verify_tree(inp, out)["findings"])
     assert "Sunita Patel" not in blob and "6910522119" not in blob
+
+
+def test_uuid_digits_are_not_an_aadhaar(tmp_path):
+    """FHIR fullUrl UUIDs match the Aadhaar digit shape; reporting them is a false positive."""
+    body = '{"fullUrl": "urn:uuid:6cd93b57-6d6d-453c-aaf2-829280011963", "subject": "urn:uuid:231534ba-b5a1-4c1e-9f3d-0a1b2c3d4e5f"}'
+    inp, out = build(tmp_path, inputs={"fhir/b.json": body}, released={"fhir/b.json": body})
+    result = verify_tree(inp, out)
+    assert result["overall"] == "passed", result["checks"]

@@ -68,6 +68,11 @@ def _index_key_is_identity(key: str, value, index) -> bool:
     return bool(_index_key_findings(key, value, index))
 
 
+# A 12-digit number is an Aadhaar only when the field says so; likewise an MRN inside an export path.
+_AADHAAR_KEY = re.compile(r"(?:aadhar|aadhaar|abha|uid|ration)", re.IGNORECASE)
+_PATH_KEY = re.compile(r"(?:path|file|dir|folder|source)", re.IGNORECASE)
+_PATH_MRN = re.compile(r"(?<![0-9])\d{5,9}(?![0-9])")
+
 _IDENTITY_KINDS = {"NAME", "RELATIVE", "UHID", "AADHAAR", "ABHA", "PAN", "PHONE"}
 
 
@@ -168,6 +173,22 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
             node = stack.pop()
             if isinstance(node, dict):
                 for key in list(node.keys()):
+                    child = node.get(key)
+                    # Note: no `continue` here. Skipping the rest of the loop body also skips
+                    # stack.append(child), which silently stopped every descendant of a matched
+                    # field from being sanitised (metadata leakage 12.5% -> 52.5% when that happened).
+                    if isinstance(key, str) and isinstance(child, str):
+                        if _AADHAAR_KEY.search(key) and re.fullmatch(r"[\d\s-]{12}", child.strip()):
+                            node[key] = tokens.get("AADHAAR", "[AADHAAR]")
+                            child = node[key]
+                            bump("AADHAAR")
+                        elif (_PATH_KEY.search(key) and ("\\" in child or "_" in child)
+                              and _PATH_MRN.search(child)):
+                            cleaned = _PATH_MRN.sub(tokens.get("MRN", "[MRN]"), child)
+                            if cleaned != child:
+                                node[key] = cleaned
+                                child = cleaned
+                                bump("MRN")
                     renamed = _identity_key_replacement(key, node, index, tokens)
                     if renamed is not None:
                         new_key, kind = renamed

@@ -113,3 +113,23 @@ def test_phone_after_a_contact_label_beats_a_protected_window(tmp_path):
     _, text = _run(tmp_path, "Rx\nTab. Paracetamol 500 mg BD x 3 days\nMob: 8069773173\n")
     assert "8069773173" not in text
     assert "500 mg" in text and "3 days" in text
+
+
+def test_aadhaar_is_detected_only_from_its_label(tmp_path):
+    body = '{"ids": {"aadhar_no": "902115225016", "abha": "12-3456-7890-1234"}}'
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    (inputs / "reg").mkdir(parents=True)
+    (inputs / "reg" / "p.json").write_text(body, encoding="utf-8")
+    write_submission(inputs, outputs)
+    released = (outputs / "sanitized" / "reg" / "p.json").read_text()
+    assert "902115225016" not in released
+
+
+def test_mrn_inside_an_export_path_is_detected(tmp_path):
+    body = '{"source_path": "D:\\\\HIS\\\\exports\\\\opd\\\\Shahid_NA_010607\\\\visits.json"}'
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    (inputs / "opd").mkdir(parents=True)
+    (inputs / "opd" / "v.json").write_text(body, encoding="utf-8")
+    write_submission(inputs, outputs)
+    released = (outputs / "sanitized" / "opd" / "v.json").read_text()
+    assert "010607" not in released

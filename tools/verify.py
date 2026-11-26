@@ -66,11 +66,26 @@ def _mask(value: str) -> str:
     return f"len={len(value)} sha256={digest}"
 
 
+_UUID = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+
+
 def candidate_identifiers(text: str) -> list[tuple[str, str]]:
-    """Identifier-shaped strings in one text blob, as (kind, value)."""
+    """Identifier-shaped strings in one text blob, as (kind, value).
+
+    UUIDs are excluded: FHIR fullUrl and subject references are 36-character identifiers whose digit
+    runs match the Aadhaar and MRN shapes. Reporting them as patient identifiers would be a false
+    positive, and a verifier that cries wolf is as useless as one that stays silent.
+    """
     out: list[tuple[str, str]] = []
+    uuid_spans = [m.span() for m in _UUID.finditer(text)]
+
+    def inside_uuid(a: int, b: int) -> bool:
+        return any(s <= a and b <= e for s, e in uuid_spans)
+
     for kind, pattern in PATTERNS.items():
         for match in pattern.finditer(text):
+            if inside_uuid(*match.span()):
+                continue
             out.append((kind, match.group(0)))
     # A bare number is an identifier only when a label introduces it (MRN, UHID, IPD, reg no).
     for match in _LABELLED_NUMBER.finditer(text):
