@@ -34,6 +34,29 @@ class Scan:
         return bool(self.text.strip())
 
 
+def plausible_text(text: str) -> bool:
+    """Reject carved nonsense: a compressed image stream inflates to bytes that look like text.
+
+    A real document has mostly printable characters, a healthy share of letters and words of
+    ordinary length. Anything else is binary and must be quarantined, never released.
+    """
+    import re
+
+    stripped = text.strip()
+    if len(stripped) < 3:
+        return False
+    allowed = set(".,:;/-()[]#%+*'&\"!?\n\t ")
+    printable = sum(1 for char in stripped
+                    if char.isalnum() or char.isspace() or char in allowed)
+    ratio = printable / len(stripped)
+    letters = sum(1 for char in stripped if char.isalpha()) / len(stripped)
+    words = re.findall(r"[A-Za-z\u0900-\u097F]{2,}", text)
+    if not words:
+        return False
+    mean_word = sum(len(word) for word in words) / len(words)
+    return ratio >= 0.90 and letters >= 0.25 and mean_word <= 20
+
+
 def _bounded(text: str) -> str:
     text = text.replace("\x00", " ")
     return text[:MAX_CHARS]
@@ -116,7 +139,24 @@ def _pdf_carve(raw: bytes) -> str:
             value = re.sub(rb"\\([()\\])", rb"\1", value)
             if len(value) >= 2:
                 pieces.append(value.decode("latin-1", "ignore"))
-    return "\n".join(dict.fromkeys(pieces))
+        for encoded in re.finditer(rb"<([0-9A-Fa-f\s]{4,})>", blob):
+            digits = re.sub(rb"\s", b"", encoded.group(1))
+            if len(digits) % 2:
+                continue
+            try:
+                data = bytes.fromhex(digits.decode("ascii"))
+            except ValueError:
+                continue
+            if data[:2] == b"\xfe\xff":
+                piece = data[2:].decode("utf-16-be", "ignore")
+            elif data and all(byte == 0 for byte in data[0::2]):
+                piece = data.decode("utf-16-be", "ignore")
+            else:
+                piece = data.decode("latin-1", "ignore")
+            if len(piece.strip()) >= 2:
+                pieces.append(piece)
+    kept = [piece for piece in dict.fromkeys(pieces) if plausible_text(piece)]
+    return "\n".join(kept)
 
 
 def _printable_runs(raw: bytes, limit: int = 65536, minimum: int = 6) -> str:
@@ -127,7 +167,7 @@ def _printable_runs(raw: bytes, limit: int = 65536, minimum: int = 6) -> str:
     for match in re.finditer(rb"[\x20-\x7e\t]{%d,}" % minimum, raw[:limit]):
         candidate = match.group(0).decode("ascii", "ignore").strip()
         letters = sum(char.isalpha() for char in candidate)
-        if letters >= 4 and letters / max(len(candidate), 1) > 0.55:
+        if letters >= 4 and letters / max(len(candidate), 1) > 0.55 and plausible_text(candidate):
             runs.append(candidate)
     return "\n".join(dict.fromkeys(runs))
 
@@ -159,6 +199,7 @@ def scan_image(path: Path) -> Scan:
         meta_text = _printable_runs(raw)
         if meta_text.strip():
             meta_notes.append("carved_from_bytes")
+    meta_text = meta_text if plausible_text(meta_text) else ""
     parts = [part for part in (meta_text, ocr.text) if part.strip()]
     if meta_text.strip() and ocr.ok:
         backend = "exif+ocr"

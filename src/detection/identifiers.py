@@ -24,8 +24,10 @@ _PAN = re.compile(r"(?<![A-Z0-9])([A-Z]{3}[PCHFATBLJG][A-Z]\d{4}[A-Z])(?![A-Z0-9
 # ABHA / health id: 14 digits, optionally dashed after 2.
 _ABHA = re.compile(r"(?<!\d)(\d{2}-?\d{4}-?\d{4}-?\d{4})(?!\d)")
 _EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
-# Hospital identifiers: letters + separator + digits (UHID-010610, DHH-IPD-00591, IP/26/00130).
-_UHID = re.compile(r"(?<![A-Za-z0-9])((?:[A-Z]{2,6}|[A-Za-z]{2,6})[-/ ]?(?:IPD|IP|OPD|MRN|UHID)?[-/ ]?\d{3,6}(?:[-/]\d{1,6})?)(?![0-9])")
+# Hospital identifiers: a mandatory letter prefix, then a separator, then digits.
+# The letter prefix is required and a bare space is not a separator, so a vital sign such as
+# "BP 117/82" or a ratio such as "117/82" can never be read as an identifier.
+_UHID = re.compile(r"(?<![A-Za-z0-9])([A-Za-z]{2,6}[-/](?:[A-Za-z]{1,6}[-/])?\d{2,6}(?:[-/]\d{1,6})?)(?![0-9])")
 _PINCODE = re.compile(r"(?<!\d)(\d{6})(?!\d)")
 
 # Name shape: 2–4 capitalised tokens, not a unit, not a drug form, not an organisation suffix.
@@ -40,6 +42,9 @@ _UNIT_WORDS = {
     "mg", "ml", "gm", "kg", "mmhg", "mmol", "iu", "mcg", "drops", "tablet", "capsule",
     "days", "weeks", "hours", "times", "daily", "twice", "thrice",
 }
+
+# Dosage-form markers: a capitalised word sitting next to one of these is a drug, not a person.
+_FORM_WORDS = {"tab", "tabs", "inj", "cap", "caps", "syp", "susp", "oint", "drops", "sos", "stat"}
 
 
 def fold_digits(text: str) -> str:
@@ -71,15 +76,24 @@ def scrub(text: str) -> tuple[str, dict[str, int]]:
     text = sub(_PINCODE, "PIN", text)
 
     def name_repl(match: re.Match) -> str:
-        run = match.group(1)
-        tokens = run.split()
-        lowered = {token.lower() for token in tokens}
-        if lowered & _STOPWORDS or lowered & _UNIT_WORDS:
-            return run
-        if any(len(token) < 3 for token in tokens):
-            return run
+        tokens = match.group(1).split()
+        # Redact the name tokens and keep the surrounding vocabulary: "Patient Farhan Qureshi"
+        # must not survive because "Patient" happened to sit in front of it.
+        clinical = _STOPWORDS | _UNIT_WORDS | _FORM_WORDS
+        candidates = [token for token in tokens if token.lower() not in clinical]
+        if len(candidates) < 2 or any(len(token) < 3 for token in candidates):
+            return match.group(0)
+        out, previous = [], None
+        for token in tokens:
+            if token.lower() in clinical:
+                out.append(token)
+                previous = None
+                continue
+            if previous != _TOKEN:
+                out.append(_TOKEN)
+                previous = _TOKEN
         mark("NAME")
-        return _TOKEN
+        return " ".join(out)
 
     text = _NAME_RUN.sub(name_repl, text)
     return text, counts
