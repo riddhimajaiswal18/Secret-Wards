@@ -79,3 +79,30 @@ def test_clinician_prefix_does_not_match_inside_words():
     assert all("\n" not in "" for _ in spans)          # symbolic: spans are ranges, see below
     name_at = "19:10 - Dr. Ramesh Srivastava took round.\nPatient Anita Deshmukh"
     assert spans[0][1] <= name_at.index(" took"), "a clinician span must stop at the name"
+
+
+# ── XML: values must be detected, structure and clinic kept ────────────────
+def test_xml_text_nodes_and_attributes_are_sanitized(tmp_path):
+    """HL7 CDA discharge was re-serialised with every identifier intact: no detector saw it."""
+    xml = ('<ClinicalDocument><recordTarget><patientRole>'
+           '<id extension="JJH-0077112"/><name>Zorawar Qadri</name>'
+           '<telecom value="mob 6910522119"/></patientRole></recordTarget>'
+           '<component><section><code code="11450-4" displayName="Problem"/><title>Diagnosis</title>'
+           '<text>Acute gastroenteritis, Metformin 500 mg BD</text></section></component>'
+           '</ClinicalDocument>')
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    (inputs / "misc").mkdir(parents=True)
+    (inputs / "misc" / "cda.xml").write_text(xml, encoding="utf-8")
+    write_submission(inputs, outputs)
+    released = (outputs / "sanitized" / "misc" / "cda.xml").read_text(encoding="utf-8")
+    assert "Zorawar Qadri" not in released and "6910522119" not in released
+    assert "Acute gastroenteritis" in released and "Metformin 500 mg" in released
+    assert "<ClinicalDocument>" in released and "<name>" in released
+
+
+# ── PHONE: contact label in a clinical row ─────────────────────────────────
+def test_phone_after_contact_label_is_detected_in_a_clinical_row(tmp_path):
+    body = "VISITOR LOG\n18:40 - Zorawar Qadri (attendant, bed 12), mob 6910522119\n"
+    _, text = _run(tmp_path, body)
+    assert "6910522119" not in text
+    assert "bed 12" in text, "clinical context must survive"

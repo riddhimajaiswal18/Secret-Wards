@@ -15,7 +15,7 @@ import binascii
 import re
 
 from src.detection.columns import classify
-from src.detection.engine import find
+from src.detection.engine import find, redact
 from src.detection.protection import ProtectionIndex
 from src.ir import IntermediateRepresentation
 
@@ -120,6 +120,46 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
             replacement = tokens.get(findings[0].kind, "[REDACTED]")
             header[position] = replacement
             bump(findings[0].kind)
+
+    # ── XML text nodes and attributes ────────────────────────────────────────
+    # Without this branch no detector ever sees an XML value: the IR walker only knew json/fhir,
+    # so an HL7 CDA discharge summary was re-serialised with every identifier intact and still
+    # reported as sanitized.
+    if fmt == "xml":
+        def walk(node) -> None:
+            if not isinstance(node, dict):
+                return
+            for field in ("text", "tail"):
+                value = node.get(field)
+                if isinstance(value, str) and value.strip():
+                    cleaned, kinds = redact(value, index, tokens)
+                    if kinds:
+                        node[field] = cleaned
+                        for kind, count in kinds.items():
+                            for _ in range(count):
+                                bump(kind)
+            # The XML IR stores attributes as [name, value] pairs, not as a mapping.
+            attributes = node.get("attributes")
+            pairs = (list(attributes.items()) if isinstance(attributes, dict)
+                     else [tuple(pair) for pair in attributes or []])
+            for index_of, (name, value) in enumerate(pairs):
+                if not isinstance(value, str) or not value.strip():
+                    continue
+                cleaned, kinds = redact(value, index, tokens)
+                if not kinds:
+                    continue
+                if isinstance(attributes, dict):
+                    attributes[name] = cleaned
+                else:
+                    attributes[index_of] = [name, cleaned]
+                for kind, count in kinds.items():
+                    for _ in range(count):
+                        bump(kind)
+            for child in node.get("children") or []:
+                walk(child)
+
+        if isinstance(data, dict):
+            walk(data)
 
     # ── JSON/FHIR keys and attachments ───────────────────────────────────────
     if fmt in {"json", "fhir"}:

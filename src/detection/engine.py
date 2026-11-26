@@ -99,6 +99,8 @@ def _identifier_patterns() -> list[tuple[str, re.Pattern, float]]:
 # Word boundaries are load-bearing: without them "dr" matches inside "Qadri" and "MO" inside
 # "mob", and each false prefix opens a 60-character clinician span that vetoes the real name and
 # phone number next to it. That is how a file full of findings was released unchanged.
+_CONTACT_LABEL = re.compile(r"(?:mob|mobile|phone|ph|tel|telephone|contact|call|whatsapp)\W{0,3}$",
+                            re.IGNORECASE)
 _CLINICIAN_PREFIX = re.compile(r"\b(?:Dr\.?|Doctor|Consultant|RMO|MO)\b\.?\s*", re.IGNORECASE)
 
 
@@ -132,7 +134,11 @@ def find(text: str, index: ProtectionIndex, *, names: bool = True) -> list[Findi
         for match in pattern.finditer(folded):
             start, end = match.span()
             candidate = Finding(kind, start, end, "patient", confidence)
-            if candidate.overlaps(protected) or index.is_clinical_text(folded, start, end):
+            # "mob 6910522119" sits in a row full of bed numbers and times, so the clinical veto
+            # fires on the digits. A contact word immediately in front settles what the number is.
+            contact = kind == PHONE and bool(_CONTACT_LABEL.search(text[max(0, start - 12):start]))
+            if candidate.overlaps(protected) or (
+                    index.is_clinical_text(folded, start, end) and not contact):
                 continue
             # A 6-digit PIN and a 6-digit value are the same shape; require a locality word nearby.
             if kind == PIN and not re.search(r"(?:pin|pincode|post|zip)\W{0,3}$",
