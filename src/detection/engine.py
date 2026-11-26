@@ -49,8 +49,15 @@ _ANCHOR_ADDRESS = re.compile(
 
 # A name-shaped run: 2–4 capitalised tokens, or Devanagari words of 3+ characters.
 # Hinglish names carry a lowercase kinship suffix: "Kamal bhaiya", "Asha ji", "Mahesh bhai".
-_NAME_KIN = re.compile(r"\b[A-Z][a-z]{2,}\s+(?:bhaiya|bhai|behenji|behen|ji|didi|sahab|sahib|ben)\b",
-                       re.IGNORECASE)
+# Hinglish kinship suffixes. Ground-truth-confirmed relative leaks included 'Jagdish Chachu',
+# 'Umesh Mama' and 'Raju Papa', which this list did not cover; a relative named only through a
+# kinship word was therefore released. The name is still required to be a capitalised word, so
+# 'C/O fever' and 'K/C/O diabetes' are untouched.
+_NAME_KIN = re.compile(
+    r"\b[A-Z][a-z]{2,}\s+(?:bhaiya|bhai|behenji|behen|ji|didi|sahab|sahib|ben|"
+    r"chachu|chacha|chachi|mama|mami|papa|mummy|papu|tau|taya|nana|nani|dada|dadi|"
+    r"bua|fufa|mausi|mausa|devar|jija|sasur|saas|bhabhi|bhabi|bhatija|bhanja|bhanji)\b",
+    re.IGNORECASE)
 
 _NAME_RUN = re.compile(r"(?:[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,}){1,3}"
                        r"|[\u0900-\u0963\u0970-\u097F]{3,}"

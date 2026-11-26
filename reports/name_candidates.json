@@ -1,0 +1,4353 @@
+{
+ "total": 529,
+ "dispositions": {
+  "medicine_or_product": 133,
+  "uncertain": 319,
+  "place_or_institution": 52,
+  "confirmed_relative": 22,
+  "confirmed_patient": 3
+ },
+ "by_script": {
+  "latin": {
+   "medicine_or_product": 133,
+   "uncertain": 319,
+   "place_or_institution": 52,
+   "confirmed_relative": 22,
+   "confirmed_patient": 3
+  }
+ },
+ "candidates": [
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Antibiotic",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Essential",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Antibiotic",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Antibiotic",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Inj Essential",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Cap Antibiotic",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Essential",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Insulin Glargine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Inj Antibiotic",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Essential",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Chronic",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Essential",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Chronic",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Sachet Antibiotic",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Essential",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Chronic",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Antibiotic",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Chronic",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Inh Essential",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/drug_formulary.csv",
+   "surface": "Tab Chronic",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/lab_reference_ranges.csv",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/lab_reference_ranges.csv",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/lab_reference_ranges.csv",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "clean/ward_census.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "discharge/arogya_ds_ADM000162.txt",
+   "surface": "Tehsil Misrikh",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "discharge/arogya_ds_ADM000162.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "discharge/arogya_ds_ADM000162.txt",
+   "surface": "Tab Ferrous",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "discharge/arogya_ds_ADM000170.txt",
+   "surface": "Tab Rifampicin",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "discharge/arogya_ds_ADM000170.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "discharge/arogya_ds_ADM000170.txt",
+   "surface": "Ramesh Yadav",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "discharge/arogya_ds_ADM000170.txt",
+   "surface": "Ramesh Yadav",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "discharge/note_0004.txt",
+   "surface": "Continue Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "discharge/note_0015.txt",
+   "surface": "Continue Levothyroxine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_08fb8ae4.json",
+   "surface": "Tehsil Malihabad",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_08fb8ae4.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_08fb8ae4.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_08fb8ae4.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_08fb8ae4.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_08fb8ae4.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_14b0278a.json",
+   "surface": "Tehsil Nanpara",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_14b0278a.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_14b0278a.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_14b0278a.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_14b0278a.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_14b0278a.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2b7ec3cf.json",
+   "surface": "Tehsil Fatehpur",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2b7ec3cf.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2b7ec3cf.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2b7ec3cf.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2b7ec3cf.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2b7ec3cf.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2b7ec3cf.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2b7ec3cf.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2f2cec5b.json",
+   "surface": "Tehsil Malihabad",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2f2cec5b.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2f2cec5b.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2f2cec5b.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2f2cec5b.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_2f2cec5b.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Tehsil Lalganj",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Rae Bareli",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Rae Bareli",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_353da32a.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_456c6763.json",
+   "surface": "Tehsil Nanpara",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_456c6763.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_456c6763.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_456c6763.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_456c6763.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_456c6763.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_4a4a1013.json",
+   "surface": "Tehsil Haidergarh",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_4a4a1013.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_4a4a1013.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_4a4a1013.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_4a4a1013.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_4a4a1013.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Tehsil Dalmau",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Rae Bareli",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Rae Bareli",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_56860b2a.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_581255ae.json",
+   "surface": "Tehsil Safipur",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_581255ae.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_581255ae.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_581255ae.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_581255ae.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_581255ae.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7bfe38d3.json",
+   "surface": "Tehsil Purwa",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7bfe38d3.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7bfe38d3.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7bfe38d3.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7bfe38d3.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7bfe38d3.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Asha Rajput",
+   "disposition": "confirmed_patient",
+   "script": "latin",
+   "truth_types": [
+    "PATIENT_NAME"
+   ],
+   "truth_roles": [
+    "patient"
+   ]
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Asha Rajput",
+   "disposition": "confirmed_patient",
+   "script": "latin",
+   "truth_types": [
+    "PATIENT_NAME"
+   ],
+   "truth_roles": [
+    "patient"
+   ]
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Asha Rajput",
+   "disposition": "confirmed_patient",
+   "script": "latin",
+   "truth_types": [
+    "PATIENT_NAME"
+   ],
+   "truth_roles": [
+    "patient"
+   ]
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Tehsil Lambhua",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_7dfbd411.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Tehsil Lalganj",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Rae Bareli",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Rae Bareli",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_877f67e7.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_99efe4d2.json",
+   "surface": "Tehsil Purwa",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_99efe4d2.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_99efe4d2.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_99efe4d2.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_99efe4d2.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_99efe4d2.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a07db3ea.json",
+   "surface": "Tehsil Nanpara",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a07db3ea.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a07db3ea.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a07db3ea.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a07db3ea.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a07db3ea.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a337481a.json",
+   "surface": "Tehsil Malihabad",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a337481a.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a337481a.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a337481a.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a337481a.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_a337481a.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_c815a19e.json",
+   "surface": "Tehsil Haidergarh",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_c815a19e.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_c815a19e.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_c815a19e.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_c815a19e.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_c815a19e.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_c815a19e.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_c815a19e.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_d0c5a498.json",
+   "surface": "Tehsil Nawabganj",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_d0c5a498.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_d0c5a498.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_d0c5a498.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_d0c5a498.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_d0c5a498.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_ee4be692.json",
+   "surface": "Tehsil Misrikh",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_ee4be692.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_ee4be692.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_ee4be692.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_ee4be692.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_fb4908ad.json",
+   "surface": "Tehsil Nawabganj",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_fb4908ad.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_fb4908ad.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_fb4908ad.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_fb4908ad.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "fhir/bundle_fb4908ad.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/bulk_lab_export.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00005.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00005.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00016.json",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00016.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00016.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00033.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00033.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00038.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00038.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00038.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00041.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00041.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00044.json",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00044.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00044.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00048.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00048.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00050.json",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00050.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00050.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00055.json",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00055.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00055.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00055.json",
+   "surface": "Ramesh Yadav",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/report_00058.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00058.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00058.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00059.json",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00059.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00059.json",
+   "surface": "Platelet Count",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00059.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00069.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00069.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00070.json",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00070.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00070.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00080.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00080.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00081.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00081.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00083.json",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/report_00083.json",
+   "surface": "Serum Sodium",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0003.txt",
+   "surface": "Kamal Bhaiya",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0003.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0006.txt",
+   "surface": "Ajay Bhaiya",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0006.txt",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0011.txt",
+   "surface": "Jagdish Chachu",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0011.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0020.txt",
+   "surface": "Umesh Mama",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0020.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0025.txt",
+   "surface": "Raju Papa",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0025.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0027.txt",
+   "surface": "Prakash Chachu",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0027.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0028.txt",
+   "surface": "Sukhwinder Papa",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0036.txt",
+   "surface": "Mohan Papa",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0036.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0042.txt",
+   "surface": "Deepak Mama",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0042.txt",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0054.txt",
+   "surface": "Ramesh Bhaiya",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0054.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0073.txt",
+   "surface": "Jagdish Chachu",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0073.txt",
+   "surface": "Pathkind Labs",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0075.txt",
+   "surface": "Arjun Chachu",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0075.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0079.txt",
+   "surface": "Anthony Mama",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "lab/whatsapp_forward_0079.txt",
+   "surface": "Serum Creatinine",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "lab/whatsapp_forward_0084.txt",
+   "surface": "Akram Mama",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "misc/ambulance_log.csv",
+   "surface": "Sitapur Lucknow",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/ambulance_log.csv",
+   "surface": "Sitapur Lucknow",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/ambulance_log.csv",
+   "surface": "Sitapur Lucknow",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/ambulance_log.csv",
+   "surface": "Sitapur Lucknow",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/patient_index.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/patient_index.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/patient_index.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/patient_index.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/patient_index.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "misc/patient_index.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/arogya_opd_2026_05.json",
+   "surface": "Ramesh Yadav",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "opd/arogya_opd_2026_06.json",
+   "surface": "Ramesh Yadav",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "opd/arogya_opd_2026_09.json",
+   "surface": "Ramesh Yadav",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "opd/dhhardoi_opd_2026_05.json",
+   "surface": "Ramesh Patel",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "opd/dhhardoi_opd_2026_08.json",
+   "surface": "Ramesh Patel",
+   "disposition": "confirmed_relative",
+   "script": "latin",
+   "truth_types": [
+    "RELATIVE_NAME"
+   ],
+   "truth_roles": [
+    "relative"
+   ]
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_01.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_02.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_03.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_04.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_05.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_06.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_07.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_08.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_09.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_10.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/jeevanjyoti_opd_2026_11.json",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_01.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_02.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_05.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_06.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_07.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_08.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_09.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_10.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "opd/sanjeevani_opd_2026_11.json",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_arogya_00030.txt",
+   "surface": "Inj Ceftriaxone",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_arogya_00030.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_arogya_00030.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_arogya_00031.txt",
+   "surface": "Inj Ceftriaxone",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_arogya_00031.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_arogya_00031.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_arogya_00053.txt",
+   "surface": "Tab Rifampicin",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_arogya_00056.txt",
+   "surface": "Cap Doxycycline",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_dhhardoi_00077.txt",
+   "surface": "Tab Azithromycin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_dhhardoi_00077.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_dhhardoi_00077.txt",
+   "surface": "Tab Artesunate",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_dhhardoi_00077.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00001.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00001.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00001.txt",
+   "surface": "Tab Telmisartan",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00001.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00001.txt",
+   "surface": "Tab Levothyroxine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00001.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00002.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00002.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00002.txt",
+   "surface": "Tab Telmisartan",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00002.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00002.txt",
+   "surface": "Tab Levothyroxine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00002.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00007.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00007.txt",
+   "surface": "Cap Doxycycline",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00008.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00008.txt",
+   "surface": "Inj Ceftriaxone",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00008.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00008.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00008.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00008.txt",
+   "surface": "Tab Ferrous",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00008.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00009.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00009.txt",
+   "surface": "Inj Ceftriaxone",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00009.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00009.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00009.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00009.txt",
+   "surface": "Tab Ferrous",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00009.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00012.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00012.txt",
+   "surface": "Inh Salbutamol",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00012.txt",
+   "surface": "Tab Ferrous",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00012.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00013.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00013.txt",
+   "surface": "Tab Rifampicin",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00014.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00014.txt",
+   "surface": "Tab Rifampicin",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00017.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00017.txt",
+   "surface": "Tab Levothyroxine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00018.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00018.txt",
+   "surface": "Tab Levothyroxine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00019.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00019.txt",
+   "surface": "Cap Doxycycline",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00021.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00021.txt",
+   "surface": "Cap Doxycycline",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00023.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00023.txt",
+   "surface": "Cap Doxycycline",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00029.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00029.txt",
+   "surface": "Inj Ceftriaxone",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00029.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00029.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00035.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00035.txt",
+   "surface": "Tab Levothyroxine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00037.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00037.txt",
+   "surface": "Tab Levothyroxine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00039.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00039.txt",
+   "surface": "Inj Ceftriaxone",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00039.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00039.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00043.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00043.txt",
+   "surface": "Tab Artesunate",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00043.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00043.txt",
+   "surface": "Tab Rifampicin",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00043.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00045.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00046.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00046.txt",
+   "surface": "Tab Azithromycin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00046.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00046.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00046.txt",
+   "surface": "Tab Telmisartan",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00046.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00046.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00062.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00062.txt",
+   "surface": "Tab Azithromycin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00062.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00062.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00063.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00063.txt",
+   "surface": "Tab Ferrous",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00063.txt",
+   "surface": "Tab Azithromycin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00063.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00063.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00064.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00064.txt",
+   "surface": "Tab Ferrous",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00064.txt",
+   "surface": "Tab Azithromycin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00064.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00064.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00065.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00065.txt",
+   "surface": "Tab Ferrous",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00065.txt",
+   "surface": "Tab Azithromycin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00065.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00065.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00068.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00068.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00068.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00068.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00072.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00072.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00072.txt",
+   "surface": "Tab Telmisartan",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00072.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00072.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00074.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00074.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00074.txt",
+   "surface": "Tab Telmisartan",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00074.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00074.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00082.txt",
+   "surface": "Jeevan Jyoti Charitable",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_jeevanjyoti_00082.txt",
+   "surface": "Inh Salbutamol",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00024.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00024.txt",
+   "surface": "Inh Salbutamol",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00026.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00026.txt",
+   "surface": "Inh Salbutamol",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00034.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00034.txt",
+   "surface": "Tab Rifampicin",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00034.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00034.txt",
+   "surface": "Inh Salbutamol",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00034.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00040.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00040.txt",
+   "surface": "Tab Artesunate",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00040.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00040.txt",
+   "surface": "Tab Rifampicin",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00040.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00049.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00049.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00049.txt",
+   "surface": "Tab Telmisartan",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00049.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00049.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00049.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00049.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00051.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00051.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00051.txt",
+   "surface": "Tab Telmisartan",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00051.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00051.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00051.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00051.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00052.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00052.txt",
+   "surface": "Tab Amlodipine",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00052.txt",
+   "surface": "Tab Telmisartan",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00052.txt",
+   "surface": "Tab Ramipril",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00052.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00052.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00052.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00057.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00057.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00057.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00057.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00057.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00060.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00060.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00060.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00060.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00060.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00061.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00061.txt",
+   "surface": "Tab Metformin",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00061.txt",
+   "surface": "Tab Glimepiride",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00061.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00066.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00066.txt",
+   "surface": "Inh Salbutamol",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00067.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00067.txt",
+   "surface": "Inh Salbutamol",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00071.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00071.txt",
+   "surface": "Cap Doxycycline",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00076.txt",
+   "surface": "Sanjeevani Multispeciality",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00076.txt",
+   "surface": "Inj Ceftriaxone",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00076.txt",
+   "surface": "Tab Paracetamol",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00076.txt",
+   "surface": "Tab Ferrous",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "prescriptions/rx_sanjeevani_00076.txt",
+   "surface": "Tab Pantoprazole",
+   "disposition": "medicine_or_product",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Guardian Street City",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Zip Phone",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Email Registered",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Patel Ashok",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Gopaldih Sitapur",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Lodhi Dinesh",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Mohangarh Sitapur",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Masih Mary",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Shivnagar Sitapur",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Sharma Anita",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Yadav Manoj",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Pandey Parvati",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/arogya_legacy_export.csv",
+   "surface": "Ramdih Sitapur",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/dhh_patients.json",
+   "surface": "Tehsil Bilgram",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Name Gender",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Relation Relative Name",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Mohalla Tehsil",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Mobile Aadhaar",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Reg Date",
+   "disposition": "uncertain",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Haidergarh Barabanki",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Dalmau Rae Bareli",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Haidergarh Barabanki",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Safipur Unnao",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Nawabganj Barabanki",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Nawabganj Barabanki",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Safipur Unnao",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Biswan Sitapur",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Malihabad Lucknow",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  },
+  {
+   "file": "registration/sanjeevani_registration.csv",
+   "surface": "Misrikh Sitapur",
+   "disposition": "place_or_institution",
+   "script": "latin",
+   "truth_types": [],
+   "truth_roles": []
+  }
+ ]
+}

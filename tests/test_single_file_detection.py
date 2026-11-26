@@ -145,3 +145,20 @@ def test_identifiers_stored_as_adjacent_list_elements(tmp_path):
     released = (outputs / "sanitized" / "reg" / "p.json").read_text()
     assert "902115225016" not in released
     assert "Hardoi" in released, "administrative context must survive"
+
+
+def test_hinglish_kinship_relatives_are_redacted(tmp_path):
+    """Ground-truth-confirmed relative leaks: kinship word only, capitalised name before it."""
+    body = ("Lab notes\nAsha ji 48/F\nRef by Jagdish Chachu\nSample collected Umesh Mama\n"
+            "Bill paid Raju Papa\n")
+    _, text = _run(tmp_path, body)
+    for name in ("Jagdish Chachu", "Umesh Mama", "Raju Papa"):
+        assert name not in text, name
+
+
+def test_kinship_words_do_not_eat_clinical_text(tmp_path):
+    """Negative control: relationship anchors must not touch clinical shorthand or doses."""
+    body = "C/O fever x 3 days\nK/C/O diabetes\nTab Metformin 500 mg BD\nBP 130/85\n"
+    _, text = _run(tmp_path, body)
+    assert "C/O fever" in text and "K/C/O diabetes" in text
+    assert "500 mg" in text and "130/85" in text
