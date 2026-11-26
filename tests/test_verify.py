@@ -164,3 +164,10 @@ def test_uuid_digits_are_not_an_aadhaar(tmp_path):
     inp, out = build(tmp_path, inputs={"fhir/b.json": body}, released={"fhir/b.json": body})
     result = verify_tree(inp, out)
     assert result["overall"] == "passed", result["checks"]
+
+
+def test_label_does_not_adopt_digits_from_another_chunk(tmp_path):
+    """A label in one flattened JSON chunk must not claim a number from the next (UUID fragments)."""
+    from tools.verify import candidate_identifiers
+    text = "subject\nreference\nurn:uuid:231534ba-b5a1-4c1e-9f3d-0a1b2c942005\ndisplay\nDischarge summary"
+    assert [v for k, v in candidate_identifiers(text) if k == "MRN"] == []

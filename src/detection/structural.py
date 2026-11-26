@@ -177,8 +177,15 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                     # Note: no `continue` here. Skipping the rest of the loop body also skips
                     # stack.append(child), which silently stopped every descendant of a matched
                     # field from being sanitised (metadata leakage 12.5% -> 52.5% when that happened).
-                    if isinstance(key, str) and isinstance(child, str):
-                        if _AADHAAR_KEY.search(key) and re.fullmatch(r"[\d\s-]{12}", child.strip()):
+                    if isinstance(key, str) and isinstance(child, (str, int)):
+                        # The value may be a JSON number, not a string: "aadhar_no": 902115225016.
+                        text_value = str(child).strip()
+                        if _AADHAAR_KEY.search(key) and re.fullmatch(r"[\d\s-]{12}", text_value):
+                            node[key] = tokens.get("AADHAAR", "[AADHAAR]")
+                            bump("AADHAAR")
+                            continue
+
+
                             node[key] = tokens.get("AADHAAR", "[AADHAAR]")
                             child = node[key]
                             bump("AADHAAR")
@@ -219,6 +226,23 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                                 continue
                     stack.append(child)
             elif isinstance(node, list):
+                # Labels and values also travel as adjacent list elements:
+                # "ids": ["aadhar_no", "902115225016", "abha", "12-3456-..."].
+                for position, item in enumerate(node):
+                    if not isinstance(item, str):
+                        continue
+                    previous = node[position - 1] if position else None
+                    if not isinstance(previous, str):
+                        continue
+                    if _AADHAAR_KEY.search(previous) and re.fullmatch(r"[\d\s-]{12}", item.strip()):
+                        node[position] = tokens.get("AADHAAR", "[AADHAAR]")
+                        bump("AADHAAR")
+                    elif (_PATH_KEY.search(previous) and ("\\" in item or "_" in item)
+                          and _PATH_MRN.search(item)):
+                        cleaned = _PATH_MRN.sub(tokens.get("MRN", "[MRN]"), item)
+                        if cleaned != item:
+                            node[position] = cleaned
+                            bump("MRN")
                 stack.extend(node)
 
     return counts

@@ -88,8 +88,11 @@ def candidate_identifiers(text: str) -> list[tuple[str, str]]:
                 continue
             out.append((kind, match.group(0)))
     # A bare number is an identifier only when a label introduces it (MRN, UHID, IPD, reg no).
-    for match in _LABELLED_NUMBER.finditer(text):
-        out.append(("MRN", match.group(1)))
+    # Matching per line keeps a label from one flattened JSON chunk from adopting the digits of the
+    # next one, which is how UUID fragments were being reported as MRNs.
+    for line in text.splitlines():
+        for match in _LABELLED_NUMBER.finditer(line):
+            out.append(("MRN", match.group(1)))
     for match in _NAME_PAIR.finditer(text):
         tokens = match.group(0).split()
         # A label word often leads the run ("Patient Sunita Patel"); drop labels, then judge.

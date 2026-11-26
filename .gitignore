@@ -39,3 +39,7 @@ node_modules/
 Thumbs.db
 .idea/
 .vscode/
+# generated
+build/
+*.pyc
+__pycache__/

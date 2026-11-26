@@ -133,3 +133,15 @@ def test_mrn_inside_an_export_path_is_detected(tmp_path):
     write_submission(inputs, outputs)
     released = (outputs / "sanitized" / "opd" / "v.json").read_text()
     assert "010607" not in released
+
+
+def test_identifiers_stored_as_adjacent_list_elements(tmp_path):
+    """`"ids": ["aadhar_no", "902115225016"]` - label and value as separate list items."""
+    body = '{"ids": ["aadhar_no", "902115225016", "abha", "12-3456-7890-1234"], "district": "Hardoi"}'
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    (inputs / "reg").mkdir(parents=True)
+    (inputs / "reg" / "p.json").write_text(body, encoding="utf-8")
+    write_submission(inputs, outputs)
+    released = (outputs / "sanitized" / "reg" / "p.json").read_text()
+    assert "902115225016" not in released
+    assert "Hardoi" in released, "administrative context must survive"
