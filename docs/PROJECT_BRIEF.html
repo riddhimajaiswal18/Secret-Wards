@@ -1,0 +1,94 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@page{size:A4;margin:13mm 14mm}
+body{font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:8.6pt;line-height:1.35;color:#16202b;margin:0}
+h1{font-size:16pt;margin:0 0 1mm;color:#0b3d5c}
+.sub{font-size:9pt;color:#456;margin-bottom:3mm}
+h2{font-size:9.6pt;margin:3.4mm 0 1.2mm;color:#0b3d5c;border-bottom:.6pt solid #cbd8e2;padding-bottom:.8mm}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+table{width:100%;border-collapse:collapse;font-size:7.8pt;margin:1mm 0}
+th,td{text-align:left;padding:1.1mm 1.4mm;border-bottom:.4pt solid #dde6ec;vertical-align:top}
+th{background:#eef4f8;font-weight:600}
+code{font-family:ui-monospace,Menlo,monospace;font-size:7.4pt;background:#f1f5f8;padding:0 .6mm;border-radius:1mm}
+.k{display:flex;gap:2mm;margin:1.5mm 0}
+.k div{flex:1;background:#f4f8fb;border-left:2pt solid #0b3d5c;padding:1.4mm 2mm;border-radius:0 1mm 1mm 0}
+.n{font-size:12pt;font-weight:700;color:#0b3d5c;display:block}
+.small{font-size:7.4pt;color:#5a6b7a}
+.pb{page-break-before:always}
+ul{margin:.8mm 0 0 3.6mm;padding:0}li{margin:.5mm 0}
+</style></head><body>
+
+<h1>Secret Wards — offline de-identification for Indian hospital records</h1>
+<div class="sub">Track 3 submission brief · repository <code>riddhimajaiswal18/Secret-Wards</code> · branch <code>feat/detection-release-pipeline</code> · commit <code>3433e49</code>+</div>
+
+<h2>Problem</h2>
+<p>Indian hospital data is heterogeneous: CSV billing exports, JSON patient indexes, FHIR bundles, XML discharge summaries, WhatsApp-style referral notes, scanned PDFs and photos. It mixes English, Devanagari and Hinglish, and it is full of numbers that look like identifiers but are clinical measurements. Deleting too much destroys research value; deleting too little exposes patients. A single missed phone number or a filename is enough to re-identify a person.</p>
+
+<h2>Solution</h2>
+<p>A deterministic, CPU-only, no-LLM pipeline that parses each format into one intermediate representation with source locations, decides what is identity and what is clinical, transforms in place, and then <b>independently verifies the released bytes</b> before anything is published.</p>
+
+<table>
+<tr><th style="width:22%">Stage</th><th>What it does</th></tr>
+<tr><td>Ingestion</td><td>format and magic-byte checks, size and depth caps, path hygiene, typed quarantine</td></tr>
+<tr><td>Parsing</td><td>CSV/TSV, JSON, FHIR, XML, text; PDF text layer → raw stream → EXIF → OCR ladder</td></tr>
+<tr><td>Normalisation</td><td>Unicode folding, Devanagari digits, dates with explicit ambiguity, phones, transliteration, canonical fields and roles (evidence only, never identity)</td></tr>
+<tr><td>Detection</td><td>identifier patterns, anchored and bare name runs, kinship/Hinglish forms, column semantics, JSON keys, filenames, structural and base64 channels</td></tr>
+<tr><td>Clinical protection</td><td>veto on value+unit, ratios, frequencies, eponyms, drug forms; lexicon harvested from the input's own reference files</td></tr>
+<tr><td>Policy</td><td>one table decides the technique per kind; transformation applies locator-based edits in reverse order</td></tr>
+<tr><td>Release gate</td><td>refuses to release a file when detection found spans but the bytes did not change</td></tr>
+<tr><td>Independent verifier</td><td><code>tools/verify.py</code> re-reads only the released tree with its own patterns and readers</td></tr>
+</table>
+
+<h2>Privacy strategy</h2>
+<div class="grid"><div>
+<ul>
+<li>Direct identifiers substituted, never pattern-preserved.</li>
+<li>Role-aware: patient names removed, clinician names retained — proven necessary by measurement.</li>
+<li>Every channel treated as a channel: content, filename, header, key, metadata, base64.</li>
+<li>Quarantine is not a copy: unsupported content is declared, never silently dropped or released.</li>
+</ul></div><div>
+<ul>
+<li>Determinism: same input + secret ⇒ byte-identical output; different secret ⇒ different output.</li>
+<li>Release integrity: parsing success can never masquerade as sanitisation success.</li>
+<li>Verification is independent of the detector, so one blind spot cannot approve itself.</li>
+<li>No identity→pseudonym mapping is ever stored, so there is no envelope to protect.</li>
+</ul></div></div>
+
+<div class="pb"></div>
+
+<h2>Measured results (development corpus, 200 files, denominators shown)</h2>
+<div class="k">
+<div><span class="n">99.4%</span>clinical values preserved<br><span class="small">4,824 / 4,855</span></div>
+<div><span class="n">14.0%</span>PII surfaces still visible<br><span class="small">453 / 3,234</span></div>
+<div><span class="n">0 / 4</span>planted canaries leaked<br><span class="small">was 4 / 4 at baseline</span></div>
+<div><span class="n">0</span>raw copies penalised<br><span class="small">197 exported · 3 quarantined · 0 unaccounted</span></div>
+</div>
+
+<table>
+<tr><th>Channel</th><th>Visible</th><th>Channel</th><th>Visible</th></tr>
+<tr><td>content</td><td>14.2%</td><td>key (JSON keys)</td><td>0.0%</td></tr>
+<tr><td>filename</td><td>8.3%</td><td>header</td><td>0.0%</td></tr>
+<tr><td>metadata</td><td>12.5%</td><td>base64</td><td>0.0%</td></tr>
+</table>
+<p class="small">Script split: Devanagari 19.6%, Hinglish 42.3%, Latin 12.7%. Independent verifier: accounting, coverage, capabilities and unchanged-output checks pass; the surviving-identifier check currently reports 564 candidates (NAME 557, AADHAAR 4, MRN 3) and therefore <b>blocks release</b>. Phone survivors: 0 after the contact-label fix.</p>
+
+<h2>Engineering evidence that shaped the design</h2>
+<table>
+<tr><th style="width:30%">Finding</th><th>Consequence</th></tr>
+<tr><td>Off-the-shelf PII engine (Presidio) found 1 of 20 spans on this data and flagged <code>BP 117/82</code> as a date</td><td>rule set written for Indian records; clinical veto built in, not bolted on</td></tr>
+<tr><td>Probabilistic record linkage produced 96 false merges at 96% recall</td><td>no linkage shipped rather than a wrong one; conflicts guarded explicitly</td></tr>
+<tr><td>Clinician-prefix regex matched "dr" inside "Qadri"</td><td>word boundaries and line-clamped spans; second scanner to catch the class of bug</td></tr>
+<tr><td>An XML file was re-serialised with every identifier intact</td><td>format-complete detection plus a byte-level release gate</td></tr>
+</table>
+
+<h2>Limitations and threat model</h2>
+<ul>
+<li><b>Not anonymity.</b> Residual re-identification risk remains; quasi-identifier generalisation and date shifting are scoped but not yet implemented, and cross-hospital linkage is not shipped.</li>
+<li><b>Names are the weak class.</b> Name detection is heuristic and context-dependent; 557 verifier candidates are dominated by name-like strings, which are not yet triaged against a labelled set.</li>
+<li><b>Scanned images.</b> OCR depends on a rendering binary that is absent here; affected files are declared and quarantined rather than released uninspected.</li>
+<li><b>Verification scope.</b> The verifier checks identifier classes it knows in channels it can read; it is a release-safety layer, not a proof of anonymity.</li>
+</ul>
+
+<h2>Constraints and reproducibility</h2>
+<p>Offline, CPU-only; 2 vCPU / 4 GB / 15-minute budget; no LLM and no pretrained model above 50 M parameters; deterministic under a fixed secret. Reproduce with <code>pip install -r requirements.txt</code>, then <code>python main.py --input &lt;dir&gt; --output &lt;dir&gt;</code>; validate with the Team Kit <code>validate_output.py</code> (CONTRACT OK) and <code>check_submission.py</code> (READY TO SUBMIT), and gate a release with <code>python tools/verify.py &lt;input&gt; &lt;output&gt;</code>.</p>
+
+</body></html>

@@ -106,3 +106,10 @@ def test_phone_after_contact_label_is_detected_in_a_clinical_row(tmp_path):
     _, text = _run(tmp_path, body)
     assert "6910522119" not in text
     assert "bed 12" in text, "clinical context must survive"
+
+
+def test_phone_after_a_contact_label_beats_a_protected_window(tmp_path):
+    """'Mob: 8069773173' inside a prescription: the clinical window protects doses, not phones."""
+    _, text = _run(tmp_path, "Rx\nTab. Paracetamol 500 mg BD x 3 days\nMob: 8069773173\n")
+    assert "8069773173" not in text
+    assert "500 mg" in text and "3 days" in text

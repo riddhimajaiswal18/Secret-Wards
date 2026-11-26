@@ -137,8 +137,12 @@ def find(text: str, index: ProtectionIndex, *, names: bool = True) -> list[Findi
             # "mob 6910522119" sits in a row full of bed numbers and times, so the clinical veto
             # fires on the digits. A contact word immediately in front settles what the number is.
             contact = kind == PHONE and bool(_CONTACT_LABEL.search(text[max(0, start - 12):start]))
-            if candidate.overlaps(protected) or (
-                    index.is_clinical_text(folded, start, end) and not contact):
+            # A number introduced by "Mob:"/"Phone:" is a contact number even when it sits inside a
+            # protected clinical window — that window protects doses and measurements, not a phone.
+            if contact:
+                found.append(candidate)
+                continue
+            if candidate.overlaps(protected) or index.is_clinical_text(folded, start, end):
                 continue
             # A 6-digit PIN and a 6-digit value are the same shape; require a locality word nearby.
             if kind == PIN and not re.search(r"(?:pin|pincode|post|zip)\W{0,3}$",

@@ -83,3 +83,44 @@ error: the file is quarantined with `ocr_unavailable` and the run continues.
 ## Known limitations
 
 Ingestion supports JSON/FHIR JSON, CSV, TSV, text, and XML. The IR retains original parsed values, so generated IR and batch outputs can contain PII; keep them local and out of version control. Detection, policy evaluation, linkage, anonymization, and final release serialization remain unimplemented. Do not claim privacy protection from this parser.
+
+## Independent release verification
+
+`tools/verify.py` is a second scanner that imports nothing from `src/detection`, `src/transformation`,
+`src/policy`, `src/output` or `src/pipeline`. It re-reads only the released tree with its own patterns
+and its own CSV/JSON/XML readers, so a blind spot would have to exist twice to pass:
+
+```bash
+python tools/verify.py <input_dir> <output_dir> [--require pdf_render] [--json out.json]
+# exit 0 released · 1 failed · 2 cannot verify
+```
+
+Checks: accounting (one fate per input), surviving identifiers in content, relative path and filename,
+unchanged outputs that still carry identifiers, required capabilities, and coverage (unreadable files
+are reported `unsupported`, never assumed safe). `tools/run_dev.sh` treats a failure as blocking.
+Evidence is masked (`len=13 sha256=…`); the verifier never republishes what it finds.
+
+## Measured state and known limitations
+
+Development corpus, 200 files, every figure with its denominator:
+
+| Measure | Value |
+|---|---|
+Clinical values preserved | 99.4% (4,824 / 4,855) |
+PII surfaces still visible | 14.0% (453 / 3,234) |
+Channels: content 14.2% · metadata 12.5% · filename 8.3% · key 0.0% · header 0.0% · base64 0.0% |
+Scripts: Devanagari 19.6% · Hinglish 42.3% · Latin 12.7% |
+Canaries | 0 / 4 (baseline 4 / 4) |
+Accounting | 197 exported · 3 quarantined · 0 unaccounted |
+Independent verifier | **fails**: 564 surviving candidates (NAME 557, AADHAAR 4, MRN 3) |
+
+Known limitations, stated plainly:
+
+* **Not anonymity.** Quasi-identifier generalisation, date shifting and cross-hospital identity linkage
+  are scoped but not implemented; `config/capabilities.json` records them as not implemented.
+* **Names are the weakest class** and account for almost all verifier findings; they are not yet
+  triaged against a labelled evaluation set.
+* **Scanned images** need a rendering binary for OCR; when it is absent the affected files are
+  declared in `report.json.capabilities` and quarantined rather than released uninspected.
+* The verifier knows a fixed set of identifier classes in the channels it can read. It is a
+  release-safety layer, not proof of anonymity, and it says so in every report it writes.
