@@ -1,0 +1,25 @@
+{
+  "_comment": "Status of every capability the repository advertises. A module listed here as not_implemented does not exist in src/ and must never be read as a feature. tests/test_module_truth.py enforces that src/ contains no unimported module outside this list.",
+  "implemented": ["ingestion", "parsers", "ir", "normalization", "detection", "clinical_protection",
+                  "policy", "transformation", "serialization", "report", "quarantine", "capabilities"],
+  "not_implemented": {
+    "linkage": "identity linkage: blocking, comparison, clustering, matching",
+    "pseudonymization": "keyed patient tokens (HMAC/HKDF)",
+    "privacy.age_banding": "age generalization ladder",
+    "privacy.location": "location generalization",
+    "privacy.date_shifting": "per-patient keyed date offset",
+    "privacy.suppression": "cell suppression",
+    "privacy.risk_assessment": "k-anonymity / re-identification measurement at run time",
+    "evaluation.metrics": "independent verification and scoring of released files",
+    "evaluation.validation": "release gate",
+    "security.encryption": "AES-GCM envelope encryption (not needed: no identity mapping is stored)",
+    "security.key_management": "key rotation",
+    "detection.names": "dedicated name detector (currently inside detection.engine)",
+    "detection.phone": "dedicated phone detector (currently inside detection.identifiers)",
+    "detection.dates": "date detector (normalization.dates parses only)",
+    "detection.structured": "superseded by detection.structural",
+    "detection.unstructured": "superseded by detection.engine",
+    "detection.gazetteers": "lexicons are harvested at run time from the input tree",
+    "ingestion.json_parser": "superseded by ingestion.ir_json"
+  }
+}

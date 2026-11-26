@@ -57,6 +57,12 @@ _NAME_RUN = re.compile(r"(?:[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,}){1,3}"
                        r"(?:\s+[\u0900-\u0963\u0970-\u097F]{3,}){1,3})")
 _ADDRESS_RUN = re.compile(r"[A-Za-z0-9][^,;\n]{8,90}")
 
+# A roster line is often prefixed by a time or a bullet ("18:40 - Name", "3. Name"). The clinical
+# veto reads that prefix as a vitals reading and suppresses the name that follows it, so the
+# prefix is excluded from the veto decision — the name is not inside a clinical neighbourhood.
+_LABEL_PREFIX = re.compile(r"(?:\d{1,2}[:.]\d{2}(?:\s*(?:am|pm))?|\d{1,2}(?:st|nd|rd|th)?"
+                           r"|[-\u2022*])\s*[-\u2013\u2014:)]?\s*$", re.IGNORECASE)
+
 _NOT_NAMES = {
     "patient", "hospital", "discharge", "summary", "admission", "department", "address",
     "mobile", "phone", "clinic", "college", "district", "village", "tehsil", "tablet",
@@ -215,8 +221,9 @@ def _bare_runs(text: str, protected: list[tuple[int, int]],
                 left = match.start() + group[0][0]
                 right = match.start() + group[-1][1]
                 candidate = Finding(NAME, left, right, "patient", 0.6)
-                if not candidate.overlaps(protected) and \
-                        not index.is_clinical_text(text, left, right):
+                prefixed = bool(_LABEL_PREFIX.search(text[max(0, left - 12):left]))
+                if not candidate.overlaps(protected) and (
+                        prefixed or not index.is_clinical_text(text, left, right)):
                     out.append(candidate)
             group = []
     return out
