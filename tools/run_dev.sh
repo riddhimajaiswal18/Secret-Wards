@@ -11,4 +11,5 @@ echo "== determinism ==" && rm -rf "$out.2" && python3 main.py --input "$inp" --
   && { diff -r -x report.json -x records.jsonl "$out" "$out.2" >/dev/null && echo "DETERMINISM OK"; } \
   || { echo "DETERMINISM FAIL"; diff -r -x report.json -x records.jsonl "$out" "$out.2" | head -5; }
 rm -rf "$out.2"
+echo "== verify ==" && { python3 tools/verify.py "$inp" "$out" || { echo "RELEASE BLOCKED: verification failed"; exit 1; }; }
 echo "== score ==" && python3 "$kit/check_dev.py" --output "$out" 2>&1 | head -26
