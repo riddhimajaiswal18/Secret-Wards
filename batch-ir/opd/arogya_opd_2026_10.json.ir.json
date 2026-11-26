@@ -1,11 +1,11 @@
 {
   "ir_version": "1.0",
-  "document_id": "arogya_opd_2026_02",
+  "document_id": "arogya_opd_2026_10",
   "source": {
     "format": "json",
-    "encoding": "utf-8-sig",
+    "encoding": "utf-8",
     "detected_arrangement": "nested_object",
-    "original_filename": "arogya_opd_2026_02.json",
+    "original_filename": "arogya_opd_2026_10.json",
     "schema_detected": false
   },
   "structure": {
@@ -16,40 +16,56 @@
         "system": "eHospital OPD module",
         "hospital": "Arogya Seva Sadan",
         "exported_by": "opd.records.clerk",
-        "generated_at": "2026-02-28T18:00:00+05:30",
-        "source_path": "D:\\HIS\\exports\\opd\\Anita_Sharma_010565\\visits_2026_02.json"
+        "generated_at": "2026-10-28T18:00:00+05:30",
+        "source_path": "D:\\HIS\\exports\\opd\\Shahid_NA_010607\\visits_2026_10.json"
       },
       "visits": [
         {
-          "visit_id": "OPD/26/02/00085",
-          "patient_ref": "UHID-010565",
-          "visit_date": "2026-02-15",
+          "visit_id": "OPD/26/10/00095",
+          "patient_ref": "UHID-010607",
+          "visit_date": "2026-10-22",
           "department": "Medicine",
           "doctor": "Dr. Ramesh Srivastava",
-          "complaints": "C/O pain abdomen x 7 days",
-          "history": "K/C/O DM2 x 8 yrs",
+          "complaints": "C/O headache and giddiness x 9 days",
+          "history": "H/O snake bite 9 yrs back",
           "vitals": {
-            "bp": "112/78",
-            "pulse": 90,
-            "temp_f": 97.9,
-            "spo2": 98,
-            "weight_kg": 9
+            "bp": "120/75",
+            "pulse": 77,
+            "temp_f": 102.0,
+            "spo2": 94,
+            "weight_kg": 75
           },
           "diagnosis": [
             {
-              "code": "K50.9",
-              "display": "Crohn's disease, unspecified"
+              "code": "E27.1",
+              "display": "Addison's disease"
+            },
+            {
+              "code": "A01.0",
+              "display": "Typhoid fever"
             }
           ],
           "rx": [
             {
+              "drug": "Ceftriaxone",
+              "strength": "1 g",
+              "frequency": "IV",
+              "duration": "30 days"
+            },
+            {
               "drug": "Paracetamol",
               "strength": "650 mg",
               "frequency": "1-1-1",
-              "duration": "7 days"
+              "duration": "5 days"
+            },
+            {
+              "drug": "Pantoprazole",
+              "strength": "40 mg",
+              "frequency": "1-0-0",
+              "duration": "14 days"
             }
           ],
-          "notes": "Anita behenji ka BP 112/78, ulti band ho gayi. Review after 2 weeks."
+          "notes": "Shahid babu ka BP 120/75, raat ko neend theek se aayi. Review after 2 weeks."
         }
       ]
     }
@@ -395,6 +411,45 @@
     },
     {
       "field_id": "f_000027",
+      "field_name": "1",
+      "field_path": "$.visits[0].diagnosis[1]",
+      "parent_field_id": "f_000023",
+      "field_kind": "object",
+      "expected_dtype": "object",
+      "actual_dtype": "object",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000028",
+      "field_name": "code",
+      "field_path": "$.visits[0].diagnosis[1].code",
+      "parent_field_id": "f_000027",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000029",
+      "field_name": "display",
+      "field_path": "$.visits[0].diagnosis[1].display",
+      "parent_field_id": "f_000027",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000030",
       "field_name": "rx",
       "field_path": "$.visits[0].rx",
       "parent_field_id": "f_000009",
@@ -407,10 +462,10 @@
       "expected_masking_technique": null
     },
     {
-      "field_id": "f_000028",
+      "field_id": "f_000031",
       "field_name": "0",
       "field_path": "$.visits[0].rx[0]",
-      "parent_field_id": "f_000027",
+      "parent_field_id": "f_000030",
       "field_kind": "object",
       "expected_dtype": "object",
       "actual_dtype": "object",
@@ -420,49 +475,10 @@
       "expected_masking_technique": null
     },
     {
-      "field_id": "f_000029",
+      "field_id": "f_000032",
       "field_name": "drug",
       "field_path": "$.visits[0].rx[0].drug",
-      "parent_field_id": "f_000028",
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    },
-    {
-      "field_id": "f_000030",
-      "field_name": "strength",
-      "field_path": "$.visits[0].rx[0].strength",
-      "parent_field_id": "f_000028",
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    },
-    {
-      "field_id": "f_000031",
-      "field_name": "frequency",
-      "field_path": "$.visits[0].rx[0].frequency",
-      "parent_field_id": "f_000028",
-      "field_kind": "leaf",
-      "expected_dtype": "string",
-      "actual_dtype": "string",
-      "presence_status": "present",
-      "sensitivity": null,
-      "detection_status": "not_evaluated",
-      "expected_masking_technique": null
-    },
-    {
-      "field_id": "f_000032",
-      "field_name": "duration",
-      "field_path": "$.visits[0].rx[0].duration",
-      "parent_field_id": "f_000028",
+      "parent_field_id": "f_000031",
       "field_kind": "leaf",
       "expected_dtype": "string",
       "actual_dtype": "string",
@@ -473,6 +489,175 @@
     },
     {
       "field_id": "f_000033",
+      "field_name": "strength",
+      "field_path": "$.visits[0].rx[0].strength",
+      "parent_field_id": "f_000031",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000034",
+      "field_name": "frequency",
+      "field_path": "$.visits[0].rx[0].frequency",
+      "parent_field_id": "f_000031",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000035",
+      "field_name": "duration",
+      "field_path": "$.visits[0].rx[0].duration",
+      "parent_field_id": "f_000031",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000036",
+      "field_name": "1",
+      "field_path": "$.visits[0].rx[1]",
+      "parent_field_id": "f_000030",
+      "field_kind": "object",
+      "expected_dtype": "object",
+      "actual_dtype": "object",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000037",
+      "field_name": "drug",
+      "field_path": "$.visits[0].rx[1].drug",
+      "parent_field_id": "f_000036",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000038",
+      "field_name": "strength",
+      "field_path": "$.visits[0].rx[1].strength",
+      "parent_field_id": "f_000036",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000039",
+      "field_name": "frequency",
+      "field_path": "$.visits[0].rx[1].frequency",
+      "parent_field_id": "f_000036",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000040",
+      "field_name": "duration",
+      "field_path": "$.visits[0].rx[1].duration",
+      "parent_field_id": "f_000036",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000041",
+      "field_name": "2",
+      "field_path": "$.visits[0].rx[2]",
+      "parent_field_id": "f_000030",
+      "field_kind": "object",
+      "expected_dtype": "object",
+      "actual_dtype": "object",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000042",
+      "field_name": "drug",
+      "field_path": "$.visits[0].rx[2].drug",
+      "parent_field_id": "f_000041",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000043",
+      "field_name": "strength",
+      "field_path": "$.visits[0].rx[2].strength",
+      "parent_field_id": "f_000041",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000044",
+      "field_name": "frequency",
+      "field_path": "$.visits[0].rx[2].frequency",
+      "parent_field_id": "f_000041",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000045",
+      "field_name": "duration",
+      "field_path": "$.visits[0].rx[2].duration",
+      "parent_field_id": "f_000041",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000046",
       "field_name": "notes",
       "field_path": "$.visits[0].notes",
       "parent_field_id": "f_000009",

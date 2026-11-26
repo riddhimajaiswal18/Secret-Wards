@@ -185,7 +185,8 @@ def json_path(parent: str, key: str | int) -> str:
 
 
 def build_json_ir(data: Any, *, document_id: str, filename: str | None = None,
-                  encoding: str = "utf-8") -> IntermediateRepresentation:
+                  encoding: str = "utf-8", source_format: str = "json",
+                  arrangement: str | None = None) -> IntermediateRepresentation:
     """Create a path/parent index for JSON nodes; original values live only in structure.data."""
     fields: list[FieldRecord] = []
 
@@ -210,8 +211,8 @@ def build_json_ir(data: Any, *, document_id: str, filename: str | None = None,
     root_type = json_dtype(data)
     return IntermediateRepresentation(
         document_id=document_id,
-        source=SourceMetadata(format="json", encoding=encoding,
-                              detected_arrangement="nested_object" if root_type == "object" else root_type,
+        source=SourceMetadata(format=source_format, encoding=encoding,
+                              detected_arrangement=arrangement or ("nested_object" if root_type == "object" else root_type),
                               original_filename=filename, schema_detected=False),
         structure=SourceStructure(root_type=root_type, original_layout={}, data=data),
         fields=fields,

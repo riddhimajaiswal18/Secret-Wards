@@ -44,7 +44,7 @@ Serializers preserve supported source formats and relative structure while repla
 
 ## Team Kit cases informing the design
 
-The inspected kit includes four encoding/date conventions, duplicate registration exports, ragged and multiline CSV, nested JSON and FHIR, Hindi/Hinglish and fragmented names, names/phones in filenames, metadata/keys/headers and base64, homonymous patients, relative-vs-clinical meaning traps, clean clinical reference files, and re-identification cases involving rare conditions, exact dates and tiny villages. Robustness inputs include bulk JSON, 1,500-level nesting, truncation, empty/invalid-byte files, mislabelled formats, XML/PDF/JPEG. These belong in future tests, but are not handled by the current placeholder.
+The inspected kit includes four encoding/date conventions, duplicate registration exports, ragged and multiline CSV, nested JSON and FHIR, Hindi/Hinglish and fragmented names, names/phones in filenames, metadata/keys/headers and base64, homonymous patients, relative-vs-clinical meaning traps, clean clinical reference files, and re-identification cases involving rare conditions, exact dates and tiny villages. Robustness inputs include bulk JSON, 1,500-level nesting, truncation, empty/invalid-byte files, mislabelled formats, XML, PDF and JPEG. XML is now represented as an ordered tree; PDF/JPEG remain unsupported and are marked with parse errors.
 
 ## Contract and validation
 

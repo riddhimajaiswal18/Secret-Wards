@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "rx_jeevanjyoti_00063",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "rx_jeevanjyoti_00063.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "Jeevan Jyoti Charitable Hospital - OPD Prescription\nName: RUKHSANA SIDDIQUI   Age: 73/F   Reg No: JJH-0077389\nDate: 29-01-2026\nMob: 9473687554\nC/O: fever x 6 days, body ache\nK/C/O: D64.9\nRx\n1. Tab Ferrous sulphate + Folic acid 100mg+0.5mg 0-1-0 x 5 days\n2. Tab Azithromycin 500mg 1-0-0 x 1 month\n3. Tab Paracetamol 650 mg 1-1-1 x 1 month\n4. Tab Pantoprazole 40 mg 1-0-0 x 5 days\nAdv: Low salt diet. Review after 2 wks.\nDr. Vandana Kulshrestha (MD Medicine)\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

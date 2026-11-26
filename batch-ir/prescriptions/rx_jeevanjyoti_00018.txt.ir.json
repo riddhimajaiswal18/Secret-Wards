@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "rx_jeevanjyoti_00018",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "rx_jeevanjyoti_00018.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "Jeevan Jyoti Charitable Hospital - OPD Prescription\nName: ZAINAB SIDDIQUI   Age: 23/F   Reg No: JJH-0077112\nDate: 18-08-2026\nMob: 73122-00406\nC/O: fever x 3 days, body ache\nK/C/O: E03.9\nRx\n1. Tab Levothyroxine 50mcg 1-0-0 x 2 wks\nAdv: Low salt diet. Review after 2 wks.\nDr. Ramesh Srivastava (MD Medicine)\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

@@ -1,1 +1,10 @@
-"""TODO: parse supported unstructured text documents."""
+"""Plain-text document representation."""
+from __future__ import annotations
+
+from src.ir import IntermediateRepresentation, build_json_ir
+
+
+def parse_text_ir(text: str, *, document_id: str, filename: str,
+                  encoding: str) -> IntermediateRepresentation:
+    return build_json_ir(text, document_id=document_id, filename=filename, encoding=encoding,
+                         source_format="text", arrangement="document")

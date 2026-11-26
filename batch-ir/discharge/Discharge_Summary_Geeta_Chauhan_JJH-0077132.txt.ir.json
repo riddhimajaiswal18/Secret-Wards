@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "Discharge_Summary_Geeta_Chauhan_JJH-0077132",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "Discharge_Summary_Geeta_Chauhan_JJH-0077132.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "JEEVAN JYOTI CHARITABLE HOSPITAL, BARABANKI\nDISCHARGE SUMMARY\n\nPatient Name: Geeta Chauhan        Age/Sex: 53 Yrs/F\nUHID: JJH-0077132        IPD No: IP/26/00129\nW/o Umesh Chauhan\nAddress: H.No. 373, Ward 6, Mohalla Nai Basti, Vill. Amarganj Khurd, Tehsil Nawabganj, Distt. Barabanki - 225127\nMobile: +91 71511 21544\nConsultant: Dr. Ramesh Srivastava (MD Medicine)\nWard/Bed: Ward 8 (Medicine) / Bed 10\nDate of Admission: 27-03-2026\nDate of Discharge: 08-04-2026\nDOB: 29-04-1972\n\nDiagnosis: Urinary tract infection, site not specified (N39.0); \nPresenting complaints: C/O fever for 8 days, generalised weakness.\nHistory: No K/C/O DM/HTN. No significant past history.\nCourse in hospital: Patient admitted with above complaints. BP 135/67 mmHg, Pulse 105/min, Temp 97.9 F, SpO2 95%. Haemoglobin 11.0 g/dL. Random Blood Sugar 231 mg/dL. Serum Creatinine 1.5 mg/dL. Treated conservatively. Geeta ji ki condition ab stable hai.\n\nMedications on discharge:\n 1. Cap Doxycycline 100 mg 1-0-1 x 30 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Ramesh Srivastava.\nAttendant: Umesh Chauhan, Mob. 7151121544\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

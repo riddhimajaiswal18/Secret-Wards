@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "sanjeevani_ds_IPD-2026-00454",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "sanjeevani_ds_IPD-2026-00454.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "SANJEEVANI MULTISPECIALITY HOSPITAL, LUCKNOW\nDISCHARGE SUMMARY\n\nPatient Name: Sukhwinder Kaur        Age/Sex: 44 Yrs/F\nUHID: SNJ/26/064423        IPD No: IPD-2026-00454\nW/o Kuldeep Singh\nAddress: H.No. 55, Ward 10, Mohalla Tilak Nagar, Durgamau Kalan, Tehsil Lalganj, Distt. Rae Bareli - 229073\nMobile: +91 88636 25768\nABHA No: 91-7529-2330-5116\nConsultant: Dr. Vandana Kulshrestha (MD Medicine)\nWard/Bed: Ward 1 (Medicine) / Bed 20\nDate of Admission: 15/04/2026\nDate of Discharge: 24/04/2026\n\nDiagnosis: Dengue, unspecified (A97.9); Type 2 diabetes mellitus without complications (E11.9); Addison's disease (E27.1); \nPresenting complaints: C/O fever for 9 days, generalised weakness.\nHistory: K/C/O DM2 x 6 yrs. No significant past history.\nCourse in hospital: Patient admitted with above complaints. BP 109/76 mmHg, Pulse 117/min, Temp 100.6 F, SpO2 92%. Haemoglobin 9.8 g/dL. HbA1c 7.7 %. Random Blood Sugar 305 mg/dL. Treated conservatively. Sukhwinder amma ki condition ab stable hai.\n\nMedications on discharge:\n 1. Tab Paracetamol 650 mg 1-1-1 x 30 days\n 2. Tab Metformin 500 mg 1-0-1 x 15 days\n 3. Tab Glimepiride 1 mg 1-0-0 x 15 days\n 4. Tab Pantoprazole 40 mg 1-0-0 x 30 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Vandana Kulshrestha.\nAttendant: Kuldeep Singh, Mob. 8863625768\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

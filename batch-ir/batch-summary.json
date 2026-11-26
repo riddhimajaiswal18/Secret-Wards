@@ -1,0 +1,1208 @@
+{
+  "schema": "secret-wards-ir-batch/1",
+  "files_total": 200,
+  "files_parsed": 195,
+  "files_errored": 5,
+  "files": [
+    {
+      "input": "billing/arogya_claims.csv",
+      "output": "billing/arogya_claims.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "billing/dhhardoi_claims.csv",
+      "output": "billing/dhhardoi_claims.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "billing/jeevanjyoti_claims.csv",
+      "output": "billing/jeevanjyoti_claims.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "billing/sanjeevani_claims.csv",
+      "output": "billing/sanjeevani_claims.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "clean/dengue_management_protocol.txt",
+      "output": "clean/dengue_management_protocol.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "clean/drug_formulary.csv",
+      "output": "clean/drug_formulary.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "clean/lab_reference_ranges.csv",
+      "output": "clean/lab_reference_ranges.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "clean/ward_census.json",
+      "output": "clean/ward_census.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/arogya_ds_ADM000162.txt",
+      "output": "discharge/arogya_ds_ADM000162.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/arogya_ds_ADM000170.txt",
+      "output": "discharge/arogya_ds_ADM000170.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/dhhardoi_ds_DHH-IPD-00591.txt",
+      "output": "discharge/dhhardoi_ds_DHH-IPD-00591.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Fatima_Bano_SNJ-26-064508.txt",
+      "output": "discharge/Discharge_Summary_Fatima_Bano_SNJ-26-064508.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Geeta_Chauhan_JJH-0077132.txt",
+      "output": "discharge/Discharge_Summary_Geeta_Chauhan_JJH-0077132.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Kavita_Pandey_SNJ-26-064371.txt",
+      "output": "discharge/Discharge_Summary_Kavita_Pandey_SNJ-26-064371.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Parvati_Pandey_UHID-010660.txt",
+      "output": "discharge/Discharge_Summary_Parvati_Pandey_UHID-010660.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Reena_Nishad_JJH-0076928.txt",
+      "output": "discharge/Discharge_Summary_Reena_Nishad_JJH-0076928.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Salma_Ansari_SNJ-26-064279.txt",
+      "output": "discharge/Discharge_Summary_Salma_Ansari_SNJ-26-064279.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Shahid_Mohammad_UHID-010607.txt",
+      "output": "discharge/Discharge_Summary_Shahid_Mohammad_UHID-010607.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Sunil_Mishra_SNJ-26-064511.txt",
+      "output": "discharge/Discharge_Summary_Sunil_Mishra_SNJ-26-064511.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/Discharge_Summary_Usha_Tiwari_SNJ-26-064365.txt",
+      "output": "discharge/Discharge_Summary_Usha_Tiwari_SNJ-26-064365.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/jeevanjyoti_ds_IP-26-00130.txt",
+      "output": "discharge/jeevanjyoti_ds_IP-26-00130.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/jeevanjyoti_ds_IP-26-00134.txt",
+      "output": "discharge/jeevanjyoti_ds_IP-26-00134.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/jeevanjyoti_ds_IP-26-00136.txt",
+      "output": "discharge/jeevanjyoti_ds_IP-26-00136.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/jeevanjyoti_ds_IP-26-00144.txt",
+      "output": "discharge/jeevanjyoti_ds_IP-26-00144.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/jeevanjyoti_ds_IP-26-00149.txt",
+      "output": "discharge/jeevanjyoti_ds_IP-26-00149.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/jeevanjyoti_ds_IP-26-00151.txt",
+      "output": "discharge/jeevanjyoti_ds_IP-26-00151.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/jeevanjyoti_ds_IP-26-00159.txt",
+      "output": "discharge/jeevanjyoti_ds_IP-26-00159.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/note_0004.txt",
+      "output": "discharge/note_0004.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/note_0015.txt",
+      "output": "discharge/note_0015.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/sanjeevani_ds_IPD-2026-00432.txt",
+      "output": "discharge/sanjeevani_ds_IPD-2026-00432.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/sanjeevani_ds_IPD-2026-00454.txt",
+      "output": "discharge/sanjeevani_ds_IPD-2026-00454.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/sanjeevani_ds_IPD-2026-00459.txt",
+      "output": "discharge/sanjeevani_ds_IPD-2026-00459.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/sanjeevani_ds_IPD-2026-00460.txt",
+      "output": "discharge/sanjeevani_ds_IPD-2026-00460.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "discharge/sanjeevani_ds_IPD-2026-00474.txt",
+      "output": "discharge/sanjeevani_ds_IPD-2026-00474.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_08fb8ae4.json",
+      "output": "fhir/bundle_08fb8ae4.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_14b0278a.json",
+      "output": "fhir/bundle_14b0278a.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_2b7ec3cf.json",
+      "output": "fhir/bundle_2b7ec3cf.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_2f2cec5b.json",
+      "output": "fhir/bundle_2f2cec5b.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_353da32a.json",
+      "output": "fhir/bundle_353da32a.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_456c6763.json",
+      "output": "fhir/bundle_456c6763.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_4a4a1013.json",
+      "output": "fhir/bundle_4a4a1013.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_56860b2a.json",
+      "output": "fhir/bundle_56860b2a.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_581255ae.json",
+      "output": "fhir/bundle_581255ae.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_7bfe38d3.json",
+      "output": "fhir/bundle_7bfe38d3.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_7dfbd411.json",
+      "output": "fhir/bundle_7dfbd411.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_877f67e7.json",
+      "output": "fhir/bundle_877f67e7.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_99efe4d2.json",
+      "output": "fhir/bundle_99efe4d2.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_a07db3ea.json",
+      "output": "fhir/bundle_a07db3ea.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_a337481a.json",
+      "output": "fhir/bundle_a337481a.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_c815a19e.json",
+      "output": "fhir/bundle_c815a19e.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_d0c5a498.json",
+      "output": "fhir/bundle_d0c5a498.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_ee4be692.json",
+      "output": "fhir/bundle_ee4be692.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "fhir/bundle_fb4908ad.json",
+      "output": "fhir/bundle_fb4908ad.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/7148988804_report_0047.json",
+      "output": "lab/7148988804_report_0047.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/7151121544_report_0022.json",
+      "output": "lab/7151121544_report_0022.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/7585697553_report_0010.json",
+      "output": "lab/7585697553_report_0010.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/8599253525_report_0078.json",
+      "output": "lab/8599253525_report_0078.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/9368591915_report_0032.json",
+      "output": "lab/9368591915_report_0032.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/bulk_lab_export.json",
+      "output": "lab/bulk_lab_export.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/city_results.csv",
+      "output": "lab/city_results.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/lifeline_results.csv",
+      "output": "lab/lifeline_results.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/pathkind_results.csv",
+      "output": "lab/pathkind_results.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00005.json",
+      "output": "lab/report_00005.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00016.json",
+      "output": "lab/report_00016.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00033.json",
+      "output": "lab/report_00033.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00038.json",
+      "output": "lab/report_00038.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00041.json",
+      "output": "lab/report_00041.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00044.json",
+      "output": "lab/report_00044.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00048.json",
+      "output": "lab/report_00048.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00050.json",
+      "output": "lab/report_00050.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00055.json",
+      "output": "lab/report_00055.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00058.json",
+      "output": "lab/report_00058.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00059.json",
+      "output": "lab/report_00059.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00069.json",
+      "output": "lab/report_00069.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00070.json",
+      "output": "lab/report_00070.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00080.json",
+      "output": "lab/report_00080.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00081.json",
+      "output": "lab/report_00081.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/report_00083.json",
+      "output": "lab/report_00083.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/sanjeevani_results.csv",
+      "output": "lab/sanjeevani_results.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0003.txt",
+      "output": "lab/whatsapp_forward_0003.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0006.txt",
+      "output": "lab/whatsapp_forward_0006.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0011.txt",
+      "output": "lab/whatsapp_forward_0011.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0020.txt",
+      "output": "lab/whatsapp_forward_0020.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0025.txt",
+      "output": "lab/whatsapp_forward_0025.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0027.txt",
+      "output": "lab/whatsapp_forward_0027.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0028.txt",
+      "output": "lab/whatsapp_forward_0028.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0036.txt",
+      "output": "lab/whatsapp_forward_0036.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0042.txt",
+      "output": "lab/whatsapp_forward_0042.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0054.txt",
+      "output": "lab/whatsapp_forward_0054.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0073.txt",
+      "output": "lab/whatsapp_forward_0073.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0075.txt",
+      "output": "lab/whatsapp_forward_0075.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0079.txt",
+      "output": "lab/whatsapp_forward_0079.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "lab/whatsapp_forward_0084.txt",
+      "output": "lab/whatsapp_forward_0084.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/ambulance_log.csv",
+      "output": "misc/ambulance_log.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/corrupt_bytes_note.txt",
+      "output": "misc/corrupt_bytes_note.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/deep_export.json",
+      "output": "misc/deep_export.json.ir.json",
+      "status": "error",
+      "reason": "ERROR:malformed_or_unsupported_content"
+    },
+    {
+      "input": "misc/empty_export.csv",
+      "output": "misc/empty_export.csv.ir.json",
+      "status": "error",
+      "reason": "ERROR:empty_file"
+    },
+    {
+      "input": "misc/helpdesk_tickets.json",
+      "output": "misc/helpdesk_tickets.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/hl7_cda_discharge.xml",
+      "output": "misc/hl7_cda_discharge.xml.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/mislabeled_export.csv",
+      "output": "misc/mislabeled_export.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/patient_index.json",
+      "output": "misc/patient_index.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/photo_rx.jpg",
+      "output": "misc/photo_rx.jpg.ir.json",
+      "status": "error",
+      "reason": "ERROR:unsupported_format"
+    },
+    {
+      "input": "misc/README_export.txt",
+      "output": "misc/README_export.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/scanned_consent_form.json",
+      "output": "misc/scanned_consent_form.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "misc/scanned_discharge.pdf",
+      "output": "misc/scanned_discharge.pdf.ir.json",
+      "status": "error",
+      "reason": "ERROR:unsupported_format"
+    },
+    {
+      "input": "misc/truncated_opd.json",
+      "output": "misc/truncated_opd.json.ir.json",
+      "status": "error",
+      "reason": "ERROR:malformed_or_unsupported_content"
+    },
+    {
+      "input": "misc/ward_vitals_sheet.csv",
+      "output": "misc/ward_vitals_sheet.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_adm000161.txt",
+      "output": "notes/nursing_adm000161.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_adm000178.txt",
+      "output": "notes/nursing_adm000178.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_ip-26-00134.txt",
+      "output": "notes/nursing_ip-26-00134.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_ip-26-00144.txt",
+      "output": "notes/nursing_ip-26-00144.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_ip-26-00151.txt",
+      "output": "notes/nursing_ip-26-00151.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_ipd-2026-00438.txt",
+      "output": "notes/nursing_ipd-2026-00438.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_ipd-2026-00454.txt",
+      "output": "notes/nursing_ipd-2026-00454.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_ipd-2026-00459.txt",
+      "output": "notes/nursing_ipd-2026-00459.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_ipd-2026-00460.txt",
+      "output": "notes/nursing_ipd-2026-00460.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/nursing_ipd-2026-00474.txt",
+      "output": "notes/nursing_ipd-2026-00474.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "notes/visitor_log_ward5.txt",
+      "output": "notes/visitor_log_ward5.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/arogya_opd_2026_02.json",
+      "output": "opd/arogya_opd_2026_02.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/arogya_opd_2026_03.json",
+      "output": "opd/arogya_opd_2026_03.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/arogya_opd_2026_04.json",
+      "output": "opd/arogya_opd_2026_04.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/arogya_opd_2026_05.json",
+      "output": "opd/arogya_opd_2026_05.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/arogya_opd_2026_06.json",
+      "output": "opd/arogya_opd_2026_06.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/arogya_opd_2026_09.json",
+      "output": "opd/arogya_opd_2026_09.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/arogya_opd_2026_10.json",
+      "output": "opd/arogya_opd_2026_10.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/arogya_opd_2026_11.json",
+      "output": "opd/arogya_opd_2026_11.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/dhhardoi_opd_2026_05.json",
+      "output": "opd/dhhardoi_opd_2026_05.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/dhhardoi_opd_2026_08.json",
+      "output": "opd/dhhardoi_opd_2026_08.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_01.json",
+      "output": "opd/jeevanjyoti_opd_2026_01.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_02.json",
+      "output": "opd/jeevanjyoti_opd_2026_02.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_03.json",
+      "output": "opd/jeevanjyoti_opd_2026_03.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_04.json",
+      "output": "opd/jeevanjyoti_opd_2026_04.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_05.json",
+      "output": "opd/jeevanjyoti_opd_2026_05.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_06.json",
+      "output": "opd/jeevanjyoti_opd_2026_06.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_07.json",
+      "output": "opd/jeevanjyoti_opd_2026_07.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_08.json",
+      "output": "opd/jeevanjyoti_opd_2026_08.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_09.json",
+      "output": "opd/jeevanjyoti_opd_2026_09.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_10.json",
+      "output": "opd/jeevanjyoti_opd_2026_10.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/jeevanjyoti_opd_2026_11.json",
+      "output": "opd/jeevanjyoti_opd_2026_11.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_01.json",
+      "output": "opd/sanjeevani_opd_2026_01.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_02.json",
+      "output": "opd/sanjeevani_opd_2026_02.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_05.json",
+      "output": "opd/sanjeevani_opd_2026_05.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_06.json",
+      "output": "opd/sanjeevani_opd_2026_06.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_07.json",
+      "output": "opd/sanjeevani_opd_2026_07.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_08.json",
+      "output": "opd/sanjeevani_opd_2026_08.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_09.json",
+      "output": "opd/sanjeevani_opd_2026_09.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_10.json",
+      "output": "opd/sanjeevani_opd_2026_10.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "opd/sanjeevani_opd_2026_11.json",
+      "output": "opd/sanjeevani_opd_2026_11.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_arogya_00030.txt",
+      "output": "prescriptions/rx_arogya_00030.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_arogya_00031.txt",
+      "output": "prescriptions/rx_arogya_00031.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_arogya_00053.txt",
+      "output": "prescriptions/rx_arogya_00053.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_arogya_00056.txt",
+      "output": "prescriptions/rx_arogya_00056.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_dhhardoi_00077.txt",
+      "output": "prescriptions/rx_dhhardoi_00077.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00001.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00001.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00002.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00002.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00007.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00007.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00008.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00008.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00009.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00009.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00012.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00012.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00013.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00013.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00014.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00014.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00017.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00017.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00018.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00018.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00019.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00019.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00021.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00021.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00023.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00023.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00029.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00029.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00035.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00035.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00037.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00037.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00039.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00039.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00043.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00043.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00045.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00045.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00046.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00046.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00062.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00062.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00063.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00063.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00064.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00064.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00065.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00065.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00068.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00068.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00072.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00072.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00074.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00074.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_jeevanjyoti_00082.txt",
+      "output": "prescriptions/rx_jeevanjyoti_00082.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00024.txt",
+      "output": "prescriptions/rx_sanjeevani_00024.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00026.txt",
+      "output": "prescriptions/rx_sanjeevani_00026.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00034.txt",
+      "output": "prescriptions/rx_sanjeevani_00034.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00040.txt",
+      "output": "prescriptions/rx_sanjeevani_00040.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00049.txt",
+      "output": "prescriptions/rx_sanjeevani_00049.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00051.txt",
+      "output": "prescriptions/rx_sanjeevani_00051.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00052.txt",
+      "output": "prescriptions/rx_sanjeevani_00052.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00057.txt",
+      "output": "prescriptions/rx_sanjeevani_00057.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00060.txt",
+      "output": "prescriptions/rx_sanjeevani_00060.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00061.txt",
+      "output": "prescriptions/rx_sanjeevani_00061.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00066.txt",
+      "output": "prescriptions/rx_sanjeevani_00066.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00067.txt",
+      "output": "prescriptions/rx_sanjeevani_00067.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00071.txt",
+      "output": "prescriptions/rx_sanjeevani_00071.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "prescriptions/rx_sanjeevani_00076.txt",
+      "output": "prescriptions/rx_sanjeevani_00076.txt.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "registration/arogya_legacy_export.csv",
+      "output": "registration/arogya_legacy_export.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "registration/dhh_patients.json",
+      "output": "registration/dhh_patients.json.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "registration/jeevanjyoti_patients.tsv",
+      "output": "registration/jeevanjyoti_patients.tsv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "registration/sanjeevani_registration (1).csv",
+      "output": "registration/sanjeevani_registration (1).csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    },
+    {
+      "input": "registration/sanjeevani_registration.csv",
+      "output": "registration/sanjeevani_registration.csv.ir.json",
+      "status": "parsed",
+      "reason": null
+    }
+  ]
+}

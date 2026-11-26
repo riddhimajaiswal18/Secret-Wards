@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "Discharge_Summary_Salma_Ansari_SNJ-26-064279",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "Discharge_Summary_Salma_Ansari_SNJ-26-064279.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "Sanjeevani Multispeciality Hospital, Lucknow\nडिस्चार्ज सारांश\n\nमरीज़ का नाम: सलमा अंसारी    आयु: 45 वर्ष / महिला\nपति का नाम: यूसुफ अंसारी\nपंजीकरण सं.: SNJ/26/064279    आईपीडी सं.: IPD-2026-00438\nपता: मकान नं. 54, मोहल्ला चौक कोतवाली, पंचायत भवन के पास, ग्राम माधवपुरवा कलां, तहसील सफ़ीपुर, जिला उन्नाव - 209482\nमोबाइल: ८६२६३८१०२७\nभर्ती की तारीख: 23/02/2026\nछुट्टी की तारीख: 05/03/2026\n\nनिदान: फेफड़ों की टीबी (A15.0); किडनी की पुरानी बीमारी (N18.3); सीओपीडी (J44.9); \nमरीज़ को 6 दिन से बुखार था। BP 109/81, Pulse 67/min।\n\nMedications on discharge:\n 1. Tab Rifampicin + Isoniazid 450 mg + 300 mg 1-0-0 x 30 days\n 2. Tab Amlodipine 5 mg 0-0-1 x 15 days\n 3. Inh Salbutamol inhaler 100 mcg 2 puffs x 30 days\n 4. Tab Pantoprazole 40 mg 1-0-0 x 30 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Harjeet Bedi.\nAttendant: Yusuf Ansari, Mob. 8626381027\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

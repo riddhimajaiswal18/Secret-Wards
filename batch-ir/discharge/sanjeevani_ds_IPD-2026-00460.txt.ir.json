@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "sanjeevani_ds_IPD-2026-00460",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "sanjeevani_ds_IPD-2026-00460.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "Sanjeevani Multispeciality Hospital, Lucknow\nडिस्चार्ज सारांश\n\nमरीज़ का नाम: नरेश चौधरी    आयु: 95 वर्ष / पुरुष\nपिता का नाम: अनिल चौधरी\nपंजीकरण सं.: SNJ/26/064441    आईपीडी सं.: IPD-2026-00460\nपता: मकान नं. 389, ग्राम शिवगढ़, तहसील नानपारा, जिला बहराइच - 271132\nमोबाइल: ७००८६५३४२२\nभर्ती की तारीख: 23/07/2026\nछुट्टी की तारीख: 28/07/2026\n\nनिदान: दमा (J45.9); रेबीज़ (A82.9); \nमरीज़ को 4 दिन से बुखार था। BP 119/85, Pulse 108/min।\n\nMedications on discharge:\n 1. Inh Salbutamol inhaler 100 mcg 2 puffs x 15 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Harjeet Bedi.\nAttendant: Anil Chaudhary, Mob. 7008653422\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

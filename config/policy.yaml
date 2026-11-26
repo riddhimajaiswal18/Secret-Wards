@@ -3,10 +3,10 @@
 
 supported_formats:
   # FHIR R4 Bundles are JSON resources and must validate after serialization.
-  extensions: [.csv, .tsv, .json, .txt]
+  extensions: [.csv, .tsv, .json, .txt, .xml]
   content_sniffing: required
   fhir_release: R4
-  unsupported_formats: [xml, pdf, jpg]
+  unsupported_formats: [pdf, jpg]
 
 languages:
   supported: [English, Hindi-Devanagari, Hinglish]

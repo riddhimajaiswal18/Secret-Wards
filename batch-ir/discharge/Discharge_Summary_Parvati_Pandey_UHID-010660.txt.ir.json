@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "Discharge_Summary_Parvati_Pandey_UHID-010660",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "Discharge_Summary_Parvati_Pandey_UHID-010660.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "Arogya Seva Sadan, Sitapur\nडिस्चार्ज सारांश\n\nमरीज़ का नाम: पार्वती पांडे    आयु: 20 वर्ष / महिला\nपति का नाम: मुकेश पांडे\nपंजीकरण सं.: UHID-010660    आईपीडी सं.: ADM000178\nपता: मकान नं. 236, ग्राम रामडीह, तहसील महमूदाबाद, जिला सीतापुर - 261454\nमोबाइल: ७८८८०२३९२३\nभर्ती की तारीख: 10/11/2026\nछुट्टी की तारीख: 10/21/2026\n\nनिदान: पेशाब में संक्रमण (N39.0); \nमरीज़ को 8 दिन से बुखार था। BP 115/81, Pulse 81/min।\n\nMedications on discharge:\n 1. Cap Doxycycline 100 mg 1-0-1 x 30 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Imtiaz Ahmed.\nAttendant: Mukesh Pandey, Mob. 7888023923\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

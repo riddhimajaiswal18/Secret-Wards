@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "whatsapp_forward_0042",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "whatsapp_forward_0042.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "[06/08/26, 11:11 pm] Deepak Mama: <attachment: report.pdf>\nForwarded\n*Pathkind Labs (Lucknow)*\nReport of Kamal ji  26 Y / M\nHaemoglobin 11.7 g/dL | HbA1c 5.7 % | Random Blood Sugar 104 mg/dL | \nDr ne bola Dolo 650 BD x 5 days lena hai 🙏\nKoi problem ho to call karo 9405574024\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

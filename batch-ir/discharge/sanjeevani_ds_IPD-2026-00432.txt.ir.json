@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "sanjeevani_ds_IPD-2026-00432",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "sanjeevani_ds_IPD-2026-00432.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "SANJEEVANI MULTISPECIALITY HOSPITAL, LUCKNOW\nDISCHARGE SUMMARY\n\nPatient Name: Mahesh Chauhan        Age/Sex: 49 Yrs/M\nUHID: SNJ/26/064127        IPD No: IPD-2026-00432\nS/o Naresh Chauhan\nAddress: House 364, Ward 20, Mohalla Raja Bazar, Durgamau Kalan, Tehsil Lalganj, Distt. Rae Bareli - 229073\nMobile: +91 72864 90658\nConsultant: Dr. Ramesh Srivastava (MD Medicine)\nWard/Bed: Ward 4 (Medicine) / Bed 24\nDate of Admission: 24/09/2026\nDate of Discharge: 26/09/2026\nDOB: 12/04/1977\n\nDiagnosis: Typhoid fever (A01.0); Type 2 diabetes mellitus without complications (E11.9); Anaemia, unspecified (D64.9); \nPresenting complaints: C/O fever for 3 days, generalised weakness.\nHistory: K/C/O DM2 x 9 yrs. No significant past history.\nCourse in hospital: Patient admitted with above complaints. BP 127/80 mmHg, Pulse 96/min, Temp 99.0 F, SpO2 90%. Haemoglobin 10.2 g/dL. HbA1c 8.8 %. Random Blood Sugar 223 mg/dL. Treated conservatively. Mahesh bhai ki condition ab stable hai.\n\nMedications on discharge:\n 1. Inj Ceftriaxone 1 g IV x 30 days\n 2. Tab Paracetamol 650 mg 1-1-1 x 30 days\n 3. Tab Metformin 500 mg 1-0-1 x 30 days\n 4. Tab Glimepiride 1 mg 1-0-0 x 30 days\n 5. Tab Ferrous sulphate + Folic acid 100 mg + 0.5 mg 0-1-0 x 30 days\n 6. Tab Pantoprazole 40 mg 1-0-0 x 15 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Ramesh Srivastava.\nAttendant: Naresh Chauhan, Mob. 7286490658\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

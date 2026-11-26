@@ -1,0 +1,192 @@
+{
+  "ir_version": "1.0",
+  "document_id": "helpdesk_tickets",
+  "source": {
+    "format": "json",
+    "encoding": "utf-8",
+    "detected_arrangement": "nested_object",
+    "original_filename": "helpdesk_tickets.json",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "object",
+    "original_layout": {},
+    "data": {
+      "system": "Helpdesk",
+      "tickets": [
+        {
+          "id": "HD-1042",
+          "category": "billing query",
+          "meta": {
+            "raised_by": {
+              "name": "Ilavenil Bhattacharya",
+              "callback": "6069109411"
+            }
+          },
+          "status": "closed"
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "object",
+      "expected_dtype": "object",
+      "actual_dtype": "object",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000002",
+      "field_name": "system",
+      "field_path": "$.system",
+      "parent_field_id": "f_000001",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000003",
+      "field_name": "tickets",
+      "field_path": "$.tickets",
+      "parent_field_id": "f_000001",
+      "field_kind": "array",
+      "expected_dtype": "array",
+      "actual_dtype": "array",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000004",
+      "field_name": "0",
+      "field_path": "$.tickets[0]",
+      "parent_field_id": "f_000003",
+      "field_kind": "object",
+      "expected_dtype": "object",
+      "actual_dtype": "object",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000005",
+      "field_name": "id",
+      "field_path": "$.tickets[0].id",
+      "parent_field_id": "f_000004",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000006",
+      "field_name": "category",
+      "field_path": "$.tickets[0].category",
+      "parent_field_id": "f_000004",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000007",
+      "field_name": "meta",
+      "field_path": "$.tickets[0].meta",
+      "parent_field_id": "f_000004",
+      "field_kind": "object",
+      "expected_dtype": "object",
+      "actual_dtype": "object",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000008",
+      "field_name": "raised_by",
+      "field_path": "$.tickets[0].meta.raised_by",
+      "parent_field_id": "f_000007",
+      "field_kind": "object",
+      "expected_dtype": "object",
+      "actual_dtype": "object",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000009",
+      "field_name": "name",
+      "field_path": "$.tickets[0].meta.raised_by.name",
+      "parent_field_id": "f_000008",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000010",
+      "field_name": "callback",
+      "field_path": "$.tickets[0].meta.raised_by.callback",
+      "parent_field_id": "f_000008",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    },
+    {
+      "field_id": "f_000011",
+      "field_name": "status",
+      "field_path": "$.tickets[0].status",
+      "parent_field_id": "f_000004",
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "jeevanjyoti_ds_IP-26-00136",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "jeevanjyoti_ds_IP-26-00136.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "JEEVAN JYOTI CHARITABLE HOSPITAL, BARABANKI\nDISCHARGE SUMMARY\n\nPatient Name: Kamla Nishad        Age/Sex: 48 Yrs/F\nUHID: JJH-0077305        IPD No: IP/26/00136\nD/o Kishan Nishad\nAddress: Makan No. 32, behind Jama Masjid, Amarganj Khurd, Tehsil Nawabganj, Distt. Barabanki - 225127\nMobile: +91 60062 72163\nConsultant: Dr. Imtiaz Ahmed (MS Surgery)\nWard/Bed: Ward 1 (Surgery) / Bed 11\nDate of Admission: 30-10-2026\nDate of Discharge: 03-11-2026\nDOB: 29-07-1978\n\nDiagnosis: Infectious gastroenteritis and colitis, unspecified (A09); \nPresenting complaints: C/O fever for 4 days, generalised weakness.\nHistory: No K/C/O DM/HTN. H/O TB 9 yrs back (completed ATT).\nCourse in hospital: Patient admitted with above complaints. BP 134/66 mmHg, Pulse 84/min, Temp 98.1 F, SpO2 91%. Haemoglobin 11.5 g/dL. Random Blood Sugar 252 mg/dL. Serum Creatinine 2.9 mg/dL. Treated conservatively. Kamla ji ki condition ab stable hai.\nProcedure: Cataract surgery (phacoemulsification) done on day 2.\n\nMedications on discharge:\n 1. Sachet ORS 1 sachet after each loose stool x 30 days\n\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Imtiaz Ahmed.\nAttendant: Kishan Nishad, Mob. 6006272163\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}

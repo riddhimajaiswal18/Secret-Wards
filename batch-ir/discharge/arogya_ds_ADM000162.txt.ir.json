@@ -1,0 +1,47 @@
+{
+  "ir_version": "1.0",
+  "document_id": "arogya_ds_ADM000162",
+  "source": {
+    "format": "text",
+    "encoding": "utf-8",
+    "detected_arrangement": "document",
+    "original_filename": "arogya_ds_ADM000162.txt",
+    "schema_detected": false
+  },
+  "structure": {
+    "root_type": "string",
+    "original_layout": {},
+    "data": "AROGYA SEVA SADAN, SITAPUR\r\nDISCHARGE SUMMARY\r\n\r\nPatient Name: Ashok Patel        Age/Sex: 46 Yrs/M\r\nUHID: UHID-010610        IPD No: ADM000162\r\nS/o Shyam Patel\r\nAddress: House 180, Ward 20, Mohalla Subhash Nagar, near Panchayat Bhawan, Gram Gopaldih, Tehsil Misrikh, Distt. Sitapur - 261715\r\nMobile: +91 67499 97417\r\nABHA No: 91-3514-4654-5892\r\nConsultant: Dr. Imtiaz Ahmed (MS Surgery)\r\nWard/Bed: Ward 3 (Surgery) / Bed 28\r\nDate of Admission: 02/01/2026\r\nDate of Discharge: 02/06/2026\r\n\r\nDiagnosis: Anaemia, unspecified (D64.9); \r\nPresenting complaints: C/O fever for 3 days, generalised weakness.\r\nHistory: No K/C/O DM/HTN. No significant past history.\r\nCourse in hospital: Patient admitted with above complaints. BP 127/66 mmHg, Pulse 104/min, Temp 97.8 F, SpO2 89%. Haemoglobin 9.9 g/dL. Random Blood Sugar 258 mg/dL. Serum Creatinine 2.4 mg/dL. Treated conservatively. Ashok bhai ki condition ab stable hai.\r\nProcedure: Cataract surgery (phacoemulsification) done on day 2.\r\n\r\nMedications on discharge:\r\n 1. Tab Ferrous sulphate + Folic acid 100 mg + 0.5 mg 0-1-0 x 30 days\r\n\r\nAdvice: Low salt, diabetic diet. Review in OPD after 2 weeks with Dr. Imtiaz Ahmed.\r\nAttendant: Shyam Patel, Mob. 6749997417\r\n"
+  },
+  "fields": [
+    {
+      "field_id": "f_000001",
+      "field_name": "root",
+      "field_path": "$",
+      "parent_field_id": null,
+      "field_kind": "leaf",
+      "expected_dtype": "string",
+      "actual_dtype": "string",
+      "presence_status": "present",
+      "sensitivity": null,
+      "detection_status": "not_evaluated",
+      "expected_masking_technique": null
+    }
+  ],
+  "entities": [],
+  "linkage": {
+    "status": "NOT_EVALUATED",
+    "canonical_patient_id": null,
+    "confidence": null,
+    "matched_records": [],
+    "matching_attributes": []
+  },
+  "transformations": [],
+  "validation": {
+    "parse_status": "SUCCESS",
+    "structure_preserved": null,
+    "clinical_utility_preserved": null,
+    "privacy_validation": "NOT_EVALUATED",
+    "serialization_status": "PENDING"
+  }
+}
