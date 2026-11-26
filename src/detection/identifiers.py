@@ -27,7 +27,7 @@ _EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 # Hospital identifiers: a mandatory letter prefix, then a separator, then digits.
 # The letter prefix is required and a bare space is not a separator, so a vital sign such as
 # "BP 117/82" or a ratio such as "117/82" can never be read as an identifier.
-_UHID = re.compile(r"(?<![A-Za-z0-9])([A-Za-z]{2,6}[-/](?:[A-Za-z]{1,6}[-/])?\d{2,6}(?:[-/]\d{1,6})?)(?![0-9])")
+_UHID = re.compile(r"(?<![A-Za-z0-9])([A-Za-z]{2,6}[-/](?:[A-Za-z]{1,6}[-/])?\d{2,10}(?:[-/]\d{1,10})?)(?![0-9])")
 _PINCODE = re.compile(r"(?<!\d)(\d{6})(?!\d)")
 
 # Name shape: 2–4 capitalised tokens, not a unit, not a drug form, not an organisation suffix.

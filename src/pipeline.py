@@ -56,8 +56,9 @@ def run(input_dir: str | Path, output_dir: str | Path, *, policy_path: str | Pat
     else:
         LOG.warning("no run secret supplied: pseudonyms will not be produced in this pass")
 
+    policy = load_policy(policy_path)
     report = write_submission(input_dir, output_dir, submission=submission,
-                              policy_digest=policy_digest(policy_path))
+                              policy_digest=policy_digest(policy_path), policy=policy)
     counts = report["counts"]
     LOG.info("files %d · sanitized %d · quarantined %d · %.2fs",
              counts["files_total"], counts["files_sanitized"], counts["files_quarantined"],

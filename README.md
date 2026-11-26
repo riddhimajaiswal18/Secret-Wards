@@ -3,12 +3,24 @@
 An offline, CPU-only Python privacy firewall for synthetic multilingual healthcare exports.
 
 **Current state (honest):** ingestion, the intermediate representation, the locator-based edit
-engine and the release-output pipeline are implemented and verified. `validate_output.py` reports
-**CONTRACT OK** on the practice set: 195 of 200 files are sanitized, 5 are quarantined with typed
-reasons, two runs are byte-identical, and `parse → serialize` reproduces the input for 189 of the
-195 emitted files. PII detection, linkage, pseudonymization and the privacy transformations are
-**still stubs**, so the release currently removes nothing — the practice self-check reports
-**99.8% of personal data still visible**. Nothing here is yet a privacy guarantee.
+engine, detection (tier-0 identifiers + tier-1 context + structural column/key/header rules), the
+clinical protection layer, path sanitation and the release-output pipeline are implemented and
+verified. On the practice set:
+
+| Gate | Result |
+|---|---|
+| `validate_output.py` | **CONTRACT OK** |
+| files | 197 / 200 sanitized, 3 quarantined with typed reasons |
+| **personal data still visible** | **17.7%** (from 99.8% pass-through) |
+| medical values preserved | **99.4%** (4824 / 4855) |
+| leakage by channel | content 17.9% · filename 8.3% · header **0%** · base64 **0%** · metadata 12.5% · key 41.7% |
+| raw copies | **0** |
+| determinism | byte-identical across runs |
+| tests | 41 passing |
+
+Not implemented yet: cross-record **linkage** (so no patient pseudonyms and no patient-level date
+shifting), quasi-identifier generalisation, and the independent verifier. Nothing here is yet a
+privacy guarantee — see `docs/decisions.md` for what each layer does and does not claim.
 
 ## Challenge constraints
 
