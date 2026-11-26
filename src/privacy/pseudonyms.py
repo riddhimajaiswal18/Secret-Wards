@@ -27,6 +27,8 @@ _ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"      # no I, O, 0, 1: unambiguous
 _SCOPE = "secret-wards/dev-corpus"                  # change per release; never derived from data
 
 # Identifier-shaped evidence. A name alone is never evidence, by rule.
+_PATIENT_COLUMN = re.compile(r"^(?:uhid|patient_?id|patient_?uhid|mrn|hospital_?patient_?id)$",
+                             re.IGNORECASE)
 _ID_KEYS = re.compile(r"(?:uhid|mrn|ipd|opd|reg(?:istration)?_?(?:no|id|number)?|patient_?id|adm)"
                       r"\w*$", re.IGNORECASE)
 _ID_VALUE = re.compile(r"\b[A-Z]{2,5}[-_]?\d{5,9}\b")
@@ -113,7 +115,10 @@ def pseudonym_for_locator(ir: Any, locator: str, secret: str | None) -> str | No
             return None
         header = [str(cell).strip() for cell in (data.get("header") or [])]
         rows = data.get("rows") or []
-        column = next((i for i, name in enumerate(header) if _ID_KEYS.search(name)), None)
+        # Only a column that names the patient itself qualifies. Anything else is evidence about a
+        # claim, a visit or a hospital, and using it links two different people (measured: 1 merge).
+        column = next((i for i, name in enumerate(header)
+                       if _PATIENT_COLUMN.match(name.strip().replace(" ", "_"))), None)
         if column is None or not rows:
             return pseudonym_for(secret, identity_evidence(ir))
         row = rows[index] if index < len(rows) else rows[-1]
