@@ -185,3 +185,31 @@ def test_every_input_file_gets_exactly_one_fate(tmp_path):
     assert statuses["bad.json"] == "quarantined"
     assert statuses["x.pdf"] == "quarantined"
     assert report["counts"]["files_total"] == 3
+
+
+# ── identity keys, not label keys ───────────────────────────────────────────
+def test_identity_key_map_is_renamed_without_collapsing(tmp_path):
+    """`{"Sunita Patel": "UHID-1"}` leaks through the key, not the value.
+
+    Regression for the key channel (measured 41.7% -> 0.0%): the value path replaced the UHID and
+    `continue`d before the key was ever examined, so the name survived as a JSON key.
+    """
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    payload = {"by_name": {"Sunita Patel": "JJH-1", "Mohd Shahid": "JJH-2",
+                           "Anita Sharma": "JJH-3"}}
+    write(inputs, "patient_index.json", json.dumps(payload).encode())
+    write_submission(inputs, outputs)
+    produced = json.loads((outputs / "sanitized" / "patient_index.json").read_text())
+    keys = list(produced["by_name"])
+    assert not any(name.split()[0] in k for name in payload["by_name"] for k in keys), keys
+    assert len(keys) == 3, "distinct identities must not collapse into one key"
+
+
+def test_label_keys_survive(tmp_path):
+    """Structural label keys carry meaning for downstream consumers and must not be renamed."""
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    write(inputs, "row.json", json.dumps({"patient_name": "Sunita Patel",
+                                          "hospital": "JJH", "visits": 3}).encode())
+    write_submission(inputs, outputs)
+    produced = json.loads((outputs / "sanitized" / "row.json").read_text())
+    assert set(produced) >= {"patient_name", "hospital", "visits"}

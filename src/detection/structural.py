@@ -68,6 +68,34 @@ def _index_key_is_identity(key: str, value, index) -> bool:
     return bool(_index_key_findings(key, value, index))
 
 
+_IDENTITY_KINDS = {"NAME", "RELATIVE", "UHID", "AADHAAR", "ABHA", "PAN", "PHONE"}
+
+
+def _identity_key_replacement(key, node, index, tokens):
+    """A key that *is* the identity, e.g. `{"Sunita Patel": "UHID-1"}`.
+
+    Titlecase or MRN-shaped keys are renamed; label keys ("patient_name", "by_name") are not,
+    because classify() resolves those to a schema field and the key must stay meaningful.
+    Returns (new_key, kind) or None.
+    """
+    if not isinstance(key, str) or len(key) < 4 or classify(key):
+        return None
+    findings = (find(key, index)
+                or find(key.replace("_", " ").replace("-", " "), index)
+                or _index_key_findings(key, None, index))
+    if not findings:
+        return None
+    kind = findings[0].kind
+    if kind not in _IDENTITY_KINDS:
+        return None
+    stem = (tokens.get(kind, "[REDACTED]").strip("[]").lower() or "redacted")
+    candidate, counter = stem, 1
+    while candidate in node and candidate != key:   # never collapse two identities into one key
+        counter += 1
+        candidate = f"{stem}_{counter}"
+    return candidate, kind
+
+
 def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                        tokens: dict[str, str]) -> dict[str, int]:
     """Sanitise headers, keys and embedded attachments in place; return per-kind counts."""
@@ -100,6 +128,12 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
             node = stack.pop()
             if isinstance(node, dict):
                 for key in list(node.keys()):
+                    renamed = _identity_key_replacement(key, node, index, tokens)
+                    if renamed is not None:
+                        new_key, kind = renamed
+                        node[new_key] = node.pop(key)
+                        key = new_key
+                        bump(kind)
                     child = node[key]
                     if isinstance(child, str) and not _looks_like_base64(child) and (
                             "_" in child or "-" in child) and 4 <= len(child) <= 400:
@@ -122,22 +156,6 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                                 node[key] = tokens.get(findings[0].kind, "[REDACTED]")
                                 bump("BASE64")
                                 continue
-                    # Index-by-patient objects: the key itself is the identity, and it may be a
-                    # single capitalised token ("Anita_Sharma") or a bare numeric MRN ("010565").
-                    if isinstance(key, str) and len(key) >= 4 and not classify(key):
-                        findings = (find(key, index)
-                                    or find(key.replace("_", " ").replace("-", " "), index)
-                                    or _index_key_findings(key, child, index))
-                        if findings:
-                            new_key = tokens.get(findings[0].kind, "[REDACTED]").strip("[]")
-                            new_key = new_key.lower() or "redacted"
-                            counter = 1
-                            candidate = new_key
-                            while candidate in node:      # never collapse two keys into one
-                                counter += 1
-                                candidate = f"{new_key}_{counter}"
-                            node[candidate] = node.pop(key)
-                            bump(findings[0].kind)
                     stack.append(child)
             elif isinstance(node, list):
                 stack.extend(node)
