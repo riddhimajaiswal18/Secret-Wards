@@ -24,6 +24,7 @@ import json
 import re
 import sys
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
 SCHEMA = "secret-wards-verification/1"
 
@@ -55,6 +56,36 @@ _PERSON_LABEL = re.compile(
     r"\b(?:patient|name|attendant|guardian|relative|visitor|father|mother|spouse|son|daughter|"
     r"wife|husband|brought|accompanied)\b", re.IGNORECASE)
 _CLINICIAN = re.compile(r"(?:\bDr\.?|\bDoctor|\bProf\.?|\bSister|\bNurse)\s*$", re.IGNORECASE)
+_PERSON_FIELD = re.compile(
+    r"(?:patient|pt|relative|guardian|attendant|father|mother|spouse|husband|wife|"
+    r"son|daughter|next.?of.?kin).{0,20}(?:name|naam|given|first|last|family)|"
+    r"(?:full|first|last|given|family)_?name", re.IGNORECASE)
+_ROLE_FIELD = re.compile(
+    r"\b(?:doctor|practitioner|provider|consultant|physician|nurse|hospital|clinic|"
+    r"organization|organisation|facility|institution)\b", re.IGNORECASE)
+_PERSON_VALUE_LABEL = re.compile(
+    r"(?i)(?:patient\s*name|name\s*of\s*patient|pt\.?\s*name|patient|name|"
+    r"attendant|guardian|relative|father\s*of|mother\s*of|s/o|d/o|w/o|c/o|"
+    r"son\s*of|daughter\s*of|wife\s*of|husband\s*of|next\s*of\s*kin)\s*[:=\-]\s*"
+    r"([^,;\r\n]+)"
+)
+_PATIENT_NAME_PREFIX = re.compile(
+    r"(?i:patient)\s+([A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,}){1,2})"
+)
+_RELATIVE_NAME_PREFIX = re.compile(
+    r"(?i:\b(?:s/o|d/o|w/o|c/o|son\s+of|daughter\s+of|wife\s+of|husband\s+of|"
+    r"father\s+of|mother\s+of|attendant|guardian|relative|next\s+of\s+kin)\s*[:=\-]?\s*)"
+    r"([A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,}){0,2})"
+)
+_HONORIFIC_NAME = re.compile(
+    r"\b[A-Z][a-z]{2,}\s+(?:amma|babu|bhaiya|bhai|behenji|behen|ji|didi|sahab|sahib)\b",
+    re.IGNORECASE,
+)
+_SCHEMA_KEYS = {
+    "system", "meta", "resource", "entry", "data", "record", "records", "patient",
+    "patients", "visit", "visits", "by_name", "identifier", "identifiers", "name",
+    "given", "family", "first", "last", "text", "display", "id", "type", "status",
+}
 
 TEXT_EXT = {".txt", ".md", ".log", ".csv", ".tsv", ".json", ".jsonl", ".xml"}
 BINARY_EXT = {".pdf", ".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif", ".zip", ".gz"}
@@ -109,6 +140,134 @@ def candidate_identifiers(text: str) -> list[tuple[str, str]]:
     return out
 
 
+def _plausible_person(value: str) -> bool:
+    value = value.strip(" \t\r\n:;,.()[]{}\"'")
+    if not value or len(value) > 100 or re.search(r"\d", value):
+        return False
+    words = re.findall(r"[A-Za-z\u0900-\u097f][A-Za-z\u0900-\u097f'’-]*", value)
+    if not words or len(words) > 5:
+        return False
+    return not any(word.casefold() in _NOT_PERSON for word in words)
+
+
+def _contextual_names(text: str) -> list[str]:
+    """High precision names from text, gated by a local person-role marker."""
+    names: list[str] = []
+    for line in text.splitlines():
+        for match in _PERSON_VALUE_LABEL.finditer(line):
+            value = match.group(1).strip()
+            # A label value may continue into demographics or another field on the same line.
+            value = re.split(
+                r"(?i)\s+(?:age(?:/sex)?|sex|dob|date\s+of\s+birth|uhid|mrn|mobile|phone)\b",
+                value, maxsplit=1)[0]
+            if _plausible_person(value) and not _ROLE_FIELD.search(line[:match.start()]):
+                names.append(value)
+            else:
+                names.extend(candidate.group(0) for candidate in _NAME_PAIR.finditer(value)
+                             if _plausible_person(candidate.group(0)))
+        for pattern in (_PATIENT_NAME_PREFIX, _RELATIVE_NAME_PREFIX):
+            for match in pattern.finditer(line):
+                value = " ".join(match.group(1).split())
+                if _plausible_person(value):
+                    names.append(value)
+        for match in _HONORIFIC_NAME.finditer(line):
+            names.append(match.group(0))
+    return names
+
+
+def _document_name_candidates(path: Path, text: str) -> list[str]:
+    """Find names from person fields without treating every clinical proper noun as a patient.
+
+    This verifier remains independent of the sanitizer. It parses only enough structure to know
+    whether a value belongs to a patient/relative field; raw identifiers are still scanned by the
+    separate shape-based rules above.
+    """
+    suffix = path.suffix.casefold()
+    names: list[str] = []
+    if suffix == ".json":
+        try:
+            payload = json.loads(text)
+        except (ValueError, RecursionError):
+            payload = None
+
+        def walk(node, path=()):
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    key_text = str(key)
+                    compact = re.sub(r"[^a-z]", "", key_text.casefold())
+                    key_readable = key_text.replace("_", " ").replace("-", " ")
+                    if (key_text.casefold() not in _SCHEMA_KEYS and
+                            candidate_identifiers(key_readable) and
+                            not _ROLE_FIELD.search(key_text)):
+                        names.extend(value for kind, value in candidate_identifiers(key_readable)
+                                     if kind == "NAME")
+                    next_path = path + (key_text,)
+                    if isinstance(value, str):
+                        ancestry = " ".join(next_path)
+                        if (not _ROLE_FIELD.search(ancestry) and
+                                (_PERSON_FIELD.search(key_text) or
+                                (compact == "name" and
+                                 re.search(r"(?i)\b(?:patient|patients|relative|guardian|attendant)\b",
+                                           ancestry)))):
+                            if _plausible_person(value):
+                                names.append(value.strip())
+                        # Values in explicit source/path metadata are checked for identity names.
+                        if re.search(r"(?i)(?:path|file|source)", key_text):
+                            names.extend(name for kind, name in candidate_identifiers(
+                                value.replace("_", " ").replace("\\", " ")) if kind == "NAME")
+                    else:
+                        walk(value, next_path)
+            elif isinstance(node, list):
+                for value in node:
+                    walk(value, path)
+
+        if payload is not None:
+            walk(payload)
+    elif suffix in {".csv", ".tsv"}:
+        try:
+            rows = list(csv.reader(io.StringIO(text), delimiter="\t" if suffix == ".tsv" else ","))
+        except csv.Error:
+            rows = []
+        if rows:
+            for index, label in enumerate(rows[0]):
+                if _ROLE_FIELD.search(label):
+                    continue
+                is_person_field = bool(_PERSON_FIELD.search(label)) or label.strip().casefold() == "name"
+                if not is_person_field:
+                    continue
+                for row in rows[1:]:
+                    if index < len(row) and _plausible_person(row[index]):
+                        names.append(row[index].strip())
+    elif suffix == ".xml":
+        try:
+            root = ET.fromstring(text)
+        except (ET.ParseError, RecursionError):
+            names.extend(_contextual_names(text))
+        else:
+            def walk_xml(element, ancestry=()):
+                tag = element.tag.rsplit("}", 1)[-1]
+                context = ancestry + (tag,)
+                context_text = " ".join(context)
+                normalized_tag = re.sub(r"[^a-z]", "", tag.casefold())
+                if not _ROLE_FIELD.search(context_text):
+                    is_person_name = (_PERSON_FIELD.search(tag) or
+                                      (normalized_tag == "name" and
+                                       re.search(
+                                           r"(?i)\b(?:patient|patientRole|guardian|relative|"
+                                           r"attendant|RelatedPerson)\b", context_text)))
+                    if is_person_name:
+                        for value in [element.text or "", *element.attrib.values()]:
+                            if _plausible_person(value):
+                                names.append(value.strip())
+                for child in list(element):
+                    walk_xml(child, context)
+
+            walk_xml(root)
+    else:
+        names.extend(_contextual_names(text))
+    return list(dict.fromkeys(names))
+
+
 def read_text(path: Path) -> str | None:
     """Best-effort text of a released file; None when the verifier cannot inspect it."""
     if path.suffix.lower() in BINARY_EXT:
@@ -134,6 +293,25 @@ def read_text(path: Path) -> str | None:
     if path.suffix.lower() == ".xml":
         return _xml_text(text)
     return text
+
+
+def read_raw_text(path: Path) -> str | None:
+    """Decode source bytes without flattening JSON, CSV or XML structure."""
+    if path.suffix.lower() in BINARY_EXT:
+        return None
+    try:
+        raw = path.read_bytes()
+    except OSError:
+        return None
+    for encoding in ("utf-8", "cp1252", "latin-1"):
+        try:
+            text = raw.decode(encoding)
+            break
+        except UnicodeDecodeError:
+            continue
+    else:
+        return None
+    return None if "\x00" in text else text
 
 
 def _csv_text(text: str) -> str:
@@ -175,9 +353,28 @@ def _json_text(text: str) -> str:
 
 def _xml_text(text: str) -> str:
     """Tags and attribute values, without importing a parser the sanitizer also uses."""
-    tags = re.findall(r"<\/?([A-Za-z_][\w:.-]*)", text)
-    attrs = re.findall(r'([A-Za-z_][\w:.-]*)\s*=\s*"([^"]{0,200})"', text)
-    return "\n".join(tags + [f"{k} {v}" for k, v in attrs])
+    try:
+        root = ET.fromstring(text)
+    except (ET.ParseError, RecursionError):
+        tags = re.findall(r"<\/?([A-Za-z_][\w:.-]*)", text)
+        attrs = re.findall(r'([A-Za-z_][\w:.-]*)\s*=\s*"([^"]{0,200})"', text)
+        body = re.sub(r"<[^>]{0,1000}>", "\n", text)
+        return "\n".join(tags + [f"{k} {v}" for k, v in attrs] + [body])
+    chunks: list[str] = []
+
+    def walk(node):
+        chunks.append(node.tag.rsplit("}", 1)[-1])
+        if node.text:
+            chunks.append(node.text)
+        for key, value in node.attrib.items():
+            chunks.extend((key, value))
+        for child in list(node):
+            walk(child)
+            if child.tail:
+                chunks.append(child.tail)
+
+    walk(root)
+    return "\n".join(chunks)
 
 
 def _files(root: Path) -> dict[str, Path]:
@@ -298,11 +495,12 @@ def verify_tree(input_root: str | Path, output_root: str | Path, *,
                              "note": "content not inspectable by this verifier"})
             continue
 
-        candidates = candidate_identifiers(input_text or "")
-        if not (any(kind != "NAME" for kind, _ in candidates)
-                or _PERSON_LABEL.search(input_text or "")):
-            candidates = [(kind, value) for kind, value in candidates if kind != "NAME"]
-        expected = candidates
+        candidates = [(kind, value) for kind, value in
+                      candidate_identifiers(input_text or "") if kind != "NAME"]
+        raw_input = read_raw_text(in_path) or input_text or ""
+        candidates.extend(("NAME", value) for value in
+                          _document_name_candidates(in_path, raw_input))
+        expected = list(dict.fromkeys(candidates))
         leaked = []
         for kind, value in expected:
             if value in released_text:

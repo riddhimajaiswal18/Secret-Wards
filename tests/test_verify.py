@@ -64,6 +64,49 @@ def test_clinician_names_are_not_reported_as_patient_leaks(tmp_path):
     assert verify_tree(inp, out)["overall"] == "passed"
 
 
+def test_json_doctor_name_is_not_a_patient_leak(tmp_path):
+    original = json.dumps({"patient_name": "Sunita Patel", "doctor_name": "Ramesh Kumar"})
+    released = json.dumps({"patient_name": "[NAME]", "doctor_name": "Ramesh Kumar"})
+    inp, out = build(tmp_path, inputs={"visits/a.json": original},
+                     released={"visits/a.json": released})
+    assert verify_tree(inp, out)["overall"] == "passed"
+
+
+def test_json_relative_name_leak_is_still_detected(tmp_path):
+    original = json.dumps({"patient": {"name": "Sunita Patel"},
+                           "guardian": {"name": "Mohan"}})
+    inp, out = build(tmp_path, inputs={"visits/a.json": original},
+                     released={"visits/a.json": original})
+    result = verify_tree(inp, out)
+    assert result["overall"] == "failed"
+    assert result["checks"]["surviving_identifiers"]["surviving"] >= 1
+
+
+def test_xml_patient_name_is_checked_but_clinician_name_is_preserved(tmp_path):
+    original = (
+        "<ClinicalDocument><recordTarget><patientRole><patient>"
+        "<name>Sunita Patel</name></patient></patientRole></recordTarget>"
+        "<author><assignedPerson><name>Ramesh Kumar</name></assignedPerson></author>"
+        "</ClinicalDocument>"
+    )
+    released = original.replace("Sunita Patel", "[NAME]")
+    inp, out = build(tmp_path, inputs={"notes/a.xml": original},
+                     released={"notes/a.xml": released})
+    assert verify_tree(inp, out)["overall"] == "passed"
+
+    leaked_inp, leaked_out = build(tmp_path / "leak", inputs={"notes/a.xml": original},
+                                   released={"notes/a.xml": original})
+    assert verify_tree(leaked_inp, leaked_out)["overall"] == "failed"
+
+
+def test_person_label_does_not_mark_clinical_proper_nouns_as_names(tmp_path):
+    original = ("Patient was treated for Acute Kidney Injury. "
+                "Ramesh Sharma Hospital issued the discharge summary.")
+    inp, out = build(tmp_path, inputs={"notes/a.txt": original},
+                     released={"notes/a.txt": original})
+    assert verify_tree(inp, out)["overall"] == "passed"
+
+
 # ── positives: each leak class must fail ───────────────────────────────────
 def test_reintroduced_name_fails(tmp_path):
     inp, out = build(tmp_path, inputs={"notes/a.txt": "Patient Sunita Patel"},

@@ -1,6 +1,6 @@
 # Design decisions and open questions
 
-These are initial choices, not validated implementation results.
+These describe the current implementation choices and unresolved architecture decisions. Practice-set measurements are in [BASELINE_RESULTS.md](BASELINE_RESULTS.md); passing them is not a general privacy guarantee.
 
 ## Decisions
 
@@ -11,7 +11,7 @@ These are initial choices, not validated implementation results.
 5. **Conservative linkage.** Require independent evidence or a unique strong identifier; do not link on names alone; return null under uncertainty and guard against homonyms/transitive over-merging.
 6. **Keyed, separated HMAC purposes.** Use `RAKSHA_SECRET` for stable pseudonyms and date offsets with separate derivation domains. Never persist the secret or plain patient identifiers.
 7. **Risk-based generalization.** Age/location/date policy must be configurable and evaluated against attack risk, not presented as a proven privacy guarantee.
-8. **Small dependency surface.** Current candidates cover encoding, Indic transliteration, phones/dates, fuzzy/phonetic comparison, Pydantic/FHIR validation, JSON Schema, encryption, and YAML. Classical ML and privacy-metric libraries are deferred until requirements justify their cost.
+8. **Small pinned dependency surface.** Only packages imported by the current implementation are declared. Exact versions were exercised on Python 3.10/Linux. FHIR model validation, fuzzy/phonetic matching, JSON Schema validation and persisted-data encryption are not claimed capabilities.
 
 ## Open architectural questions
 
@@ -19,17 +19,17 @@ These are initial choices, not validated implementation results.
 - Which FHIR R4 library/version and validation scope will work across the target Python and Linux environment, and how will bundle references be rewritten consistently?
 - How should content sniffing distinguish JSON-in-CSV-extension and other mislabelled data while preserving intended output formats safely?
 - What dependency is actually needed for encryption at rest, and which sensitive intermediates can instead be avoided entirely? Where will keys live without sharing storage with ciphertext?
-- What calibrated linkage evidence/thresholds achieve high precision on homonym, fragmented identity, and cross-script cases? How will cluster consistency prevent transitive over-merging?
+- What evidence and review process should extend exact name-plus-phone matching to homonyms, fragmented identity and cross-script aliases without increasing false merges?
 - What practical Hindi/Hinglish name resources and transliteration direction(s) are legally and operationally suitable offline?
-- How should the system handle partial dates, invalid dates, ages above the ordinary band range, minors, and date shifts near representational boundaries?
+- How should partial dates, uncommon date formats, date-boundary handling, minors and older ages be generalized across every input format?
 - Which risk threshold triggers suppression/generalization for rare diagnoses/procedures while preserving useful clinical statistics?
 - What are safe parsing limits for bulk exports and 1,500-level nested JSON under the 4 GB/15-minute budget?
-- How should file-level PII in a path be renamed deterministically while preserving the required directory structure and report mapping?
+- Which output naming policy should cover filename fragments and nested paths whose names contain PII while preserving a stable, useful directory layout?
 - Which policy settings and matching thresholds remain provisional until practice and hidden-style held-out testing?
 
 ## Dependency/version notes
 
-The Team Kit starter itself uses only the Python standard library, so it establishes no dependency conflicts. This repository lists unpinned utility packages except a compatibility constraint pairing `fhir.resources` 7.x–8.x with Pydantic 2.x. Versions must be resolved on the target Python/Linux environment before the first implementation milestone. spaCy, scikit-learn, CRF libraries, Splink/recordlinkage, anonymeter and pycanon are not included yet: overlap, model/runtime cost, API compatibility and need should be assessed first. No pretrained models are required or downloaded.
+`requirements.txt` pins the runtime packages verified with Python 3.10/Linux. FHIR-shaped JSON currently uses the project's common JSON IR; `fhir.resources` is not installed because it is not wired into the runtime. `charset-normalizer`, fuzzy/phonetic matcher packages, JSON Schema libraries, and encryption packages were removed because the current code does not import them. spaCy, scikit-learn, CRF libraries, Splink/recordlinkage, anonymeter and pycanon remain excluded until evaluation demonstrates a need. No pretrained models are used or downloaded.
 
 ## IR write-back decisions
 
@@ -38,8 +38,8 @@ The Team Kit starter itself uses only the Python standard library, so it establi
 - Guard edits with optional expected values. Text spans apply from highest offset down; overlapping edits quarantine the document.
 - Capture delimited dialect, encoding and BOM for re-serialization. Original byte-level whitespace/quoting and JSON number lexemes are not retained.
 - Enforce a JSON nesting cap of 512 and return a controlled error instead of raising the recursion limit.
-- FHIR validation remains structural; full R4 validation and reference-resolution checks are follow-up work.
-- The policy package currently exposes an interface only; policy rules and PII detection remain unimplemented.
+- FHIR validation remains structural; full R4 validation and comprehensive reference-resolution checks are follow-up work.
+- Policy rules and privacy transforms are implemented for the supported fields; rare-combination suppression and attack-based risk measurement remain open.
 
 ## Canonical source representation
 

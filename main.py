@@ -31,9 +31,15 @@ def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(level=logging.WARNING if args.quiet else logging.INFO,
                         format="%(levelname)s %(message)s", stream=sys.stderr)
     if not Path(args.input).is_dir():
-        print(f"input directory not found: {args.input}", file=sys.stderr)
+        # Do not echo user-supplied paths: folder names may contain patient identifiers.
+        print("input directory not found", file=sys.stderr)
         return 2
-    run(args.input, args.output, policy_path=args.policy, submission=args.submission)
+    try:
+        run(args.input, args.output, policy_path=args.policy, submission=args.submission)
+    except (RuntimeError, ValueError):
+        # Validation exceptions can include source values. Keep the CLI failure generic.
+        logging.getLogger("raksha").error("pipeline failed; no release should be trusted")
+        return 2
     return 0
 
 

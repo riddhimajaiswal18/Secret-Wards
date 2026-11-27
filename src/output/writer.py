@@ -25,6 +25,8 @@ from src.ingestion.scanned import scan_path
 from src.policy import engine as policy_engine
 from src.privacy.pseudonyms import (identity_evidence, pseudonym_for,
                                     pseudonym_for_locator, secret_from_environment)
+from src.privacy.linkage import build_assignments
+from src.privacy.transforms import apply_privacy_transforms, prepare_date_offsets
 from src.security.capabilities import report_section
 from src.security.quarantine import QuarantineReason, binary_reason, normalise_reason
 from src.security.safe_logging import safe_write
@@ -176,13 +178,17 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
     tokens = policy_engine.resolve_tokens(policy)
 
     submission_secret = secret_from_environment()
+    linkage_assignments = build_assignments(input_root, submission_secret)
+    date_offsets = prepare_date_offsets(input_root, linkage_assignments,
+                                         submission_secret, policy)
     used_paths: dict[str, str] = {}
     files: list[dict[str, Any]] = []
     quarantine: list[dict[str, Any]] = []
     records: list[dict[str, Any]] = []
     counts = {"files_total": 0, "files_sanitized": 0, "files_quarantined": 0,
               "records_processed": 0, "identifiers_detected": 0, "records_linked": 0,
-              "records_generalized": 0, "records_suppressed": 0, "records_quarantined": 0}
+              "records_generalized": 0, "fields_generalized": 0, "dates_shifted": 0,
+              "records_suppressed": 0, "records_quarantined": 0}
 
     for path, relative in iter_inputs(input_root):
         counts["files_total"] += 1
@@ -239,7 +245,9 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
         try:
             locators = record_locators(ir)
             patient_by_locator = {
-                locator: pseudonym_for_locator(ir, locator, submission_secret)
+                locator: (linkage_assignments[(relative, locator)]
+                          if (relative, locator) in linkage_assignments
+                          else pseudonym_for_locator(ir, locator, submission_secret))
                 for locator in locators
             }
             # Headers, keys and base64 attachments are rewritten before value edits are built,
@@ -248,6 +256,12 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
             counts["identifiers_detected"] += sum(structural_counts.values())
             kind_counts = policy_engine.evaluate(ir, protection, policy)
             counts["identifiers_detected"] += sum(kind_counts.values())
+            privacy_counts = apply_privacy_transforms(
+                ir, file_relative=relative, patient_by_locator=patient_by_locator,
+                secret=submission_secret, policy=policy, date_offsets=date_offsets)
+            counts["records_generalized"] += privacy_counts["records_generalized"]
+            counts["fields_generalized"] += privacy_counts["fields_generalized"]
+            counts["dates_shifted"] += privacy_counts["dates_shifted"]
             payload = _serialize(ir, patient_by_locator)
             # Release integrity: parsing success is not sanitisation success. If detection found
             # spans and the bytes did not change, the findings were lost downstream — refuse to
@@ -308,7 +322,7 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
         "method": {
             "detection": "deterministic rules and checksums only",
             "model": "none at run time",
-            "identifiers": "HMAC-SHA256 keyed pseudonyms from identifier evidence; no cross-record linkage",
+            "identifiers": "HMAC-SHA256 pseudonyms from record identifiers and conflict-checked name+phone evidence",
         },
         "files": files,
         "quarantine": quarantine,
@@ -322,7 +336,40 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
 
 
 def _peak_mb() -> float:
-    import resource
     import sys
+
+    if sys.platform == "win32":
+        # ``resource`` is Unix-only. Use the Windows process API so local Windows
+        # runs can still produce the numeric resource field required by the report.
+        import ctypes
+        from ctypes import wintypes
+
+        class ProcessMemoryCounters(ctypes.Structure):
+            _fields_ = [
+                ("cb", wintypes.DWORD),
+                ("PageFaultCount", wintypes.DWORD),
+                ("PeakWorkingSetSize", ctypes.c_size_t),
+                ("WorkingSetSize", ctypes.c_size_t),
+                ("QuotaPeakPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+                ("PagefileUsage", ctypes.c_size_t),
+                ("PeakPagefileUsage", ctypes.c_size_t),
+            ]
+
+        counters = ProcessMemoryCounters()
+        counters.cb = ctypes.sizeof(counters)
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        psapi = ctypes.WinDLL("psapi", use_last_error=True)
+        kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+        get_memory_info = psapi.GetProcessMemoryInfo
+        get_memory_info.argtypes = [wintypes.HANDLE, ctypes.POINTER(ProcessMemoryCounters), wintypes.DWORD]
+        get_memory_info.restype = wintypes.BOOL
+        if not get_memory_info(kernel32.GetCurrentProcess(), ctypes.byref(counters), counters.cb):
+            raise ctypes.WinError(ctypes.get_last_error())
+        return round(counters.PeakWorkingSetSize / (1024 * 1024), 1)
+
+    import resource
     rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     return round(rss / (1024 * 1024) if sys.platform == "darwin" else rss / 1024, 1)

@@ -66,6 +66,40 @@ def test_same_name_different_identifier_is_not_merged(tmp_path):
     assert len(set(tokens)) == 2, tokens
 
 
+def test_exact_name_and_phone_link_different_hospital_ids(tmp_path):
+    records = _run(tmp_path, {
+        "hospital_a/registration.csv":
+            "uhid,patient_name,phone,dob,sex\nJJH-0077112,Sunita Patel,9876543210,1980-05-12,F\n",
+        "hospital_b/registration.csv":
+            "uhid,patient_name,phone,dob,sex\nSNJ-26064508,Sunita Patel,9876543210,1980-05-12,F\n",
+    })
+    tokens = [record["patient"] for record in records]
+    assert len(tokens) == 2 and tokens[0] is not None and tokens[0] == tokens[1], tokens
+
+
+def test_linkage_rejects_shared_phone_when_name_or_demographics_conflict(tmp_path):
+    records = _run(tmp_path, {
+        "a.csv": ("uhid,patient_name,phone,dob,sex\n"
+                  "JJH-0077112,Sunita Patel,9876543210,1980-05-12,F\n"),
+        "b.csv": ("uhid,patient_name,phone,dob,sex\n"
+                  "SNJ-26064508,Anita Sharma,9876543210,1980-05-12,F\n"),
+        "c.csv": ("uhid,patient_name,phone,dob,sex\n"
+                  "DHH-0059100,Sunita Patel,9876543210,1970-08-02,F\n"),
+    })
+    tokens = [record["patient"] for record in records]
+    assert len(tokens) == 3
+    assert len(set(tokens)) == 3, tokens
+
+
+def test_name_and_phone_without_a_direct_id_can_link(tmp_path):
+    records = _run(tmp_path, {
+        "a.json": json.dumps({"patient_name": "Sunita Patel", "phone": "9876543210"}),
+        "b.json": json.dumps({"patient_name": "Sunita Patel", "phone": "9876543210"}),
+    })
+    tokens = [record["patient"] for record in records]
+    assert len(tokens) == 2 and tokens[0] is not None and tokens[0] == tokens[1], tokens
+
+
 def test_no_identifier_means_no_pseudonym(tmp_path):
     records = _run(tmp_path, {"notes/a.txt": "Patient Sunita Patel, stable, discharged.\n"})
     assert all(r["patient"] is None for r in records)

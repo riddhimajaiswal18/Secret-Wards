@@ -1,30 +1,34 @@
-# Release criteria
+# Release criteria and current decision
 
-This repository must not be described as submission-ready or safe for real clinical data until all organizer requirements are checked on the target Linux sandbox. Current practice-set evidence is in [BASELINE_RESULTS.md](BASELINE_RESULTS.md).
+The Team Kit's repository and runtime checks have been exercised on the current working tree. Current measurements are detailed in [BASELINE_RESULTS.md](BASELINE_RESULTS.md). Passing the practice checks supports a competition submission; it does not establish general privacy safety or production readiness.
 
-## Current gate status
+## Gate status
 
-| Gate | Required evidence | Current status |
+| Gate | Evidence required | Current status |
 |---|---|---|
-| Output contract | Team Kit validator says `CONTRACT OK` | Pass on latest practice output |
-| Accounting | every input gets one fate | Pass: 197 exported, 3 quarantined, 0 unaccounted |
-| Direct PII | project target ≤5% labeled surfaces | Pass on practice set: 0.84%; not hidden-set evidence |
-| Canaries and unsafe copies | 0 canaries; 0 penalized raw copies | Pass on practice set: 0/4; 0 penalized |
-| Clinical utility | ≥99% measured values retained | Pass on practice set: 99.38% |
-| Determinism and key variation | same secret identical; different secret changes tokens | Pass on three direct runs |
-| Identity linkage | precision ≥0.98, 0 false merges, F0.5 ≥0.85 | Partial: P=1.00, R=0.51, F0.5=0.84; recall/score below target |
-| Independent verifier | no unresolved candidate findings | Fail: 492 NAME candidates; each requires triage |
-| Re-identification risk | attack-based evaluation on supplied registry | Not measured |
-| Date recovery | date shift and recovery attack | Not implemented |
-| Linux limits and offline operation | full run at 2 CPUs / 4 GB / 15 min / no network | Not verified on Linux |
-| Test suite | all project tests pass | Pass: 145 tests |
+| Repository contract | Root `raksha.toml`, README, dependencies and policy | Pass; Toolkit pre-submit checker reports `READY TO SUBMIT` |
+| Output contract | Toolkit validator accepts output | Pass on the Linux practice run (`CONTRACT OK`) |
+| Accounting | Every input has one output fate | Pass: 197 sanitized, 3 quarantined, 0 unaccounted / 200 |
+| Direct PII | Practice-set labeled surfaces | Pass on this corpus: 0/3,234 and 0/3,230 in separate Toolkit checks |
+| Canaries and raw-copy safety | No canaries; no penalized unchanged unsupported files | Pass: 0/4 canaries; 0 penalized raw copies |
+| Clinical utility | At least 99% exact-value retention | Pass on practice set: 99.38%; 30 exact values were not retained and need error-class review |
+| Determinism and key variation | Same secret is repeatable; a new secret changes output | Pass in official three-run check |
+| Linkage | Precision ≥0.98, no false merges, F0.5 ≥0.85 | Pass on practice self-check: P=1.00, R=0.61, F0.5=0.89, zero observed false merges |
+| Independent verifier | No surviving supported identifier candidates | Pass on current practice output; verifier is not wired as a pipeline release gate |
+| Linux limits and offline run | 2 CPUs, 4 GB RAM, ≤15 minutes, no network | Pass: 5.44 s reported pipeline time and 58.3 MB reported peak RSS on staged input; official helper also passed |
+| OCR capability | Required image-only PDF and image pixels are inspected or quarantined | Partial: `pdftoppm` and Tesseract binaries were absent; runtime reported the degradation |
+| FHIR and privacy-risk validation | Schema/reference validation and attack-based risk evidence | Not complete: full R4 validation, rare-combination suppression and re-identification-risk measurement remain |
+| Project tests | All current unit and adversarial tests | Pass: 162 tests on Python 3.10 Linux |
 
-**Current decision:** publish the rescue branch for review, but do not merge it as a final release or claim the project is fully submission-ready. Remaining requirements are measurable work, especially verifier triage, re-identification-risk controls, date transformations, and Linux validation.
+## Decision
 
-## Promotion procedure
+The repository passes the Toolkit's current submission checker and its three-run Linux execution gate. It is reasonable to submit as a competition prototype with the stated OCR and evaluation limitations. Do not claim the system is perfect, anonymous, safe for real patient data, or validated against hidden cases.
 
-1. Run the full Team Kit three-run checker in the target Linux sandbox.
-2. Resolve direct-PII and verifier findings; rerun the truth-based scorecard.
-3. Implement and evaluate the missing linkage/privacy transforms and attack metrics.
-4. Attach the final scores and known residuals to a pull request.
-5. Merge only after the required gates pass and a human reviews the result. Do not force-push `main`.
+## Remaining work before any production use
+
+1. Install and require native PDF rendering/OCR tools for workloads containing image-only scans; verify quarantine behavior when they are absent.
+2. Add broader held-out identity variants and review the 30 clinical-value exact-match misses.
+3. Complete FHIR R4 schema and reference validation.
+4. Add attack-based re-identification measurement and rare-combination suppression.
+5. Integrate the independent verifier as a blocking release step and review its scope.
+6. Review key lifecycle, memory handling, crash dumps, temporary files and host-level side channels.

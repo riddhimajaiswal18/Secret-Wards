@@ -28,7 +28,8 @@ _ANCHOR_NAME = re.compile(
     r"(?:Patient\s*Name|Name\s*of\s*Patient|Pt\.?\s*Name|Patient|Name|नाम|मरीज़)\s*[:\-–]?\s*")
 _ANCHOR_RELATIVE = re.compile(
     r"(?<![A-Za-z/])(?:S/o|D/o|W/o|C/o|Son\s+of|Daughter\s+of|Wife\s+of|"
-    r"Husband\s+of|Father\s+of|माता|पिता)\s*[:\-–]?\s*",
+    r"Husband\s+of|Father\s+of|Mother\s+of|Attendant|Guardian|Relative|"
+    r"Next\s+of\s+Kin|माता|पिता|अभिभावक|रिश्तेदार|परिजन)\s*[:\-–]?\s*",
     re.IGNORECASE)
 _ANCHOR_CLINICIAN = re.compile(
     r"(?:Dr\.?|Doctor|Consultant|RMO|MO|Physician|Surgeon)\s*[:\-–]?\s*", re.IGNORECASE)
@@ -40,7 +41,7 @@ _ANCHOR_LOCAL = re.compile(
     r"(?:patient\s*ka\s*naam|patient\s*ka\s*name|naam|नाम|मरीज़\s*का\s*नाम|रोगी\s*का\s*नाम)"
     r"\s*[:\-–]?\s*(?:hai\s+|है\s+)?", re.IGNORECASE)
 _HINGLISH_POSSESSIVE = re.compile(
-    r"^\s*([A-Za-z][A-Za-z'\-]{2,})\s+(?:ka|ki|ke)\b", re.IGNORECASE)
+    r"(?m)^\s*([A-Za-z][A-Za-z'\-]{2,})\s+(?:ka|ki|ke)\b", re.IGNORECASE)
 _PATIENT_BEFORE_RELATIVE = re.compile(
     r"(?<![A-Za-z])(?P<name>[A-Za-z][A-Za-z'\-]{2,}(?:[ \t]+[A-Za-z][A-Za-z'\-]{2,}){0,2})"
     r"(?:\s*,\s*|\s+)(?=(?:S/o|D/o|W/o|Son\s+of|Daughter\s+of|Wife\s+of|"
@@ -64,14 +65,14 @@ _LABELED_VALUES = (
     ("ADDRESS", re.compile(r"(?i)(?:address|residential\s*address|residence|पता|निवास)\s*[:=\-]\s*([^;\n]{4,160})")),
 )
 
-# A name-shaped run: 2–4 capitalised tokens, or Devanagari words of 3+ characters.
-# Hinglish names carry a lowercase kinship suffix: "Kamal bhaiya", "Asha ji", "Mahesh bhai".
+# A name-shaped run: 2–4 capitalised tokens (including common abbreviated given names such as
+# "Mohd."), or Devanagari words of 3+ characters. Hinglish names carry a contextual suffix.
 # Hinglish kinship suffixes. Ground-truth-confirmed relative leaks included 'Jagdish Chachu',
 # 'Umesh Mama' and 'Raju Papa', which this list did not cover; a relative named only through a
 # kinship word was therefore released. The name is still required to be a capitalised word, so
 # 'C/O fever' and 'K/C/O diabetes' are untouched.
 _NAME_KIN = re.compile(
-    r"\b[A-Z][a-z]{2,}\s+(?:bhaiya|bhai|behenji|behen|ji|didi|sahab|sahib|ben|"
+    r"\b[A-Z][a-z]{2,}\s+(?:bhaiya|bhai|behenji|behen|ji|didi|sahab|sahib|ben|amma|babu|"
     r"chachu|chacha|chachi|mama|mami|papa|mummy|papu|tau|taya|nana|nani|dada|dadi|"
     r"bua|fufa|mausi|mausa|devar|jija|sasur|saas|bhabhi|bhabi|bhatija|bhanja|bhanji)\b",
     re.IGNORECASE)
@@ -80,7 +81,8 @@ _RELATIVE_KIN = re.compile(
     r"tau|taya|nana|nani|dada|dadi|bua|fufa|mausi|mausa|devar|jija|sasur|saas|bhabhi|"
     r"bhabi|bhatija|bhanja|bhanji)\b", re.IGNORECASE)
 
-_NAME_RUN = re.compile(r"(?:[A-Z][a-z]{2,}(?:[ \t]+[A-Z][a-z]{2,}){1,3}"
+_NAME_PART = r"(?:[A-Z][a-z]{2,}|[A-Z][a-z]{1,}\.|[A-Z]\.)"
+_NAME_RUN = re.compile(rf"(?:{_NAME_PART}(?:[ \t]+{_NAME_PART}){{1,3}}"
                        r"|[\u0900-\u0963\u0970-\u097F]{3,}"
                        r"(?:[ \t]+[\u0900-\u0963\u0970-\u097F]{3,}){1,3})")
 _ADDRESS_RUN = re.compile(r"[A-Za-z0-9][^,;\n]{8,90}")
@@ -98,7 +100,8 @@ _NOT_NAMES = {
     "diagnosis", "medicine", "male", "female", "years", "year", "days", "date", "opd", "ipd",
     "fever", "cough", "pain", "chest", "abdominal", "vomiting", "diarrhea", "breathlessness",
     "weakness", "headache", "nausea", "diabetes", "hypertension", "follow", "up", "age",
-    "sex", "dob", "uhid", "reg", "no", "mob", "yrs", "mrn", "pin",
+    "sex", "dob", "uhid", "reg", "no", "mob", "yrs", "mrn", "pin", "attendant",
+    "guardian", "relative", "next", "kin", "contact", "tel", "telephone", "bed",
     "generalised", "generalized", "loose", "stools", "burning", "micturition",
 }
 # Devanagari function words and complaint vocabulary: "6 दिन से बुखार" is a clinical sentence,
@@ -227,14 +230,31 @@ def find(text: str, index: ProtectionIndex, *, names: bool = True) -> list[Findi
         found.extend(_anchored_local(text, protected, index))
         for match in _NAME_KIN.finditer(text):
             candidate = Finding(NAME, match.start(), match.end(), "patient", 0.8)
-            if not candidate.overlaps(protected) and \
-                    not index.is_clinical_text(text, match.start(), match.end()):
+            # The suffix is explicit person context. Nearby clinical values must not veto it;
+            # only an overlapping protected span or a clinical/place token can do so.
+            if (not candidate.overlaps(protected)
+                    and not index.is_place(text[candidate.start:candidate.end])
+                    and not any(index.word_is_clinical(token)
+                                for token in re.findall(r"[A-Za-z]+", text[candidate.start:candidate.end]))):
                 found.append(candidate)
         for match in _RELATIVE_KIN.finditer(text):
             candidate = Finding(RELATIVE, match.start(), match.end(), "relative", 0.9)
-            if not candidate.overlaps(protected) and \
-                    not index.is_clinical_text(text, match.start(), match.end()):
+            if (not candidate.overlaps(protected)
+                    and not index.is_place(text[candidate.start:candidate.end])
+                    and not any(index.word_is_clinical(token)
+                                for token in re.findall(r"[A-Za-z]+", text[candidate.start:candidate.end]))):
                 found.append(candidate)
+        # A ward number inside a labelled attendant address is a locality. "Ward 1" in a
+        # Ward/Bed or nursing-unit field remains operational context and is not modified.
+        for line_match in re.finditer(
+                r"(?im)^\s*(?:address|addr)\s*\(\s*(?:attendant|guardian|relative)\s*\)\s*:\s*[^\r\n]*",
+                text):
+            for ward_match in re.finditer(r"(?i)\bward\s+\d+\b", line_match.group(0)):
+                start = line_match.start() + ward_match.start()
+                end = line_match.start() + ward_match.end()
+                candidate = Finding("ADDRESS", start, end, "relative", 0.8)
+                if not candidate.overlaps(protected):
+                    found.append(candidate)
     return _dedupe(found)
 
 

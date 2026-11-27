@@ -51,21 +51,23 @@ linkage:
 
 age_bands:
   width_years: 5 # Provisional; true age must remain inside its assigned band.
-  minor_policy: unresolved
-  oldest_age_policy: unresolved
+  minor_policy: 0-17
+  oldest_age_policy: 85+
 
 location_generalization:
   levels: [village, tehsil, district, state]
-  default_level: district # Provisional; risk assessment may require coarser output.
+  default_level: district
+  missing_district_fallback: suppress
   rare_combination_action: suppress_or_generalize
 
 date_shifting:
   method: deterministic_per_patient_hmac_offset
   max_days: 180 # Provisional; must be reviewed against attack risk and date validity.
+  date_order: DMY
   preserve_intervals: true
   same_patient_same_offset: true
-  partial_date_policy: unresolved
-  boundary_date_policy: unresolved
+  partial_date_policy: preserve_month_only
+  boundary_date_policy: shift_with_calendar_arithmetic
 
 capabilities:
   # Failing closed here prevents a degraded run from being mistaken for a complete one.

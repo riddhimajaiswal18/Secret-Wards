@@ -133,6 +133,7 @@ def test_mrn_inside_an_export_path_is_detected(tmp_path):
     write_submission(inputs, outputs)
     released = (outputs / "sanitized" / "opd" / "v.json").read_text()
     assert "010607" not in released
+    assert "Shahid" not in released, "name plus initials in a source-path component must be removed"
 
 
 def test_identifiers_stored_as_adjacent_list_elements(tmp_path):
@@ -154,6 +155,47 @@ def test_hinglish_kinship_relatives_are_redacted(tmp_path):
     _, text = _run(tmp_path, body)
     for name in ("Jagdish Chachu", "Umesh Mama", "Raju Papa"):
         assert name not in text, name
+
+
+def test_hinglish_patient_honorifics_survive_nearby_clinical_values(tmp_path):
+    body = (
+        "Patient: Sukhwinder amma ki condition ab stable hai.\n"
+        "Shahid babu ka BP 105/77, pulse 72.\n"
+        "Brijesh ka BP 146/91, sugar control nahi hai.\n"
+        "19:10 - Dr. Ramesh Srivastava reviewed the patient.\n"
+        "Tab Metformin 500 mg BD x 5 days.\n"
+    )
+    _, text = _run(tmp_path, body)
+    for name in ("Sukhwinder amma", "Shahid babu", "Brijesh"):
+        assert name not in text, name
+    assert "105/77" in text and "146/91" in text
+    assert "Metformin 500 mg BD x 5 days" in text
+    assert "Dr. Ramesh Srivastava" in text
+
+
+def test_attendant_anchor_and_dotted_name_are_handled(tmp_path):
+    body = (
+        "Attendant: Zubair, Mob. 9368591915\n"
+        "14:00 - Mohd. Shahid - K/C/O addison's disease.\n"
+    )
+    _, text = _run(tmp_path, body)
+    assert "Zubair" not in text
+    assert "9368591915" not in text
+    assert "Mohd. Shahid" not in text
+    assert "addison's disease" in text
+    assert "Mob." in text
+
+
+def test_ward_numbers_are_only_generalized_in_attendant_address(tmp_path):
+    body = (
+        "Address (attendant): C/O Ramesh Yadav, Ward 8\n"
+        "Ward/Bed: Ward 1 (Medicine) / Bed 20\n"
+        "Nursing notes - Ward 8 (Medicine)\n"
+    )
+    _, text = _run(tmp_path, body)
+    assert "Ward 8" not in text.splitlines()[0]
+    assert "Ward 1 (Medicine)" in text
+    assert "Ward 8 (Medicine)" in text
 
 
 def test_kinship_words_do_not_eat_clinical_text(tmp_path):

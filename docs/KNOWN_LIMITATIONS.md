@@ -1,32 +1,28 @@
 # Known limitations
 
-These are current implementation or evaluation gaps, not hypothetical risks. The project remains a prototype and must not be used for real patient data.
+The current system is a competition prototype. Its toolkit scores describe one synthetic development corpus and do not establish hidden-set performance, anonymity, or suitability for real patient data.
 
-## Measured detection gaps
+## Detection and formats
 
-- On the 200-file Team Kit practice set, 27 of 3,234 labeled PII surfaces remained visible (0.84%). Most residuals were patient and relative names; residual Hinglish rate was 14.4%.
-- The independent verifier is useful for finding candidates but is not a mandatory release gate. It reports 492 NAME candidates on the current practice output; some candidates may be benign, but each finding still needs triage.
-- A successful parser or contract validation does not imply all PII was detected.
+- The practice labels showed 0 visible direct-PII surfaces in both the scorecard (0/3,234) and the Toolkit self-check (0/3,230). These are corpus-specific observations, not general recall guarantees.
+- The Linux evaluation lacked `pdftoppm` and the Tesseract executable. Image-only PDF rendering and pixel OCR were unavailable even though the Python wrappers were installed. The runtime reports these missing capabilities; OCR-dependent inputs may be quarantined or incompletely inspected.
+- CSV/TSV, JSON, FHIR-shaped JSON, XML, and text use the shared IR, but format-specific semantic coverage is not uniform. Full FHIR R4 schema validation and comprehensive Bundle reference validation are not implemented.
+- Date/age/location transforms cover common structured paths and selected text patterns. XML, uncommon date labels, partial dates, and free-text contexts have limited transformation coverage.
+- The independent verifier passed the current 200-file corpus, but it checks only the patterns and readable channels it implements. It is run separately and does not block `main.py` from releasing output.
 
-## Identity and privacy transformations
+## Identity and privacy
 
-- The current token logic extracts strong-looking identifier evidence and emits HMAC-based pseudonyms where possible. It is not a complete linkage engine for spelling variants, multiple hospitals, fragmented records, cross-script identity, homonyms, or conflicts.
-- The Team Kit self-check scored practice-set pseudonym linkage at precision 1.00, recall 0.51 and F0.5 0.84 with zero observed false merges. This does not guarantee hidden-set performance or solve all cross-hospital aliases, homonyms and conflicts. The number of tokenized records is not itself a linkage quality result.
-- Date shifting, age-band generalization, location generalization and rare-combination suppression are not implemented in the release path. There is no measured re-identification-risk estimate.
-- Approximate transliteration supports normalization experiments only; it must not be used as identity equivalence evidence by itself.
+- The within-run linker groups direct identifier evidence and can join different hospital IDs only on an exact patient-name plus phone pair, subject to sex and date-of-birth conflict checks. It deliberately does not link on name alone or phone alone.
+- Alias spelling changes, script variants, fragmented identities, shared phones, complex homonyms, and identity ambiguity are not comprehensively handled. There is no persistent cross-release identity service.
+- Date shifting, age bands, village/locality generalization and PIN-prefix masking are implemented for covered contexts. The practice run shifted 696 date values and generalized 1,358 fields across 699 records. These counts do not assess privacy risk.
+- Rare-combination suppression and attack-based re-identification-risk measurement are not implemented. A zero direct-PII score does not imply resistance to linkage, singling-out, or auxiliary-data attacks.
+- Pseudonyms use HMAC and a caller-provided secret. There is no key rotation service. Parsed source values and linkage evidence remain in memory during the run; persisted-data encryption and secure-deletion guarantees are absent.
 
-## Formats and execution
+## Evaluation and operation
 
-- CSV/TSV, JSON/FHIR-shaped JSON, XML and text parsers exist, but format preservation and semantic detection vary by input shape. Full FHIR R4 schema and all-reference validation need broader testing.
-- PDF text extraction, image metadata extraction and OCR rely on optional dependencies and native tools. In the measured environment these were absent, so scanned content could not be inspected with OCR.
-- The test run was performed on Windows with a temporary compatibility shim for the Linux-only `resource` module. The target Linux sandbox (2 CPUs, 4 GB RAM, 15 minutes, no network) still requires a full run. The organizer's `check_submission.py --run` helper also uses POSIX quoting and fails to invoke the pipeline correctly from this Windows shell; three-run behavior was checked directly instead.
-- Same-secret determinism was measured on the practice set. A final different-secret unlinkability check and full three-run submission test remain required.
+- The project passed 162 tests and the Toolkit's three-run submission helper in a Python 3.10 Linux container with 2 CPUs, 4 GB RAM, and no network during execution. That proves behavior only for the tested source, environment and synthetic corpus.
+- Clinical value retention was 4,825/4,855 (99.38%). The remaining 30 exact-match misses require continued clinical-utility review; this aggregate does not identify which changes were intentional privacy transforms.
+- The report records missing optional capabilities. Deployment should install and require the OCR native tools if image-only scans must be processed instead of quarantined.
+- `report.json` avoids source filenames and the Toolkit helper confirmed the test secret was absent from output and logs. This does not cover every host-level crash dump, filesystem snapshot, antivirus index, or operator-created copy.
 
-## Security and operations
-
-- The report avoids original input paths, but every release still needs side-channel scans of logs, output paths, temporary files and errors.
-- Sensitive parse structures exist in process memory. At-rest encryption for persisted sensitive intermediates and secure quarantine lifecycle are incomplete.
-- The independent verifier is not currently wired as a blocking release gate.
-- The 3 quarantined practice files demonstrate fail-closed behavior for known empty/malformed/deep cases; they do not prove all corrupt or unsupported files are safely quarantined.
-
-Do not describe the system as anonymous, fully compliant, or ready for real clinical deployment. Treat practice-set results as development evidence only.
+Do not describe this prototype as anonymous, production safe, or fully compliant. Before real-world use, complete broad hidden-style evaluation, FHIR validation, OCR capability handling, privacy-risk attacks, stronger linkage review, and security operations review.

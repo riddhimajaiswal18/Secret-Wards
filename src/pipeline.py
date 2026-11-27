@@ -1,7 +1,7 @@
-"""Pipeline entry point: enumerate → parse → (detect) → (link) → (privatise) → serialise → report.
+"""Release pipeline: validate configuration, then parse, detect, link, transform and report.
 
-Today only the mechanical half is wired. With no detector the pass must reproduce every
-parseable input byte-for-byte; that is the fidelity gate the rest of the system is built on.
+Each format is parsed into the common IR. Detection and privacy stages attach locator-based edits,
+which are serialized without mutating the authoritative parsed source structure.
 """
 from __future__ import annotations
 
@@ -52,10 +52,9 @@ def run(input_dir: str | Path, output_dir: str | Path, *, policy_path: str | Pat
         submission: str = "secret-wards") -> dict:
     install_log_filter()
     secret = os.environ.get("RAKSHA_SECRET", "")
-    if secret:
-        register(secret, token="[SECRET]")
-    else:
-        LOG.warning("no run secret supplied: pseudonyms will not be produced in this pass")
+    if not secret:
+        raise RuntimeError("RAKSHA_SECRET is required for a privacy release")
+    register(secret, token="[SECRET]")
 
     policy = load_policy(policy_path)
     enforce(policy)                      # fail closed when a required capability is absent

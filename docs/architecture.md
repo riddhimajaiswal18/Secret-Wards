@@ -6,7 +6,7 @@ One coordinator, one responsibility per package, no stage reaching into another'
 main.py                       CLI, exit codes
 └── src/pipeline.py           policy load, capability enforcement, log filter
     └── src/output/writer.py  coordinator: enumerate → parse → detect → policy → transform
-        │                     → serialise → report → release gate
+        │                     → serialise → report and quarantine accounting
         ├── src/ingestion/    file_router, csv_tsv, ir_json, xml_parser, fhir_parser,
         │                     text_parser, encoding, scanned (PDF/EXIF/OCR ladder)
         ├── src/ir.py         IntermediateRepresentation: structure, provenance, source locations
@@ -15,7 +15,7 @@ main.py                       CLI, exit codes
         ├── src/detection/    engine, identifiers, protection, columns, paths, structural
         ├── src/policy/       technique table: the only place that decides substitute/keep
         ├── src/transformation/ locator-based edits, applied in reverse order, fail-closed
-        ├── src/privacy/      pseudonyms (HMAC), the only place identity tokens are made
+        ├── src/privacy/      record linkage, HMAC pseudonyms, date/age/location transforms
         └── src/security/     safe_logging (leak scan), capabilities, quarantine
 tools/verify.py               independent verifier — imports none of the above
 ```
@@ -28,8 +28,8 @@ tools/verify.py               independent verifier — imports none of the above
 `detection/` | *findings* with spans and confidence | modify the document, or re-derive validation |
 `policy/` | the technique per kind | parse or transform |
 `transformation/` | applying edits by locator | decide what to edit |
-`privacy/` | pseudonym generation | store a mapping table |
-`output/` | artifacts, accounting, release gate | trust detection to have worked |
+`privacy/` | record linkage, pseudonyms and generalization | store a persistent identity map |
+`output/` | artifacts and accounting | claim independent verification ran automatically |
 `tools/verify.py` | the release question, asked independently | import the detector |
 
 ## Data flow invariant

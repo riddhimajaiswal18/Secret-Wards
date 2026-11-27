@@ -4,26 +4,26 @@
 
 ## Status at a glance
 
-The supplied Team Kit development set contains 200 files. The latest measured run exported 197 and quarantined 3 (empty, malformed JSON, and excessive nesting). On labeled PII surfaces, 27 of 3,234 remained visible (0.8%); measured clinical values retained were 4,825 of 4,855 (99.4%). The independent toolkit contract validator passed on the run. The Team Kit practice self-check measured linkage at precision 1.00, recall 0.51 and F0.5 0.84, with zero observed false merges. Same-secret output determinism and different-secret token changes were observed. The full test suite passes 145 tests. These results apply only to this practice set and local Windows evaluation; they do not establish hidden-set performance, anonymity, or submission readiness.
+The supplied Team Kit development set contains 200 files. In the latest Linux evaluation, 197 were sanitized and 3 were quarantined, with no unaccounted inputs. Both toolkit scorers found 0 visible labeled PII surfaces (scorecard: 0/3,234; practice self-check: 0/3,230); 4,825/4,855 clinical values were retained (99.38%). Linkage scored precision 1.00, recall 0.61 and F0.5 0.89, with zero observed false merges. The independent verifier and output-contract validator passed. All 162 project tests passed on Python 3.10. The organizer's three-run check passed under Linux with 2 CPUs, 4 GB RAM and no network: same-secret output was identical, a changed secret changed output, and input files were unchanged. These are synthetic development-set results, not hidden-set performance or an anonymity guarantee.
 
 | Practice-set check | Latest measured result |
 |---|---:|
 | Files | 197 exported, 3 quarantined, 0 unaccounted / 200 |
-| Labeled PII surfaces still visible | 27 / 3,234 (0.8%) |
-| By script | Latin 0.4%, Devanagari 0.0%, Hinglish 14.4% |
-| By channel | content 0.8%, metadata 5.0%; filename, header, JSON key and base64 0% observed |
-| Clinical values retained | 4,825 / 4,855 (99.4%) |
-| Practice-set linkage score | precision 1.00, recall 0.51, F0.5 0.84 (0 false merges in this self-check) |
+| Labeled PII surfaces still visible | 0 / 3,234 (independent scorecard); 0 / 3,230 (practice self-check) |
+| By script and channel | 0 labeled misses in the measured Latin, Devanagari, Hinglish, content, filename, header, key, metadata and base64 groups |
+| Clinical values retained | 4,825 / 4,855 (99.38%) |
+| Practice-set linkage score | precision 1.00, recall 0.61, F0.5 0.89 (0 false merges in this self-check) |
 | Determinism | same-secret outputs matched; changed secret changed output |
-| Independent verifier | Fails with 492 NAME candidates; candidates need triage and are not all confirmed PII |
-| Optional capabilities missing in the measured environment | cross-script transliteration package, phone validation, PDF text extraction, imaging and OCR |
+| Output contract and independent verifier | Passed; verifier inspected all 200 input files and found no surviving identifier candidates |
+| Files and canaries | 197 exported, 3 quarantined, 0 unaccounted; 0 / 4 canaries found |
+| Linux runtime | Python 3.10, 2 CPUs, 4 GB RAM, no network; organizer three-run check passed |
 
-Hinglish remains the largest measured gap. “0%” in a channel means no labeled surface was missed there in this run, not that the channel is universally safe. See [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md) and [docs/KNOWN_LIMITATIONS.md](docs/KNOWN_LIMITATIONS.md) for methods and caveats.
+Zero labeled misses describe only this synthetic practice corpus and its answer key. The Linux environment lacked the `pdftoppm` and `tesseract` executables, so image-only PDF rendering and OCR were unavailable; this limitation is recorded in the run report. See [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md) and [docs/KNOWN_LIMITATIONS.md](docs/KNOWN_LIMITATIONS.md) for measurement scope and caveats.
 
 ## Requirements and setup
 
 - Python 3.10 or later.
-- Linux is the target runtime; development has also been exercised on Windows. The full organizer run and resource limits must still be confirmed on Linux.
+- Linux is the target runtime. The full organizer check was run in a Python 3.10 Linux container with 2 CPUs, 4 GB RAM and networking disabled. Native OCR tools were absent and are reported as missing capabilities.
 - `RAKSHA_SECRET` must be provided by the runner. The program must not write it to disk, logs, or reports.
 - Production execution is offline. No model downloads, LLMs, hosted services, or telemetry are used.
 
@@ -35,40 +35,39 @@ python3 -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
+For project tests and rebuilding the Project Brief PDF, install the development/documentation tools:
+
+```bash
+python -m pip install -r requirements-dev.txt
+```
+
 ### Technology and dependency inventory
 
-This section distinguishes packages used by the current implementation from packages that are
-only declared for optional features, diagnostics, or future work. A package appearing in
-`requirements.txt` does not by itself mean the release path currently uses it. Optional imports
-are checked at runtime; when an optional backend is missing, the corresponding capability is
-reported and affected files or annotations may be degraded or quarantined.
+This section lists packages used by the current implementation. Optional extraction backends are
+checked at runtime; when a backend is missing, the report records the degradation and affected
+files may be quarantined.
 
 | Technology / package | Role and where it is used | Status |
 |---|---|---|
 | Python 3.10+ | Main implementation language, command-line application, tests and tools. `main.py` is the entry point; `src/` contains the processing pipeline. | Required |
 | Python standard library | `argparse`/`os`/`sys`/`pathlib` for the CLI and paths; `csv`, `json`, `xml.etree.ElementTree` and `io` for format parsing/rendering; `hashlib` and `hmac` for SHA-256 accounting and keyed pseudonyms; `unicodedata` and `re` for Unicode/script handling and deterministic pattern rules; `datetime`, `decimal`, `urllib.parse`, `base64`, `binascii`, `logging`, `shutil`, `subprocess`, `tempfile`, `time`, `zlib`, `math`, `collections`, `dataclasses`, `enum`, `typing`, `ast`, and `importlib` support normalization, bounded extraction, safe logging, validation, and development tools. | Used throughout runtime and tooling |
-| Pydantic 2 (`pydantic>=2,<3`) | Typed validation for the common intermediate representation and its nested source metadata in `src/ir.py`; validation errors are covered in `tests/test_ir.py`. | Required at runtime |
-| PyYAML (`PyYAML`, imported as `yaml`) | Loads `config/policy.yaml` in `src/pipeline.py`; if missing, the pipeline falls back to a limited flat key/value reader. Capability is recorded in `src/security/capabilities.py`. | Optional runtime backend; declared |
-| `indic-transliteration` (imported as `indic_transliteration`) | Optional Indic-script transliteration in `src/normalization/transliteration.py`, used by semantic normalization for cross-script comparison. A small approximate Devanagari fallback is implemented in the project when the package is absent. | Optional runtime backend; declared |
-| `phonenumbers` | Optional phone-number parsing, validation, region metadata, and E.164 formatting in `src/normalization/phones.py` and semantic normalization. Without it, phone handling has reduced validation capability. | Optional runtime backend; declared |
-| `pycountry` | Optional country-name/code lookup in `src/normalization/other.py`. | Optional runtime backend; declared |
-| `pypdf` | Reads text layers from PDF files in `src/ingestion/scanned.py`; lack of this package degrades PDF extraction. | Optional runtime backend; declared |
-| Pillow (`pillow`, imported as `PIL`) | Reads image metadata and opens image content for OCR in `src/ingestion/scanned.py`. | Optional runtime backend; declared |
-| `pytesseract` plus the external Tesseract executable | OCR for image pixels in `src/ingestion/scanned.py`. Both the Python wrapper and system executable are needed; their availability is separately reported. | Optional runtime backend; Python package declared, executable installed separately |
-| `pdftoppm` (Poppler command-line utility) | Optional PDF page rendering path for OCR in `src/ingestion/scanned.py`; checked as the `pdf_render` capability. | Optional system tool; not a Python package |
-| pytest | Runs the project test suite under `tests/` (`python -m pytest -q`). | Development dependency; used by tests, not listed in `requirements.txt` |
-| ReportLab | Builds the project brief PDF via `tools/build_project_brief.py`. | Documentation-build dependency; not listed in `requirements.txt` |
+| Pydantic 2 (`pydantic==2.14.4`) | Typed validation for the common intermediate representation and its nested source metadata in `src/ir.py`. | Required at runtime |
+| PyYAML (`PyYAML==6.0.4`, imported as `yaml`) | Loads `config/policy.yaml` in `src/pipeline.py`; if missing, the pipeline falls back to a limited flat key/value reader. | Declared runtime package; capability is reported |
+| `indic-transliteration==2.3.83` | Indic-script transliteration in `src/normalization/transliteration.py`; a small approximate fallback is available. Transliteration is not proof of identity equivalence. | Declared optional runtime backend |
+| `phonenumbers==9.0.44` | Phone-number parsing, validation, region metadata and E.164 formatting in `src/normalization/phones.py`. | Declared optional runtime backend |
+| `pycountry==26.2.16` | Country-name/code lookup in `src/normalization/other.py`. | Declared optional runtime backend |
+| `pypdf==7.2.0` | Reads PDF text layers in `src/ingestion/scanned.py`. | Declared optional runtime backend |
+| Pillow (`Pillow==12.3.0`, imported as `PIL`) | Reads image metadata and opens image content for OCR in `src/ingestion/scanned.py`. | Declared optional runtime backend |
+| `pytesseract==0.3.13` and external Tesseract executable | Python OCR wrapper and the native OCR executable are both needed to read image pixels. | Wrapper declared; executable installed separately |
+| `pdftoppm` (Poppler command-line utility) | Renders image-only PDF pages for OCR. | Optional system tool; not installed by pip |
+| pytest (`pytest==9.2.0`) | Runs the project test suite under `tests/` (`python -m pytest -q`). | Development dependency in `requirements-dev.txt` |
+| ReportLab (`reportlab==5.1.0`) | Builds the project brief PDF via `tools/build_project_brief.py`. | Documentation-build dependency in `requirements-dev.txt` |
 | Bash | Runs `tools/run_dev.sh` for the development workflow in a Linux/Unix environment. | Development environment/tool |
 
-The following packages are present in `requirements.txt` but are **not imported by the current
-implementation**: `charset-normalizer` (text decoding is currently strict, explicit UTF-8,
-UTF-16 and cp1252 logic in `src/ingestion/encoding.py`), `rapidfuzz` and `jellyfish` (record
-comparison libraries; current linkage is limited and does not use these packages),
-`fhir.resources` (FHIR-shaped JSON is routed through the project's JSON/common-IR logic, without
-Pydantic FHIR model validation), `jsonschema` (no JSON Schema validation is currently wired in),
-and `cryptography` (HMAC pseudonyms use Python's standard-library `hmac`; encryption is not
-implemented). They are declared dependencies, not active features. The classical ML and privacy
-metric packages mentioned as deferred in `requirements.txt` are not installed or used.
+The dependency list is intentionally limited to packages imported by the current implementation.
+Encoding is handled by the explicit UTF-8, UTF-16 and CP1252 logic in `src/ingestion/encoding.py`.
+FHIR-shaped JSON uses the common JSON IR; full FHIR R4 schema validation is not implemented.
+HMAC pseudonyms use Python's standard-library `hmac`; persisted-data encryption is not implemented.
 
 ### Formats and project stack
 
@@ -129,9 +128,10 @@ The pipeline entry point is `main.py`; orchestration is in `src/pipeline.py`, an
 | Normalization | Provides deterministic Unicode, date, name and phone normalization annotations. A built-in approximate Devanagari transliteration fallback is available; it must not be treated as proof that two identities match. | `src/normalization/` |
 | Understanding | Uses hierarchy, labels, section context and nearby marker phrases to add deterministic semantic annotations and represent uncertainty. This is evidence, not a cross-document identity resolver. | `src/understanding/` |
 | Detection | Combines identifier patterns, field/header/key semantics, structural metadata and context-aware name/relative rules. Clinical protection is intended to preserve diagnoses, medicines, doses and measurements. | `src/detection/`, `src/policy/` |
-| Pseudonymization | Derives keyed pseudonyms from available identifier evidence using HMAC and `RAKSHA_SECRET`; pseudonyms are written into exported records and `records.jsonl`. Evidence is limited and does not constitute robust cross-hospital linkage. | `src/privacy/pseudonyms.py`, `src/output/writer.py` |
-| Output | Applies locator-based changes, writes supported formats and the report/record manifest, and avoids copying quarantined raw bytes into the release. | `src/transformation/`, `src/output/` |
-| Evaluation | Includes unit/adversarial tests, the supplied contract validator, development-set scorecard and a separate verifier. The verifier is an additional diagnostic, not currently a mandatory release gate. | `tests/`, `tools/`, `team-kit/` |
+| Linkage and pseudonymization | Keeps strong direct-identifier tokens; can link records on an exact patient-name plus phone pair when sex/DOB evidence does not conflict. Name-only and phone-only links are rejected. HMAC token generation is domain separated and secret keyed. | `src/privacy/linkage.py`, `src/privacy/pseudonyms.py` |
+| Privacy transforms | Applies same-patient date shifts, age bands, village/locality generalization and PIN-prefix masking where supported by structure and patient evidence. Rare-combination suppression is not implemented. | `src/privacy/transforms.py`, `src/transformation/` |
+| Output | Applies locator-based changes, writes supported formats and the report/record manifest, and quarantines unsafe parse failures rather than releasing raw bytes. | `src/transformation/`, `src/output/` |
+| Evaluation | Includes 162 project tests, toolkit contract checking, development-set scorecard and an independent verifier. The verifier is run separately and is not automatically a blocking pipeline stage. | `tests/`, `tools/`, `team-kit/` |
 
 ### Output contract
 
@@ -165,19 +165,21 @@ INPUT="$KIT/dev/input"
 python main.py --input "$INPUT" --output build/practice-output
 python "$KIT/validate_output.py" --input "$INPUT" --output build/practice-output
 python "$KIT/check_dev.py" --output build/practice-output
+python tools/scorecard.py --kit "$KIT" --output build/practice-output
 python tools/verify.py "$INPUT" build/practice-output
+python "$KIT/check_submission.py" --repo . --input "$INPUT" --run
 ```
 
 Use synthetic data only. Keep generated output, secrets, and private test data out of version control. For score definitions, denominators, and interpretation, see [docs/BASELINE_RESULTS.md](docs/BASELINE_RESULTS.md).
 
 ## Known limitations and next work
 
-- Hinglish names/relatives and some localities still leak; 27 labeled surfaces remained in the latest run. The independent verifier reports 492 name candidates, some likely benign but requiring review.
-- The practice self-check measures pseudonym linkage at precision 1.00, recall 0.51 and F0.5 0.84 (0 false merges) on this synthetic set. This is not a hidden-set guarantee; alias resolution and general cross-hospital identity matching remain limited.
-- Date shifting, age bands, configurable location generalization and rare-combination suppression are not implemented in the release path.
-- Approximate transliteration is not validated identity matching; OCR, image metadata and PDF text processing depend on missing optional local backends.
-- The separate verifier may still report candidate names and does not currently stop a release automatically.
-- The latest measured run is on Windows with a temporary compatibility shim for Linux's `resource` module. Linux runtime, full resource limits, held-out variants, comprehensive FHIR reference validation, and changed-secret behavior need final confirmation.
-- Practice data is synthetic and small; the measured score does not establish hidden-set accuracy or anonymity.
+- The practice corpus had 0 labeled direct-PII misses in two toolkit measurements, but it is small and synthetic; this is not a hidden-set guarantee or proof of anonymity.
+- Linkage uses direct identifiers and exact patient-name/phone composites with sex/DOB conflict checks. Alias resolution, cross-script matching, identity review states and robust homonym handling remain limited; same-name-only linking is forbidden.
+- Date shifting, age bands, locality generalization and PIN masking are implemented for supported structures. Rare-combination suppression and attack-based re-identification-risk measurement remain unsupported; XML and free-text generalization coverage is limited.
+- Linux evaluation reported missing native `pdftoppm` and `tesseract` executables. Text-layer PDF parsing and metadata extraction are available through Python packages, but image-only PDF rendering and OCR are not assured.
+- The independent verifier passed the current corpus but is a separate tool, not an automatic blocking pipeline stage. Full FHIR R4 schema and reference validation remain incomplete.
+- Sensitive parsed values exist in process memory. Persisted intermediate-data encryption, secure-deletion guarantees and a complete key-rotation lifecycle are not implemented.
+- Practice results do not establish hidden-set accuracy, full multilingual performance, anonymity or safety for real patient records.
 
 For detailed findings and prioritized fixes, see [docs/ENGINEERING_AUDIT.md](docs/ENGINEERING_AUDIT.md), [docs/KNOWN_LIMITATIONS.md](docs/KNOWN_LIMITATIONS.md), and [docs/architecture.md](docs/architecture.md). The project brief is [docs/Project-Brief.pdf](docs/Project-Brief.pdf).

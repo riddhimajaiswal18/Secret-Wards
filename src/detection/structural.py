@@ -72,6 +72,13 @@ def _index_key_is_identity(key: str, value, index) -> bool:
 _AADHAAR_KEY = re.compile(r"(?:aadhar|aadhaar|abha|uid|ration)", re.IGNORECASE)
 _PATH_KEY = re.compile(r"(?:path|file|dir|folder|source)", re.IGNORECASE)
 _PATH_MRN = re.compile(r"(?<![0-9])\d{5,9}(?![0-9])")
+# Export paths may encode identity as Name_Initials_MRN. The MRN is replaced first; this catches
+# the remaining name component without treating ordinary segments such as opd_2026_03 as people.
+_PATH_PERSON_COMPONENT = re.compile(
+    r"(?<![A-Za-z0-9])(?:[A-Za-z][A-Za-z'-]{2,})(?:_[A-Za-z][A-Za-z'-]{0,11}){1,3}_"
+    r"(?:\d{5,12}|\[(?:MRN|UHID)\])(?![A-Za-z0-9])",
+    re.IGNORECASE,
+)
 
 _IDENTITY_KINDS = {"NAME", "RELATIVE", "UHID", "AADHAAR", "ABHA", "PAN", "PHONE"}
 
@@ -184,13 +191,22 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                             node[key] = tokens.get("AADHAAR", "[AADHAAR]")
                             bump("AADHAAR")
                             continue
-                        elif (_PATH_KEY.search(key) and ("\\" in child or "_" in child)
+                        elif (isinstance(child, str) and _PATH_KEY.search(key)
+                              and ("\\" in child or "_" in child)
                               and _PATH_MRN.search(child)):
                             cleaned = _PATH_MRN.sub(tokens.get("MRN", "[MRN]"), child)
                             if cleaned != child:
                                 node[key] = cleaned
                                 child = cleaned
                                 bump("MRN")
+                        if (isinstance(child, str) and _PATH_KEY.search(key)
+                                and ("\\" in child or "/" in child or "_" in child)):
+                            cleaned, redacted_components = _PATH_PERSON_COMPONENT.subn(
+                                "[PERSON]", child)
+                            if redacted_components:
+                                node[key] = cleaned
+                                child = cleaned
+                                bump("METADATA")
                     renamed = _identity_key_replacement(key, node, index, tokens)
                     if renamed is not None:
                         new_key, kind = renamed

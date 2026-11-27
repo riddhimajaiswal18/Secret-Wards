@@ -24,19 +24,19 @@
 <table><thead><tr><th>Stage</th><th>How it works</th></tr></thead><tbody>
 <tr><td>Ingestion and IR</td><td>Routes CSV/TSV, JSON/FHIR-shaped JSON, XML and text through bounded parsers; retains source locators and annotations; quarantines known parse failures. PDF/image processing depends on optional local tools.</td></tr>
 <tr><td>Detection and understanding</td><td>Uses field/key/header semantics, structural context, deterministic identifier patterns and contextual name/relative rules. Clinical protection helps retain diagnoses, medicines and measurements.</td></tr>
-<tr><td>Identity and privacy</td><td>HMAC pseudonyms use available identifier evidence. Full cross-hospital linkage, date shifting, age bands, location generalization and rare-combination suppression are incomplete.</td></tr>
+<tr><td>Identity and privacy</td><td>HMAC tokens use direct identifiers or exact patient-name/phone composites with sex/DOB conflict checks. Supported paths apply date shifts, age bands, locality generalization and PIN masking. Rare-combination suppression is not implemented.</td></tr>
 <tr><td>Output and security</td><td>Writes sanitized files, SHA-256 report mapping and records manifest; avoids raw-copy fallback. Secret is environment-provided; an independent blocking release gate and encryption of persisted intermediates remain incomplete.</td></tr>
 </tbody></table>
 <h2>Measured practice-set results</h2>
 <p class="note">Organizer's synthetic 200-file development corpus; local run on 2026-11-27. Results do not establish hidden-set performance or anonymity.</p>
 <div class="metrics">
-<div class="metric"><b>0.84%</b>27 / 3,234 labeled PII surfaces remained visible</div>
+<div class="metric"><b>0</b>0 / 3,234 labeled PII surfaces visible (scorecard)</div>
 <div class="metric"><b>99.38%</b>4,825 / 4,855 clinical values retained</div>
 <div class="metric"><b>197 / 200</b>files exported; 3 quarantined</div>
 </div>
-<p>Script leakage: Latin 0.40%, Devanagari 0%, Hinglish 14.40%. Practice self-check linkage: precision 1.00, recall 0.51, F0.5 0.84, with zero observed false merges. Same-secret outputs matched and a changed secret changed output. Runtime was 3.42-3.52 seconds per local run; peak memory was not measured. The independent verifier reports 492 name candidates (not all confirmed PII) that need triage.</p>
+<p>The practice self-check also found 0 / 3,230 labeled PII surfaces; its denominator differs from the scorecard. Linkage: precision 1.00, recall 0.61, F0.5 0.89, and zero observed false merges. The independent verifier passed with 200 / 200 files inspectable. Project tests: 162 passed. The Toolkit's three-run submission check passed offline on Linux with 2 CPUs and 4 GB RAM. A staged run reported 5.44 seconds and 58.3 MB peak RSS; a host-mounted helper run took 27 seconds.</p>
 <h2>Known limitations and next work</h2>
-<p>Hinglish and name/relative misses remain. Re-identification risk is unmeasured. Alias and homonym resolution is limited. OCR, image metadata and PDF text depend on optional backends. Full FHIR reference validation and Linux resource tests remain. The independent verifier is diagnostic and may report false-positive candidates; it is not currently a blocking gate. Do not use real patient data or claim anonymity.</p>
-<p>Reproduce with <code>python main.py --input team-kit/dev/input --output build/practice-output</code> and set <code>RAKSHA_SECRET</code> in the environment. The authoritative two-page brief is <a href="Project-Brief.pdf">Project-Brief.pdf</a>.</p>
+<p>Native <code>pdftoppm</code> and Tesseract executables were absent, so image-only PDF rendering and pixel OCR were unavailable. Broad alias and homonym resolution, full FHIR R4 validation, rare-combination suppression and attack-based re-identification measurement remain incomplete. The verifier is separate from the runtime pipeline. Results are synthetic development-set evidence, not hidden-set accuracy or a privacy guarantee. Do not use real patient data or claim anonymity.</p>
+<p>Reproduce with <code>python main.py --input &lt;KIT&gt;/dev/input --output build/practice-output</code> and set <code>RAKSHA_SECRET</code> in the environment. The authoritative two-page brief is <a href="Project-Brief.pdf">Project-Brief.pdf</a>.</p>
 </body>
 </html>

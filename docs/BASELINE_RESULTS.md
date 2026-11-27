@@ -1,45 +1,49 @@
-# Practice-set evaluation
+# Current Team Kit evaluation
 
-**Corpus:** supplied Secret Wards Team Kit development set, 200 synthetic files. **Run:** latest stored rescue iteration, 2026-11-27. **Environment:** Windows, Python 3.10.11; a temporary compatibility shim supplied the Linux-only `resource` module for the local tools. The shim is outside application source and is not part of the release. This snapshot is not a hidden-set or Linux submission score.
+**Corpus:** Secret Wards Toolkit development set, 200 synthetic input files. **Runtime:** Python 3.10 Linux container, 2 CPUs, 4 GB memory limit, and network disabled during execution. Dependencies were installed before the offline run. The organizer's `check_submission.py --run` helper and the project's own tests were run against the current working tree.
 
 ## Results
 
-| Measure | Result |
+| Measure | Linux result |
 |---|---:|
-| Files accounted for | 200 / 200 |
-| Unit tests | 145 passed |
-| Sanitized | 197 |
-| Quarantined | 3: empty, malformed JSON, excessive depth |
-| Truth-labeled direct-PII surfaces visible | 27 / 3,234 (0.84%) |
+| Project tests | 162 passed |
+| Files | 200 accounted for: 197 sanitized, 3 quarantined, 0 unaccounted |
+| Toolkit contract | `CONTRACT OK` |
+| Labeled direct PII visible | 0 / 3,234 (independent scorecard) |
+| Toolkit self-check PII visible | 0 / 3,230 |
 | Clinical values retained | 4,825 / 4,855 (99.38%) |
-| Canary strings detected in release | 0 / 4 |
-| Same-secret deterministic exported files | 197 / 197 identical |
-| Identifier-derived tokens emitted | 609 records |
-| Practice-set pseudonym linkage | precision 1.00, recall 0.51, F0.5 0.84 (0 false merges) |
-| Same-secret / changed-secret behavior | same-secret sanitized tree and manifest identical; changed secret changed output |
-| Contract validator | Passed on the current three-run corpus output (`CONTRACT OK`) |
-| Independent verifier | Fails with 492 NAME candidates (candidate findings, not confirmed PII count) |
+| Linkage | precision 1.00, recall 0.61, F0.5 0.89; 0 observed false merges |
+| Canaries | 0 / 4 found |
+| Unsafe unchanged copies | 0 penalized raw copies; two byte-identical outputs were not files expected to be quarantined |
+| Independent verifier | Passed; 200 / 200 inputs inspectable, no surviving identifier candidates |
+| Reproducibility | Same secret produced identical output for 197 files; a changed secret changed output |
+| Runtime and memory | 5.44 s reported pipeline time; 5.98 s wall time; 58.3 MB reported peak RSS |
 
-Visible labeled PII by type: `PATIENT_NAME` 21, `RELATIVE_NAME` 4 and `LOCALITY` 2. No identifier or phone surfaces were labeled as visible in this run. The 609 token count is not an accuracy metric and does not mean 609 patients were correctly linked.
+The scorecard and practice self-check use different denominators and counting logic. Their zero-miss results apply only to the provided synthetic labels and output surfaces; they are not held-out recall estimates and do not establish anonymity. The utility metric retained 99.38% of its labeled clinical values; 30 exact-value checks did not match, and those cases need review to distinguish expected transformations from unintended loss.
 
-## Leakage rates
+## Transform and linkage activity
 
-| Grouping | Visible-surface rate |
-|---|---:|
-| Content | 0.84% |
-| Metadata | 5.00% |
-| Filename | 0% |
-| Header | 0% |
-| JSON key | 0% |
-| Base64 | 0% |
-| Latin script | 0.40% |
-| Devanagari | 0.00% |
-| Hinglish | 14.40% |
+The Linux run reported 665 linked records, 699 records with at least one generalization, 1,358 generalized fields, and 696 shifted date values. No records were suppressed. These are activity counts, not independent accuracy or privacy-risk scores. The deterministic linker uses same-record direct identifiers and exact patient-name-plus-phone composite evidence with sex/date-of-birth conflict checks; it does not perform broad fuzzy alias resolution.
 
-The channel/script denominators describe labeled surfaces and may overlap; they are not the 3,234 overall denominator partitioned in the same way. Rates are rounded. They measure this synthetic set only and do not imply zero risk in a category with no observed miss.
+## Capability caveats
 
-## Tool and capability caveats
+The run reported `pdf_render` and `ocr_binary` missing: `pdftoppm` and the native Tesseract executable were not installed. Python packages for PDF text, image metadata, and the OCR wrapper were installed, but image-only PDF rendering and pixel OCR were not available. The report records this degradation. Do not treat zero labeled misses as evidence that unseen image pixels were inspected.
 
-The current scorecard is the ignored local evaluation artifact `build/rescue-baseline-20261127/scorecard-final3.json`. It reports optional cross-script transliteration package, phone validation, PDF text, image metadata and OCR capabilities missing in that environment. The built-in transliteration fallback is approximate, and does not resolve identity by itself. OCR has no local Tesseract binary in the measured environment. These limitations can lead to quarantine or degraded detection.
+The independent verifier passed, but it is a separate command, not an automatic blocking step in `main.py`. Full FHIR R4 schema validation and comprehensive reference checking, rare-combination suppression, and attack-based re-identification-risk measurement remain unimplemented. Sensitive source values exist in process memory during parsing.
 
-The supplied self-check measures the reported precision/recall/F0.5 values above on this synthetic set; the 609-token count alone is not linkage accuracy. These figures do not establish hidden-set performance or broad cross-hospital identity resolution. Re-identification risk, Linux resource consumption and full FHIR reference correctness remain unmeasured. The separate verifier flags 492 name candidates on the latest output; candidates are not all confirmed leaks, but each needs triage and the verifier does not establish release safety. The organizer's three-run helper is not runnable with Windows paths here because its POSIX `shlex.quote` arguments are passed to the Windows shell; the equivalent three runs, contract validator, self-check, determinism and secret-variation checks were run directly. Before submission, run `team-kit/check_submission.py --run` on the target Linux environment and inspect every verifier finding.
+## Reproduction
+
+Set `KIT` to the extracted Toolkit root and `INPUT` to its `dev/input` directory:
+
+```bash
+python -m pytest -q
+export RAKSHA_SECRET='practice-only-secret'
+python main.py --input "$INPUT" --output build/practice-output
+python "$KIT/validate_output.py" --input "$INPUT" --output build/practice-output
+python "$KIT/check_dev.py" --output build/practice-output
+python tools/scorecard.py --kit "$KIT" --output build/practice-output
+python tools/verify.py "$INPUT" build/practice-output
+python "$KIT/check_submission.py" --repo . --input "$INPUT" --run
+```
+
+The organizer helper was run in an offline Linux container with 2 CPUs and 4 GB RAM. Its check passed, including contract validation, same-secret determinism, changed-secret output, secret non-disclosure, and input immutability. One run from the host-mounted OneDrive path took 27 seconds; a staged local Linux run took 5.98 seconds wall time. Both are well under the 900-second per-run limit. Memory is measured by the application report and has not been measured with an independent process-tree profiler.

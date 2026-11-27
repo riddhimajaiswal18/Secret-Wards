@@ -1,28 +1,11 @@
-# Encoding and multilingual normalization
-charset-normalizer
-indic-transliteration
+# Exact versions verified on Python 3.10 / Linux for reproducible offline runtime.
+indic-transliteration==2.3.83
+phonenumbers==9.0.44
+pycountry==26.2.16
+pydantic==2.14.4
+PyYAML==6.0.4
 
-# Phone and country metadata; dates use Python's standard library
-phonenumbers
-pycountry
-
-# Record comparison
-rapidfuzz
-jellyfish
-
-# Validation and format support (fhir.resources 7+ uses Pydantic 2)
-pydantic>=2,<3
-fhir.resources>=7,<9
-jsonschema
-
-# Scanned documents: PDF text layers, image metadata, OCR (all optional at run time)
-pypdf
-pillow
-pytesseract
-
-# Encryption and policy configuration
-cryptography
-PyYAML
-
-# Classical ML and privacy-risk metrics are intentionally deferred until justified
-# by measured requirements. No pretrained model is installed or downloaded.
+# Optional extraction backends; the binaries are installed separately.
+pypdf==7.2.0
+Pillow==12.3.0
+pytesseract==0.3.13
