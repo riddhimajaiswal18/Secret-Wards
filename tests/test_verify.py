@@ -6,6 +6,7 @@ fails on clinical values would destroy utility. Each positive case has a matchin
 from __future__ import annotations
 
 import json
+import hashlib
 from pathlib import Path
 
 import pytest
@@ -98,6 +99,19 @@ def test_unaccounted_input_file_fails(tmp_path):
     result = verify_tree(inp, out)
     assert result["overall"] == "failed"
     assert result["checks"]["accounting"]["unaccounted"] == ["b.txt"]
+
+
+def test_contract_hash_report_passes_without_source_path(tmp_path):
+    """The contract's SHA-256 mapping verifies without retaining a PII-bearing input path."""
+    body = "Patient [NAME]"
+    inp, out = build(tmp_path, inputs={"notes/a.txt": "Patient Sunita Patel"},
+                     released={"notes/a.txt": body}, entries=[
+                         {"input_sha256": hashlib.sha256(b"Patient Sunita Patel").hexdigest(),
+                          "status": "sanitized", "output": "sanitized/notes/a.txt"}
+                     ])
+    result = verify_tree(inp, out)
+    assert result["checks"]["accounting"]["status"] == "passed", result["checks"]
+    assert result["overall"] == "passed", result["checks"]
 
 
 def test_phantom_reported_file_fails(tmp_path):

@@ -16,35 +16,44 @@ from dataclasses import dataclass
 
 # (kind, pattern) — order matters, first match wins.
 _COLUMN_RULES: list[tuple[str, re.Pattern[str]]] = [
-    ("RELATIVE", re.compile(r"(relative|guardian|father|mother|spouse|husband|wife|"
-                            r"attendant|next\s*of\s*kin|kin)\b", re.I)),
-    ("AADHAAR", re.compile(r"(aadhaa?r|adhar|uidai)", re.I)),
+    ("RELATIVE", re.compile(r"(relative|guardian|father|mother|spouse|husband|wife|pita|pati|mata|maa|"
+                            r"attendant|next\s*of\s*kin|kin|पिता|माता|पति|पत्नी|"
+                            r"अभिभावक|रिश्तेदार|परिजन)\b", re.I)),
+    ("AADHAAR", re.compile(r"(aadhaa?r|adhar|uidai|आधार)", re.I)),
     ("ABHA", re.compile(r"\babha\b", re.I)),
     ("PAN", re.compile(r"\bpan\b|pan\s*(no|number)", re.I)),
     ("INSURANCE", re.compile(r"(insurance|policy|tpa|claim|scheme|esi|esic|pmjay)", re.I)),
     ("UHID", re.compile(r"(uhid|mrn|patient\s*id|pid|reg(istration)?\s*(no|num|id)|"
                         r"\bipd\b|\bopd\b|admission\s*(no|num|id)|hospital\s*id|"
-                        r"\bcr\s*no\b|visit\s*(no|id)|encounter)", re.I)),
-    ("DOB", re.compile(r"(\bdob\b|date\s*of\s*birth|birth\s*date|year\s*of\s*birth)", re.I)),
-    ("PHONE", re.compile(r"(phone|mobile|contact|cell|tel(ephone)?|whatsapp)", re.I)),
-    ("EMAIL", re.compile(r"(e[-_]?mail|email\s*id)", re.I)),
-    ("PIN", re.compile(r"(\bpin\b|pincode|pin\s*code|zip|postal)", re.I)),
+                        r"\bcr\s*no\b|visit\s*(no|id)|encounter|पंजीकरण|अस्पताल\s*आईडी)", re.I)),
+    ("DOB", re.compile(r"(\bdob\b|date\s*of\s*birth|birth\s*date|year\s*of\s*birth|"
+                       r"janm\s*(?:tithi|tarikh|date)|जन्म\s*(?:तिथि|तारीख))", re.I)),
+    ("PHONE", re.compile(r"\b(?:phone|mobile|contact|cell|telephone|tel|whatsapp)\b|मोबाइल|फोन|संपर्क|दूरभाष", re.I)),
+    ("EMAIL", re.compile(r"(e[-_]?mail|email\s*id|ईमेल)", re.I)),
+    ("PIN", re.compile(r"(\bpin\b|pincode|pin\s*code|zip|postal|पिन\s*(?:कोड)?)", re.I)),
+    ("VILLAGE", re.compile(r"(village|gram|gaon|gaav|panchayat|गांव|गाँव|ग्राम|पंचायत)", re.I)),
     ("HOUSE", re.compile(r"(house|h\.?\s*no|door|flat|building|street|gali|mohalla|"
-                         r"locality|colony|area\b)", re.I)),
-    ("VILLAGE", re.compile(r"(village|gram|panchayat)", re.I)),
-    ("LANDMARK", re.compile(r"(landmark|near\s*by|nearby)", re.I)),
-    ("ADDRESS", re.compile(r"(address|addr|residence|residing)", re.I)),
-    ("NAME", re.compile(r"(patient\s*name|full\s*name|\bname\b|pname|pt\s*name)", re.I)),
+                         r"locality|colony|area\b|घर|मकान|गली|मोहल्ला)", re.I)),
+    ("LANDMARK", re.compile(r"(landmark|near\s*by|nearby|पहचान\s*चिह्न|निशान)", re.I)),
+    ("ADDRESS", re.compile(r"(address|addr|residence|residing|pata|city|tehsil|tahsil|jila|zila|"
+                            r"(?<![\u0900-\u097F])पता(?![\u0900-\u097F])|"
+                            r"(?<![\u0900-\u097F])निवास(?![\u0900-\u097F])|तहसील|जिला)", re.I)),
+    ("NAME", re.compile(r"(patient\s*name|full\s*name|(?:first|last|given|family|middle)_?name|"
+                        r"\bname\b|pname|pt\s*name|"
+                        r"\bnaam\b|रोगी\s*का\s*नाम|मरीज़?\s*का\s*नाम|\bनाम\b)", re.I)),
 ]
 
 # Columns that must never be treated as personal: clinical content and demographics we keep.
-_KEEP = re.compile(r"(district|state|country|region|city|town|age|sex|gender|diagnos|medicine|drug|dose|dosage|frequency|route|"
-                   r"test|investigation|value|unit|result|reference|range|ward|bed|"
-                   r"department|doctor|consultant|date\s*of\s*(admission|discharge)|"
-                   r"admission\s*date|discharge\s*date|amount|bill|total|status|type|"
-                   r"remarks|notes?|complaint|history|procedure|outcome)", re.I)
+_KEEP = re.compile(r"\b(?:district|state|country|region|town|age|sex|gender|ward|bed|"
+                   r"medicine|drug|dose|dosage|frequency|route|test|investigation|value|unit|"
+                   r"result|reference|range|department|doctor|consultant|hospital|clinic|"
+                   r"institution|facility|amount|bill|total|status|type|remarks|notes?|"
+                   r"complaint|history|procedure|outcome)\b|"
+                   r"\bdiagnos\w*\b|\bdate\s*of\s*(?:admission|discharge)\b|"
+                   r"\b(?:admission|discharge)\s*date\b|\b(?:ling|umar|tehsil|tahsil|jila|zila)\b|"
+                   r"अस्पताल|चिकित्सालय|डॉक्टर|चिकित्सक", re.I)
 
-_LABEL_CLEAN = re.compile(r"[^a-z0-9]+")
+_LABEL_CLEAN = re.compile(r"[^a-z0-9\u0900-\u097f]+", re.I)
 
 
 @dataclass(frozen=True)
@@ -60,10 +69,19 @@ def classify(label: str | None) -> str | None:
     normalised = _LABEL_CLEAN.sub(" ", str(label).lower()).strip()
     if not normalised:
         return None
-    if _KEEP.search(normalised):
+    # Explicit identity/identifier fields take precedence over a generic context word. For
+    # example, `hospital_uhid` is an identifier field even though it contains `hospital`; the
+    # `_KEEP` guard is for ambiguous labels such as `hospital_name` and `doctor_name`.
+    direct_kinds = {"RELATIVE", "AADHAAR", "ABHA", "PAN", "INSURANCE", "UHID", "DOB",
+                    "PHONE", "EMAIL", "PIN", "VILLAGE", "HOUSE", "LANDMARK"}
+    for kind, pattern in _COLUMN_RULES:
+        if kind in direct_kinds and pattern.search(normalised):
+            return kind
+    if (_KEEP.search(normalised)
+            and not re.search(r"\b(?:address|addr|residence|pata)\b", normalised)):
         return None
     for kind, pattern in _COLUMN_RULES:
-        if pattern.search(normalised):
+        if kind not in direct_kinds and pattern.search(normalised):
             return kind
     return None
 

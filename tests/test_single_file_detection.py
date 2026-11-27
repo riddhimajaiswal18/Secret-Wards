@@ -162,3 +162,25 @@ def test_kinship_words_do_not_eat_clinical_text(tmp_path):
     _, text = _run(tmp_path, body)
     assert "C/O fever" in text and "K/C/O diabetes" in text
     assert "500 mg" in text and "130/85" in text
+
+
+def test_context_protects_clinical_acronym_not_person_name_and_handles_chat_names(tmp_path):
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    (inputs / "clean").mkdir(parents=True)
+    (inputs / "notes").mkdir()
+    (inputs / "clean" / "dengue_management_protocol.txt").write_text(
+        "ASHA workers should follow up discharged patients.\n", encoding="utf-8")
+    (inputs / "notes" / "note.txt").write_text(
+        "Name: Asha Rajput\n"
+        "[30/05/26, 9:32 pm] Kamal Bhaiya: report received\n"
+        "Report of Asha ji\n"
+        "Asha, W/o Kamal, admitted today.\n"
+        "Lifeline Pathology issued the result.\n", encoding="utf-8")
+    write_submission(inputs, outputs)
+    note = (outputs / "sanitized" / "notes" / "note.txt").read_text(encoding="utf-8")
+    protocol = (outputs / "sanitized" / "clean" / "dengue_management_protocol.txt").read_text(
+        encoding="utf-8")
+    for name in ("Asha Rajput", "Kamal Bhaiya", "Asha ji", "Asha, W/o Kamal"):
+        assert name not in note
+    assert "Lifeline Pathology" in note
+    assert "ASHA workers" in protocol

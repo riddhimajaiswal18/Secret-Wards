@@ -58,7 +58,7 @@ def test_every_module_is_imported_or_declared():
     for path in _modules():
         if path.name == "__init__.py":
             continue
-        dotted = str(path.relative_to(ROOT).with_suffix("")).replace("/", ".")
+        dotted = path.relative_to(ROOT).with_suffix("").as_posix().replace("/", ".")
         package = dotted.rsplit(".", 1)[0]
         if dotted in imported or dotted in ENTRY_POINTS:
             continue

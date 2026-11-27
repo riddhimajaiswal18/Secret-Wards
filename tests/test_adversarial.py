@@ -98,6 +98,67 @@ def test_report_never_contains_input_values(tmp_path):
     assert "Kaveri" not in blob and "8599253525" not in blob
 
 
+def test_report_never_contains_pii_bearing_input_filename(tmp_path):
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    write(inputs, "notes/Ritara_Qemvi_9820001111.txt", b"clinical reference only")
+    write_submission(inputs, outputs)
+    blob = (outputs / "report.json").read_text(encoding="utf-8")
+    report = json.loads(blob)
+    assert "Ritara" not in blob and "Qemvi" not in blob and "9820001111" not in blob
+    assert all("path" not in entry for entry in report["files"])
+    assert report["schema"] == "raksha-report/1"
+
+
+def test_quarantine_report_omits_original_filename(tmp_path):
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    write(inputs, "unsafe/Ritara_Qemvi_9820001111.xyz", b"unsupported")
+    write_submission(inputs, outputs)
+    blob = (outputs / "report.json").read_text(encoding="utf-8")
+    report = json.loads(blob)
+    assert "Ritara" not in blob and "Qemvi" not in blob and "9820001111" not in blob
+    assert report["files"][0]["status"] == "quarantined"
+    assert report["files"][0]["output"] is None
+    assert "path" not in report["quarantine"][0]
+
+
+def test_contextual_relative_names_keep_clinical_complaints():
+    from src.detection.engine import find
+    from src.detection.protection import ProtectionIndex
+
+    index = ProtectionIndex()
+    examples = {
+        "C/O Ramesh": "[RELATIVE]",
+        "C/O fever": "C/O fever",
+        "K/C/O diabetes": "K/C/O diabetes",
+        "S/o ram kumar": "[RELATIVE]",
+    }
+    from src.policy import engine as policy_engine
+    tokens = policy_engine.resolve_tokens(None)
+    from src.detection.engine import redact
+    for source, expected in examples.items():
+        output, _ = redact(source, index, tokens)
+        if expected == "[RELATIVE]":
+            assert output != source, source
+        else:
+            assert output == expected
+
+
+def test_explicit_labels_capture_single_names_and_address_values():
+    from src.detection.engine import redact
+    from src.detection.protection import ProtectionIndex
+
+    index = ProtectionIndex()
+    text = "Patient Name: Niral\nVillage: Hariyapur\nPIN: 560001"
+    output, counts = redact(text, index, {
+        "NAME": "[NAME]", "VILLAGE": "[VILLAGE]", "PIN": "[PIN]",
+        "PHONE": "[PHONE]", "RELATIVE": "[RELATIVE]",
+    })
+    assert "Niral" not in output
+    assert "Hariyapur" not in output
+    assert "560001" not in output
+    assert counts.get("NAME") and counts.get("VILLAGE") and counts.get("PIN")
+
+
 def test_missing_input_directory_exits_two(tmp_path):
     code = subprocess.call([sys.executable, str(ROOT / "main.py"), "--input",
                             str(tmp_path / "absent"), "--output", str(tmp_path / "o")],
@@ -178,13 +239,69 @@ def test_every_input_file_gets_exactly_one_fate(tmp_path):
     write(inputs, "bad.json", b'{"a":')
     write(inputs, "x.pdf", b"%PDF-1.4")
     report = write_submission(inputs, outputs)
-    paths = [entry["path"] for entry in report["files"]]
-    assert sorted(paths) == ["bad.json", "ok.csv", "x.pdf"]
-    statuses = {entry["path"]: entry["status"] for entry in report["files"]}
-    assert statuses["ok.csv"] == "sanitized"
-    assert statuses["bad.json"] == "quarantined"
-    assert statuses["x.pdf"] == "quarantined"
+    assert len(report["files"]) == 3
+    statuses = sorted(entry["status"] for entry in report["files"])
+    assert statuses == ["quarantined", "quarantined", "sanitized"]
+    assert all(entry["input_sha256"] and "path" not in entry for entry in report["files"])
     assert report["counts"]["files_total"] == 3
+
+
+def test_json_record_arrays_use_pointer_locators_and_embed_tokens(tmp_path, monkeypatch):
+    monkeypatch.setenv("RAKSHA_SECRET", "test-secret-json")
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    write(inputs, "visits.json", json.dumps({"visits": [
+        {"uhid": "JJH-0077112", "patient_ref": "JJH-0077112",
+         "patient_name": "Sunita Patel"},
+        {"uhid": "JJH-0099999", "patient_ref": "JJH-0099999",
+         "patient_name": "Mohd Shahid"},
+    ]}).encode())
+    write_submission(inputs, outputs)
+    rows = [json.loads(line) for line in
+            (outputs / "records.jsonl").read_text(encoding="utf-8").splitlines()]
+    assert [row["loc"] for row in rows] == ["/visits/0", "/visits/1"]
+    assert len({row["patient"] for row in rows}) == 2
+    produced = json.loads((outputs / "sanitized" / "visits.json").read_text(encoding="utf-8"))
+    assert [visit["patient_ref"] for visit in produced["visits"]] == [
+        row["patient"] for row in rows]
+
+
+def test_fhir_patient_name_is_scrubbed_and_practitioner_is_preserved(tmp_path):
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    bundle = {
+        "resourceType": "Bundle", "type": "collection",
+        "entry": [
+            {"resource": {"resourceType": "Patient", "id": "JJH-0077112",
+                          "identifier": [{"system": "urn:mrn", "value": "JJH-0077112"}],
+                          "name": [{"text": "Sunita Patel"}]}},
+            {"resource": {"resourceType": "Practitioner", "id": "d1",
+                          "name": [{"text": "Dr. Ramesh Kumar"}]}},
+            {"resource": {"resourceType": "Condition", "id": "c1",
+                          "subject": {"reference": "Patient/JJH-0077112"}}},
+        ],
+    }
+    write(inputs, "bundle.json", json.dumps(bundle).encode())
+    write_submission(inputs, outputs)
+    produced = json.loads((outputs / "sanitized" / "bundle.json").read_text(encoding="utf-8"))
+    patient, practitioner, condition = [entry["resource"] for entry in produced["entry"]]
+    assert "Sunita" not in json.dumps(patient)
+    assert "Dr. Ramesh Kumar" in json.dumps(practitioner)
+    assert patient["id"] != "JJH-0077112"
+    assert condition["subject"]["reference"] == f"Patient/{patient['id']}"
+
+
+def test_nested_json_name_and_address_context_is_sanitized(tmp_path):
+    inputs, outputs = tmp_path / "in", tmp_path / "out"
+    payload = {"patients": [{
+        "uhid": "JJH-0077112",
+        "name": {"first": "Sunita", "last": "Patel"},
+        "address": {"line": ["House 22, Main Road"], "city": "Lucknow"},
+    }]}
+    write(inputs, "patients.json", json.dumps(payload).encode())
+    write_submission(inputs, outputs)
+    produced = json.loads((outputs / "sanitized" / "patients.json").read_text(encoding="utf-8"))
+    rendered = json.dumps(produced)
+    assert "Sunita" not in rendered and "Patel" not in rendered
+    assert "House 22" not in rendered and "Lucknow" not in rendered
 
 
 # ── identity keys, not label keys ───────────────────────────────────────────

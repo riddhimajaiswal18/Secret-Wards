@@ -109,7 +109,12 @@ def test_url_country_and_transliteration_are_separate_optional_representations()
     try:
         import indic_transliteration  # noqa: F401
     except ImportError:
-        assert converted is None and status == "unsupported" and warnings
+        assert converted and status == "fallback" and warnings
+        assert converted == transliterate(
+            value, source_script="Devanagari", scheme="itrans")[0]
+        assert transliterate(
+            value, source_script="Devanagari", scheme="itrans")[3][
+                "identity_equivalence"] == "not_asserted"
     else:
         assert status == "success" and converted
 

@@ -1,41 +1,29 @@
 # Evaluation
 
-Reproduce with the Team Kit, never with hardcoded numbers.
+The Team Kit development corpus contains 200 synthetic files and truth labels. Results below are from a local Windows run with a temporary `resource` compatibility shim; Linux target-resource compliance remains unverified. Full results and caveats are in [BASELINE_RESULTS.md](BASELINE_RESULTS.md).
+
+| Measure | Latest practice result |
+|---|---:|
+| Direct PII surfaces still visible | 27 / 3,234 (0.84%) |
+| Clinical values retained | 4,825 / 4,855 (99.38%) |
+| Canary strings found | 0 / 4 |
+| Files | 197 sanitized, 3 quarantined, 0 unaccounted |
+| Pseudonym linkage | precision 1.00, recall 0.51, F0.5 0.84; zero observed false merges |
+| Same secret / different secret | deterministic / output changed |
+| Independent verifier | accounting passes; 492 NAME candidates cause verifier failure |
+| Runtime | 3.42-3.52 seconds per local run; memory not measured |
+
+The scorecard and Team Kit self-check have different labeled-surface denominators (3,234 vs 3,230). Percentages are practice-set measurements, not held-out accuracy or anonymity guarantees. Verifier names are candidate findings and may include false positives; they must not be silently disregarded.
+
+## Reproduction
 
 ```bash
 export RAKSHA_SECRET=practice
 python3 main.py --input <kit>/dev/input --output build/out
 python3 <kit>/validate_output.py --input <kit>/dev/input --output build/out
-python3 tools/scorecard.py --kit <kit>          # independent: measures input+output trees only
+python3 <kit>/check_dev.py --output build/out
+python3 tools/scorecard.py --kit <kit> --output build/out
 python3 tools/verify.py <kit>/dev/input build/out
-python3 <kit>/check_dev.py --output build/out   # official scoring, if shipped
 ```
 
-## Baseline measured on this corpus (200 files)
-
-| Measure | Value | Denominator |
-|---|---|---|
-PII surfaces visible | 13.6% | 440 / 3230 |
-Clinical values kept | 99.4% | 4824 / 4855 |
-Canaries found | 0 | of 4 |
-Accounting | 197 exported, 3 quarantined, 0 unaccounted | 200 |
-Raw copies | 0 | — |
-Verifier survivors | 557 (all name-like) | 2459 candidates |
-Runtime / peak RSS | 0.8 s / 66 MB | 2 vCPU budget |
-
-Channels: content 13.9 · metadata 7.5 · filename 8.3 · key 0 · header 0 · base64 0.
-Scripts: Devanagari 19.6 · Hinglish 42.3 · Latin 12.2.
-
-## Ground truth available for this corpus
-
-`<kit>/dev/truth/truth.json` provides per-unit labels: 883 units across 200 files, 771 of them
-requiring a patient link, with `entities[]` carrying `type`, `surface`, `role`, `script`, `channel`,
-`critical`. Use it to compute precision, recall and F1 per kind and channel, and to score identity
-grouping against truth patient ids. It is the practice set, not a held-out one: results tuned here
-overstate hidden-corpus performance, which is a different and narrower caveat than "no labels exist".
-
-## What each number does *not* mean
-
-A surface count is not recall. The verifier's survivor count is a candidate count, not a confirmed
-leak count. `check_dev.py`'s linking line measures the shipped rule (0 false merges) and not a
-linkage system that does not exist.
+The organizer's `check_submission.py --run` should be run on Linux, as supplied. On this Windows host its POSIX shell quoting fails on local paths, so the three pipeline runs, contract validation, self-check, determinism and changed-secret checks were executed directly instead.

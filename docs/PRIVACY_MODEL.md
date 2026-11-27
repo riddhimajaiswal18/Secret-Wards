@@ -2,32 +2,18 @@
 
 ## Threat model
 
-An attacker holds the released tree plus external knowledge (a voter list, a hospital registry). They
-try to re-identify a patient from direct identifiers, from structural leakage (keys, filenames,
-metadata, encoded blobs) or from quasi-identifier combinations. They do not hold the release secret.
+An attacker may see the released tree plus external knowledge such as public registries or hospital exports. Risk comes from direct identifiers, structural channels (keys, filenames, metadata, encoded content), and combinations of quasi-identifiers. A release secret is not available to the attacker.
 
-## Protected
+## Current protections
 
-Direct identifiers: names (patient, relative, attendant), phones, Aadhaar, ABHA, PAN, email, MRN,
-hospital UHIDs. Six channels are treated as channels: content, filename/path, header, JSON key,
-metadata, base64. Role matters: **patient names are removed, clinician names are retained** — measured
-as necessary for utility, and enforced by a role guard.
+The implementation detects selected patient/relative names, phone and Indian identifier patterns across supported content and structural channels, applies locator-based substitutions, protects selected clinical spans, and quarantines known parse failures. Patient pseudonyms use secret-keyed HMAC; the secret comes from the environment. Reports identify input files by SHA-256 rather than their original path.
 
-## Transformation
+The system uses contextual and structural evidence to distinguish patient, relative, clinician and institution information. The practice scorecard still records misses; see [BASELINE_RESULTS.md](BASELINE_RESULTS.md).
 
-Substitution by kind token from `config/policy.yaml`. Clinical values are protected by a veto on
-value+unit, ratios, frequencies, eponyms and drug forms, plus a lexicon harvested from the input's own
-reference files. A contact label (`Mob:`) overrides the clinical veto for that number only.
+## Unimplemented protections
 
-## Release rules
+Per-patient date shifting, age bands, location generalization, rare-combination suppression, full conservative record linkage, and measured re-identification-risk assessment are not implemented in the release path. Persisted sensitive intermediate-data encryption and a blocking release verifier are also incomplete.
 
-* parsing success is never sanitisation success;
-* detection found spans but bytes unchanged ⇒ **quarantine** (`untransformed_identifiers`);
-* unsupported or unreadable content ⇒ typed quarantine, never a raw copy;
-* every file gets exactly one fate, recorded in `report.json`.
+## Release rules and residual risk
 
-## Residual risk, stated plainly
-
-This is not anonymity. Quasi-identifier generalisation and date shifting are not implemented
-(`config/capabilities.json`), so combinations of age, place, date and rare diagnosis remain a
-re-identification path — measured externally at 12% unique rows on the shipped attacker registry.
+Parsing success is not proof of sanitization. Unsupported or unparseable inputs must be quarantined, and partial edits must not be represented as safe output. The current verifier reports candidate names and fails the practice output; candidate counts are not a ground-truth leak count, but every finding requires review. No anonymity claim is made. Do not use real patient data.

@@ -27,15 +27,24 @@ PHONE, EMAIL, AADHAAR, PAN, ABHA, UHID, PIN, NAME, RELATIVE = (
 _ANCHOR_NAME = re.compile(
     r"(?:Patient\s*Name|Name\s*of\s*Patient|Pt\.?\s*Name|Patient|Name|नाम|मरीज़)\s*[:\-–]?\s*")
 _ANCHOR_RELATIVE = re.compile(
-    r"(?:S/o|D/o|W/o|C/o|Son\s+of|Daughter\s+of|Wife\s+of|Husband\s+of|Father\s+of|माता|पिता)\s*[:\-–]?\s*",
+    r"(?<![A-Za-z/])(?:S/o|D/o|W/o|C/o|Son\s+of|Daughter\s+of|Wife\s+of|"
+    r"Husband\s+of|Father\s+of|माता|पिता)\s*[:\-–]?\s*",
     re.IGNORECASE)
 _ANCHOR_CLINICIAN = re.compile(
     r"(?:Dr\.?|Doctor|Consultant|RMO|MO|Physician|Surgeon)\s*[:\-–]?\s*", re.IGNORECASE)
+_ANCHOR_FROM_PATIENT = re.compile(
+    r"\b(?:sample\s+received\s+from|report\s+of)\s+", re.IGNORECASE)
 # Romanised Hindi and Devanagari name anchors. The captured run may be lowercase (Hinglish) or a
 # single Devanagari token, which the capitalised-run rule could never match.
 _ANCHOR_LOCAL = re.compile(
     r"(?:patient\s*ka\s*naam|patient\s*ka\s*name|naam|नाम|मरीज़\s*का\s*नाम|रोगी\s*का\s*नाम)"
     r"\s*[:\-–]?\s*(?:hai\s+|है\s+)?", re.IGNORECASE)
+_HINGLISH_POSSESSIVE = re.compile(
+    r"^\s*([A-Za-z][A-Za-z'\-]{2,})\s+(?:ka|ki|ke)\b", re.IGNORECASE)
+_PATIENT_BEFORE_RELATIVE = re.compile(
+    r"(?<![A-Za-z])(?P<name>[A-Za-z][A-Za-z'\-]{2,}(?:[ \t]+[A-Za-z][A-Za-z'\-]{2,}){0,2})"
+    r"(?:\s*,\s*|\s+)(?=(?:S/o|D/o|W/o|Son\s+of|Daughter\s+of|Wife\s+of|"
+    r"Husband\s+of)\b)", re.IGNORECASE)
 _LOCAL_TOKEN = re.compile(r"[A-Za-z][A-Za-z'\-]{2,}|[\u0900-\u0963\u0970-\u097F]{2,}")
 _HINGLISH_STOP = {
     "hai", "hain", "ka", "ki", "ke", "ko", "se", "aur", "mein", "me", "koi", "nahi", "tha",
@@ -46,6 +55,14 @@ _HINGLISH_STOP = {
 
 _ANCHOR_ADDRESS = re.compile(
     r"(?:Address|Addr|पता|Residence)\s*[:\-–]\s*", re.IGNORECASE)
+_LABELED_VALUES = (
+    ("PIN", re.compile(r"(?i)(?:pin\s*code|pincode|postal\s*code|zip\s*code|\bpin)\s*[:=\-]\s*([0-9०-९][0-9०-९ -]{3,12})")),
+    ("DOB", re.compile(r"(?i)(?:date\s*of\s*birth|birth\s*date|\bdob)\s*[:=\-]\s*([0-9०-९][0-9०-९/.-]{3,14}|\d{1,2}\s+[A-Za-z]+\s+\d{4})")),
+    ("HOUSE", re.compile(r"(?i)(?:house\s*(?:no|number)|h\.?\s*no|door\s*(?:no|number))\s*[:=\-]?\s*([^,;\n]{1,40})")),
+    ("VILLAGE", re.compile(r"(?i)(?:village|gram|गांव|गाँव|ग्राम)\s*[:=\-]\s*([^,;\n]{2,80})")),
+    ("LANDMARK", re.compile(r"(?i)(?:landmark|nearby|near\s*by|पहचान\s*चिह्न)\s*[:=\-]\s*([^;\n]{2,100})")),
+    ("ADDRESS", re.compile(r"(?i)(?:address|residential\s*address|residence|पता|निवास)\s*[:=\-]\s*([^;\n]{4,160})")),
+)
 
 # A name-shaped run: 2–4 capitalised tokens, or Devanagari words of 3+ characters.
 # Hinglish names carry a lowercase kinship suffix: "Kamal bhaiya", "Asha ji", "Mahesh bhai".
@@ -58,10 +75,14 @@ _NAME_KIN = re.compile(
     r"chachu|chacha|chachi|mama|mami|papa|mummy|papu|tau|taya|nana|nani|dada|dadi|"
     r"bua|fufa|mausi|mausa|devar|jija|sasur|saas|bhabhi|bhabi|bhatija|bhanja|bhanji)\b",
     re.IGNORECASE)
+_RELATIVE_KIN = re.compile(
+    r"\b[A-Z][a-z]{2,}\s+(?:bhaiya|bhai|chachu|chacha|chachi|mama|mami|papa|mummy|papu|"
+    r"tau|taya|nana|nani|dada|dadi|bua|fufa|mausi|mausa|devar|jija|sasur|saas|bhabhi|"
+    r"bhabi|bhatija|bhanja|bhanji)\b", re.IGNORECASE)
 
-_NAME_RUN = re.compile(r"(?:[A-Z][a-z]{2,}(?:\s+[A-Z][a-z]{2,}){1,3}"
+_NAME_RUN = re.compile(r"(?:[A-Z][a-z]{2,}(?:[ \t]+[A-Z][a-z]{2,}){1,3}"
                        r"|[\u0900-\u0963\u0970-\u097F]{3,}"
-                       r"(?:\s+[\u0900-\u0963\u0970-\u097F]{3,}){1,3})")
+                       r"(?:[ \t]+[\u0900-\u0963\u0970-\u097F]{3,}){1,3})")
 _ADDRESS_RUN = re.compile(r"[A-Za-z0-9][^,;\n]{8,90}")
 
 # A roster line is often prefixed by a time or a bullet ("18:40 - Name", "3. Name"). The clinical
@@ -75,6 +96,10 @@ _NOT_NAMES = {
     "mobile", "phone", "clinic", "college", "district", "village", "tehsil", "tablet",
     "capsule", "injection", "doctor", "consultant", "reference", "range", "result", "report",
     "diagnosis", "medicine", "male", "female", "years", "year", "days", "date", "opd", "ipd",
+    "fever", "cough", "pain", "chest", "abdominal", "vomiting", "diarrhea", "breathlessness",
+    "weakness", "headache", "nausea", "diabetes", "hypertension", "follow", "up", "age",
+    "sex", "dob", "uhid", "reg", "no", "mob", "yrs", "mrn", "pin",
+    "generalised", "generalized", "loose", "stools", "burning", "micturition",
 }
 # Devanagari function words and complaint vocabulary: "6 दिन से बुखार" is a clinical sentence,
 # not a name. Word-level, general, and independent of any patient identity.
@@ -100,13 +125,16 @@ class Finding:
 def _identifier_patterns() -> list[tuple[str, re.Pattern, float]]:
     return [(EMAIL, ids._EMAIL, 1.0), (PAN, ids._PAN, 1.0), (ABHA, ids._ABHA, 0.9),
             (AADHAAR, ids._AADHAAR, 0.9), (PHONE, ids._PHONE, 0.95),
-            (UHID, ids._UHID, 0.8), (PIN, ids._PINCODE, 0.7)]
+            (UHID, re.compile(ids._UHID.pattern + r"|(?<![A-Za-z0-9])(?:adm|mrn|uhid|ipd|opd|reg)[-_]?\d{5,10}(?!\d)", re.I), 0.8),
+            (PIN, ids._PINCODE, 0.7)]
 
 
 # Word boundaries are load-bearing: without them "dr" matches inside "Qadri" and "MO" inside
 # "mob", and each false prefix opens a 60-character clinician span that vetoes the real name and
 # phone number next to it. That is how a file full of findings was released unchanged.
-_CONTACT_LABEL = re.compile(r"(?:mob|mobile|phone|ph|tel|telephone|contact|call|whatsapp)\W{0,3}$",
+_CONTACT_LABEL = re.compile(
+    r"(?:mob|mobile|phone|ph|tel|telephone|contact|whatsapp|call(?:\s+(?:me|on|karo|karna))?)"
+    r"\W{0,8}$",
                             re.IGNORECASE)
 _CLINICIAN_PREFIX = re.compile(r"\b(?:Dr\.?|Doctor|Consultant|RMO|MO)\b\.?\s*", re.IGNORECASE)
 
@@ -143,7 +171,7 @@ def find(text: str, index: ProtectionIndex, *, names: bool = True) -> list[Findi
             candidate = Finding(kind, start, end, "patient", confidence)
             # "mob 6910522119" sits in a row full of bed numbers and times, so the clinical veto
             # fires on the digits. A contact word immediately in front settles what the number is.
-            contact = kind == PHONE and bool(_CONTACT_LABEL.search(text[max(0, start - 12):start]))
+            contact = kind == PHONE and bool(_CONTACT_LABEL.search(text[max(0, start - 24):start]))
             # A number introduced by "Mob:"/"Phone:" is a contact number even when it sits inside a
             # protected clinical window — that window protects doses and measurements, not a phone.
             if contact:
@@ -157,13 +185,53 @@ def find(text: str, index: ProtectionIndex, *, names: bool = True) -> list[Findi
                 continue
             found.append(candidate)
 
+    # Explicitly labelled free-text fields are reliable context for otherwise ambiguous values.
+    # Bound captures to the current field/line so adjacent clinical content is not swallowed.
+    for kind, pattern in _LABELED_VALUES:
+        for match in pattern.finditer(text):
+            start, end = match.span(1)
+            candidate = Finding(kind, start, end, "patient", 0.9)
+            # An explicit field label provides stronger evidence than a nearby numeric clinical
+            # context; the bounded value parser has already constrained this candidate.
+            if not candidate.overlaps(protected):
+                found.append(candidate)
+
     if names:
         found.extend(_anchored(text, _ANCHOR_RELATIVE, RELATIVE, 0.9, protected, index))
         found.extend(_anchored(text, _ANCHOR_NAME, NAME, 0.9, protected, index))
+        found.extend(_anchored(text, _ANCHOR_FROM_PATIENT, NAME, 0.85, protected, index))
+        for match in _PATIENT_BEFORE_RELATIVE.finditer(text):
+            tokens = list(_LOCAL_TOKEN.finditer(match.group("name")))
+            while tokens and tokens[0].group(0).casefold() in (_NOT_NAMES | _NOT_NAMES_DEVA):
+                tokens.pop(0)
+            if not tokens:
+                continue
+            start = match.start("name") + tokens[0].start()
+            end = match.start("name") + tokens[-1].end()
+            name = text[start:end]
+            if (any(token.casefold() in (_NOT_NAMES | _NOT_NAMES_DEVA)
+                    or index.word_is_clinical(token) for token in name.split())
+                    or index.is_place(name)):
+                continue
+            candidate = Finding(NAME, start, end, "patient", 0.9)
+            if not candidate.overlaps(protected):
+                found.append(candidate)
+        for match in _HINGLISH_POSSESSIVE.finditer(text):
+            token = match.group(1)
+            if (token.casefold() not in _HINGLISH_STOP and token.casefold() not in _NOT_NAMES
+                    and not index.word_is_clinical(token) and not index.is_place(token)
+                    and not any(match.start(1) < end and start < match.end(1)
+                                for start, end in protected)):
+                found.append(Finding(NAME, match.start(1), match.end(1), "patient", 0.85))
         found.extend(_bare_runs(text, protected, index))
         found.extend(_anchored_local(text, protected, index))
         for match in _NAME_KIN.finditer(text):
             candidate = Finding(NAME, match.start(), match.end(), "patient", 0.8)
+            if not candidate.overlaps(protected) and \
+                    not index.is_clinical_text(text, match.start(), match.end()):
+                found.append(candidate)
+        for match in _RELATIVE_KIN.finditer(text):
+            candidate = Finding(RELATIVE, match.start(), match.end(), "relative", 0.9)
             if not candidate.overlaps(protected) and \
                     not index.is_clinical_text(text, match.start(), match.end()):
                 found.append(candidate)
@@ -174,18 +242,56 @@ def _anchored(text: str, anchor: re.Pattern, kind: str, confidence: float,
               protected: list[tuple[int, int]], index: ProtectionIndex) -> list[Finding]:
     out: list[Finding] = []
     for anchor_match in anchor.finditer(text):
-        window = text[anchor_match.end():anchor_match.end() + 60]
+        line_end = text.find("\n", anchor_match.end())
+        window_end = min(anchor_match.end() + 60,
+                         line_end if line_end >= 0 else len(text))
+        window = text[anchor_match.end():window_end]
         run = _NAME_RUN.search(window)
-        if not run:
-            continue
-        start = anchor_match.end() + run.start()
-        end = anchor_match.end() + run.end()
+        first_token = _LOCAL_TOKEN.search(window)
+        if run and first_token and run.start() == first_token.start():
+            # Stop a titlecase run at the next label ("Name: Asha Rajput Age: 48/F").
+            selected_end = run.start()
+            for token in re.finditer(r"\S+", run.group(0)):
+                value = token.group(0).strip(".,:;()[]{}")
+                if (value.casefold() in _NOT_NAMES or value.casefold() in _NOT_NAMES_DEVA
+                        or index.word_is_clinical(value) or index.is_place(value)):
+                    break
+                selected_end = token.end()
+            if selected_end <= 0:
+                continue
+            start = anchor_match.end() + run.start()
+            end = anchor_match.end() + run.start() + selected_end
+        else:
+            # Explicit identity labels also identify single-token and lowercase names. For
+            # relative markers, collect a short name run ("S/o ram kumar") without crossing
+            # clinical vocabulary or the next labelled field.
+            tokens = list(_LOCAL_TOKEN.finditer(window))
+            if not tokens:
+                continue
+            first = tokens[0].group(0)
+            if (first.casefold() in _NOT_NAMES or first.casefold() in _NOT_NAMES_DEVA
+                    or index.word_is_clinical(first) or index.is_place(first)):
+                continue
+            selected = [tokens[0]]
+            for token in tokens[1:4]:
+                gap = window[selected[-1].end():token.start()]
+                value = token.group(0)
+                if (len(gap) > 4 or not re.fullmatch(r"[\s,.'’\\-]*", gap)
+                        or value.casefold() in _NOT_NAMES
+                        or value.casefold() in _NOT_NAMES_DEVA
+                        or index.word_is_clinical(value) or index.is_place(value)):
+                    break
+                selected.append(token)
+            start = anchor_match.end() + selected[0].start()
+            end = anchor_match.end() + selected[-1].end()
         tokens = {token.lower() for token in text[start:end].split()}
-        if tokens & (_NOT_NAMES | _NOT_NAMES_DEVA) or len(tokens) < 2:
+        if tokens & (_NOT_NAMES | _NOT_NAMES_DEVA):
             continue
         candidate = Finding(kind, start, end, "relative" if kind == RELATIVE else "patient",
                             confidence)
-        if candidate.overlaps(protected) or index.is_clinical_text(text, start, end):
+        # The explicit label is stronger than nearby clinical vocabulary; clinical terms are
+        # already rejected token-by-token above (so C/O fever remains clinical).
+        if candidate.overlaps(protected):
             continue
         out.append(candidate)
     return out
@@ -289,17 +395,19 @@ def redact(text: str, index: ProtectionIndex, tokens: dict[str, str]) -> tuple[s
 
 def _walk_json(value: Any, path: str, emit) -> None:
     from src.ir import json_path
-    stack: list[tuple[Any, str]] = [(value, path)]
+    stack: list[tuple[Any, str, tuple[str, ...], str | None]] = [(value, path, (), None)]
     while stack:
-        node, current = stack.pop()
+        node, current, ancestry, resource_type = stack.pop()
         if isinstance(node, dict):
+            current_type = node.get("resourceType", resource_type)
             for key, child in node.items():
-                stack.append((child, json_path(current, key)))
+                stack.append((child, json_path(current, key), ancestry + (str(key),),
+                              current_type if isinstance(current_type, str) else None))
         elif isinstance(node, list):
             for position, child in enumerate(node):
-                stack.append((child, json_path(current, position)))
+                stack.append((child, json_path(current, position), ancestry, resource_type))
         elif isinstance(node, str) and len(node) >= 4:
-            emit(current, node)
+            emit(current, node, ancestry, resource_type)
 
 
 def build_edits(ir: IntermediateRepresentation, index: ProtectionIndex,
@@ -363,8 +471,34 @@ def build_edits(ir: IntermediateRepresentation, index: ProtectionIndex,
     if fmt in {"json", "fhir"}:
         pending: list[tuple[str, str, str, str]] = []
 
-        def collect(locator: str, value: str) -> None:
-            key_kind = classify(key_from_locator(locator))
+        def collect(locator: str, value: str, ancestry: tuple[str, ...],
+                    resource_type: str | None) -> None:
+            key = key_from_locator(locator) or ""
+            lowered_path = {part.casefold() for part in ancestry}
+            if ir.source.format == "fhir" and key.casefold() == "reference":
+                # FHIR references are coupled to resource.id edits. The transformation layer
+                # rewrites local references atomically when it replaces a target id; a second
+                # free-text edit here would invalidate its own locator precondition.
+                return
+            if (resource_type in {"Practitioner", "Organization"}
+                    and lowered_path & {"name", "display"}):
+                return
+            if resource_type == "Practitioner" or "doctor" in lowered_path:
+                key_kind = None
+            elif resource_type == "RelatedPerson" or lowered_path & {
+                    "guardian", "relative", "father", "mother", "spouse", "nextofkin"}:
+                key_kind = RELATIVE if key.casefold() in {
+                    "name", "text", "display", "first", "last", "given", "family"} else classify(key)
+            elif (key.casefold() in {"first", "last", "given", "family", "text"}
+                  and "name" in lowered_path):
+                key_kind = NAME
+            elif key.casefold() == "display" and "subject" in lowered_path:
+                key_kind = NAME
+            elif "address" in lowered_path and key.casefold() in {
+                    "line", "text", "city", "district", "village", "locality", "landmark"}:
+                key_kind = "VILLAGE" if key.casefold() == "village" else "ADDRESS"
+            else:
+                key_kind = classify(key)
             if key_kind and is_institution(value):
                 key_kind = None          # Organization.name is context, not a person
             if key_kind:

@@ -89,17 +89,30 @@ def test_pseudonym_does_not_contain_the_identifier():
     assert token and "0077112" not in token and token.startswith("PSN-") and len(token) == 10
 
 
-def test_batch_file_with_several_patients_is_not_merged(tmp_path):
-    """One pseudonym for a multi-patient export is a false merge; ambiguity must yield None."""
+def test_batch_file_assigns_independent_row_pseudonyms(tmp_path):
     records = _run(tmp_path, {"reg/batch.csv":
                              "uhid,name\nJJH-0077112,Sunita Patel\nJJH-0099999,Mohd Shahid\n"})
-    assert all(r["patient"] is None for r in records)
+    linked = [r for r in records if r["patient"]]
+    assert [r["loc"] for r in linked] == ["row:0", "row:1"]
+    assert len({r["patient"] for r in linked}) == 2
 
 
-def test_multi_patient_export_is_left_unlinked(tmp_path):
-    """Row-level identity was measured at precision 0.03 with a wrong merge, so the shipped rule
-    refuses to guess on a multi-patient export: unlinked is better than merged."""
-    records = _run(tmp_path, {"billing/c.csv":
-                             "uhid,name,amount\nJJH-0077112,Sunita Patel,450\nJJH-0099999,"
-                             "Mohd Shahid,600\n"})
-    assert all(r["patient"] is None for r in records)
+def test_row_pseudonyms_are_embedded_in_sanitized_csv(tmp_path):
+    previous = os.environ.get("RAKSHA_SECRET")
+    os.environ["RAKSHA_SECRET"] = SECRET
+    try:
+        inputs, outputs = tmp_path / "in", tmp_path / "out"
+        inputs.mkdir()
+        (inputs / "batch.csv").write_text(
+            "uhid,name,amount\nJJH-0077112,Sunita Patel,450\nJJH-0099999,Mohd Shahid,600\n",
+            encoding="utf-8")
+        write_submission(inputs, outputs)
+        rows = (outputs / "sanitized" / "batch.csv").read_text(encoding="utf-8").splitlines()
+        assert rows[0].endswith(",patient_ref")
+        assert "PSN-" in rows[1] and "PSN-" in rows[2]
+        assert rows[1].split(",")[-1] != rows[2].split(",")[-1]
+    finally:
+        if previous is None:
+            os.environ.pop("RAKSHA_SECRET", None)
+        else:
+            os.environ["RAKSHA_SECRET"] = previous

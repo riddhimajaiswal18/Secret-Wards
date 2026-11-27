@@ -54,15 +54,82 @@ def record_locators(ir: IntermediateRepresentation) -> list[str]:
     if fmt in {"csv", "tsv"} and isinstance(data, dict):
         rows = data.get("rows", [])
         return [f"row:{index}" for index in range(len(rows))] or ["row:0"]
+    if fmt == "json" and isinstance(data, (dict, list)):
+        # Repeated JSON objects are independent records. Report the outermost arrays of objects
+        # as RFC 6901 locators; don't invent record units for their nested clinical arrays.
+        def pointer(parent: str, key: str | int) -> str:
+            escaped = str(key).replace("~", "~0").replace("/", "~1")
+            return f"{parent}/{escaped}"
+        found: list[str] = []
+        stack = [(data, "")]
+        while stack:
+            node, current = stack.pop()
+            if isinstance(node, dict):
+                for key, child in node.items():
+                    child_path = pointer(current, key)
+                    if isinstance(child, list) and child and all(isinstance(item, dict) for item in child):
+                        found.extend(pointer(child_path, i) for i in range(len(child)))
+                        continue
+                    stack.append((child, child_path))
+            elif isinstance(node, list):
+                for position, child in enumerate(node):
+                    stack.append((child, pointer(current, position)))
+        return sorted(set(found)) or ["doc"]
     if fmt in {"json", "fhir"}:
-        return ["path:$"]
+        return ["doc"]
     return ["span:0:0"]
 
 
-def _serialize(ir: IntermediateRepresentation) -> bytes:
+def _embed_patient_tokens(ir: IntermediateRepresentation, patients: dict[str, str | None]) -> None:
+    """Put each claimed pseudonym in the exported record as required by the Team Kit contract."""
+    data, fmt = ir.structure.data, ir.source.format
+    if fmt in {"csv", "tsv"} and isinstance(data, dict):
+        header = data.setdefault("header", [])
+        if "patient_ref" not in [str(value).strip().casefold() for value in header]:
+            header.append("patient_ref")
+        rows = data.setdefault("rows", [])
+        for index, row in enumerate(rows):
+            row.append(patients.get(f"row:{index}") or "")
+        return
+    if fmt == "json" and isinstance(data, dict):
+        for locator, patient in patients.items():
+            if not patient or not locator.startswith("/"):
+                continue
+            node = data
+            try:
+                for part in locator.split("/")[1:]:
+                    key = part.replace("~1", "/").replace("~0", "~")
+                    node = node[int(key)] if isinstance(node, list) else node[key]
+            except (KeyError, IndexError, TypeError, ValueError):
+                continue
+            if isinstance(node, dict):
+                node["patient_ref"] = patient
+        if "doc" in patients and patients["doc"]:
+            data["patient_ref"] = patients["doc"]
+        return
+    if fmt == "fhir" and isinstance(data, dict):
+        patient = patients.get("doc")
+        if not patient:
+            return
+        resources = [entry.get("resource") for entry in data.get("entry", [])
+                     if isinstance(entry, dict) and isinstance(entry.get("resource"), dict)]
+        patients_in_bundle = [resource for resource in resources
+                              if resource.get("resourceType") == "Patient"]
+        target = patients_in_bundle[0] if len(patients_in_bundle) == 1 else data
+        identifiers = target.setdefault("identifier", [])
+        if isinstance(identifiers, list):
+            identifiers.append({"system": "urn:secret-wards:pseudonym", "value": patient})
+
+
+def _serialize(ir: IntermediateRepresentation,
+               patients: dict[str, str | None] | None = None) -> bytes:
     """Apply any queued edits, then emit bytes using the captured layout."""
     if ir.pending_edits:
         apply_pending_edits(ir)
+    # Add contract pseudonyms only after locator edits have checked their preconditions. Some
+    # source records already use patient_ref for a raw identifier which those edits redact.
+    if patients is not None:
+        _embed_patient_tokens(ir, patients)
     payload = serialize_ir(ir)
     # The release contract is UTF-8. A file that arrived as cp1252 or UTF-16 is transcoded on
     # purpose, so its bytes legitimately differ from the input; the report says so via `kind`.
@@ -76,8 +143,8 @@ def _serialize(ir: IntermediateRepresentation) -> bytes:
 
 
 def _release_scanned(path: Path, relative: str, out_root: Path, counts: dict[str, int],
-                     protection: ProtectionIndex, tokens: dict[str, str],
-                     *, source_relative: str | None = None) -> dict[str, Any] | None:
+                     protection: ProtectionIndex,
+                     tokens: dict[str, str]) -> dict[str, Any] | None:
     """PDF/image path: extract text, scrub it, release it as a declared derived file.
 
     Returns the report entry on success, or None when nothing safe could be produced.
@@ -91,7 +158,7 @@ def _release_scanned(path: Path, relative: str, out_root: Path, counts: dict[str
     target = f"{SANITIZED}/{relative}.txt"
     safe_write(out_root, target, clean.encode("utf-8"))
     counts["identifiers_detected"] += sum(categories.values())
-    return {"path": source_relative or relative, "status": "sanitized", "output": target,
+    return {"status": "sanitized", "output": target,
             "kind": "derived-text", "derived_from": scan.backend,
             "pages": scan.pages, "records": 1}
 
@@ -154,7 +221,7 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
             # A document we cannot parse may still be readable: PDF text layers, image metadata
             # and OCR are tried before we give up, and anything released is scrubbed and declared.
             released = _release_scanned(path, safe_relative, out_root, counts, protection,
-                                        tokens, source_relative=relative)
+                                        tokens)
             if released is not None:
                 released["input_sha256"] = digest
                 files.append(released)
@@ -162,21 +229,26 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
                 counts["records_processed"] += 1
                 records.append({"file": released["output"], "loc": "span:0:0", "patient": None})
                 continue
-            quarantine.append({"path": relative, "reason": reason, "input_sha256": digest})
+            quarantine.append({"reason": reason, "input_sha256": digest})
             counts["files_quarantined"] += 1
             counts["records_quarantined"] += 1
-            files.append({"path": relative, "input_sha256": digest, "kind": ir.source.format,
+            files.append({"input_sha256": digest, "output": None, "kind": ir.source.format,
                           "status": "quarantined", "reason": reason})
             continue
 
         try:
+            locators = record_locators(ir)
+            patient_by_locator = {
+                locator: pseudonym_for_locator(ir, locator, submission_secret)
+                for locator in locators
+            }
             # Headers, keys and base64 attachments are rewritten before value edits are built,
             # because renaming a key would otherwise invalidate every locator under it.
             structural_counts = sanitise_structure(ir, protection, tokens)
             counts["identifiers_detected"] += sum(structural_counts.values())
             kind_counts = policy_engine.evaluate(ir, protection, policy)
             counts["identifiers_detected"] += sum(kind_counts.values())
-            payload = _serialize(ir)
+            payload = _serialize(ir, patient_by_locator)
             # Release integrity: parsing success is not sanitisation success. If detection found
             # spans and the bytes did not change, the findings were lost downstream — refuse to
             # release rather than reporting an untouched file as clean.
@@ -186,15 +258,15 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
             safe_write(out_root / SANITIZED, safe_relative, payload)
         except (EditFailure, ValueError, TypeError, RecursionError) as exc:
             reason = (str(exc) if isinstance(exc, EditFailure) else "") or QuarantineReason.EDIT_FAILED.value
-            quarantine.append({"path": relative, "reason": normalise_reason(reason),
+            quarantine.append({"reason": normalise_reason(reason),
                                "input_sha256": digest})
             counts["files_quarantined"] += 1
-            files.append({"path": relative, "input_sha256": digest, "kind": ir.source.format,
+            files.append({"input_sha256": digest, "output": None, "kind": ir.source.format,
                           "status": "quarantined", "reason": normalise_reason(reason)})
             continue
 
         counts["files_sanitized"] += 1
-        files.append({"path": relative, "input_sha256": digest, "kind": ir.source.format,
+        files.append({"input_sha256": digest, "kind": ir.source.format,
                       "status": "sanitized", "output": f"{SANITIZED}/{safe_relative}",
                       # Five separate facts, never collapsed into one word "sanitized".
                       "parse_status": ir.validation.parse_status,
@@ -211,10 +283,10 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
         # dev corpus, because the first identifier-looking column is not reliably the patient key.
         # A wrong merge corrupts two patients' histories, so ambiguous files are left unlinked
         # (patient=null) and linked records carry a PSN- token. Identity credit is partial by design.
-        patient = pseudonym_for(submission_secret, evidence)
-        if patient:
-            counts["records_linked"] += 1
-        for locator in record_locators(ir):
+        for locator in locators:
+            patient = patient_by_locator.get(locator)
+            if patient:
+                counts["records_linked"] += 1
             # SPEC §6 uses "doc" for a whole text document and a whole FHIR Bundle. Internal
             # locators (span:0:0, path:$) are correct for editing but do not match the contract,
             # so the evaluator could not join our records to its own units: identity scored zero
@@ -225,7 +297,7 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
             counts["records_processed"] += 1
 
     report = {
-        "schema_version": "1.0",
+        "schema": "raksha-report/1",
         "submission": submission,
         "counts": counts,
         "timing": {"seconds": round(time.time() - started, 3)},
@@ -236,7 +308,7 @@ def write_submission(input_root: str | Path, output_root: str | Path, *,
         "method": {
             "detection": "deterministic rules and checksums only",
             "model": "none at run time",
-            "identifiers": "HMAC-SHA256 keyed pseudonyms, per-patient date offsets",
+            "identifiers": "HMAC-SHA256 keyed pseudonyms from identifier evidence; no cross-record linkage",
         },
         "files": files,
         "quarantine": quarantine,

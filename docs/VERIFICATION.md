@@ -1,33 +1,14 @@
 # Independent verification
 
-`tools/verify.py` answers one question — *may this output be released?* — and imports nothing from
-`src/detection`, `src/transformation`, `src/policy`, `src/output` or `src/pipeline`. It has its own
-patterns and its own CSV/JSON/XML readers, so a blind spot would have to exist twice to pass.
+`tools/verify.py` independently reads the input tree, hash-keyed `report.json` and released files. It imports no sanitizer detection, policy, transformation, writer or pipeline modules. It checks file accounting, identifier-shaped candidates, unchanged unsafe outputs, required capabilities and readable coverage.
 
 ```bash
 python tools/verify.py <input> <output> [--require cap,cap] [--json report.json]
-# 0 released · 1 failed · 2 cannot verify
+# exit 0 passed; 1 failed; 2 cannot verify
 ```
 
-| Check | Meaning |
-|---|---|
-`accounting` | one fate per input; no phantom, duplicated or missing outputs |
-`surviving_identifiers` | an identifier in an input that still appears in the release, its path or filename |
-`unchanged_outputs` | unchanged file that still carries identifiers |
-`capabilities` | a required inspection stage that did not run |
-`coverage` | uninspectable files are `unsupported`, never assumed safe |
+The verifier maps current `input_sha256` entries to the input tree without requiring source paths in `report.json`; it still accepts older path-keyed reports for tests/compatibility. Its evidence masks candidate text as length plus digest. Paths in CLI diagnostics are for local triage and should not be copied into externally scanned reports.
 
-Evidence is masked (`len=13 sha256=…`); the verifier never republishes what it finds.
+## Current result and limits
 
-## Precision is calibrated, with evidence
-
-Numeric classes are label-gated (a 12-digit value is an Aadhaar only when the key says so); UUIDs are
-excluded (FHIR `urn:uuid:` digit runs are not patient identifiers); labels cannot adopt digits from
-another flattened JSON chunk. Each calibration has a regression test proving a real identifier of the
-same class is still detected.
-
-## What it cannot establish
-
-OCR text inside images, compressed or encrypted payloads, Devanagari name pairs, and any
-linkability-based risk. A pass means no known identifier class survived in the channels it can read —
-not that the data is anonymous.
+On the latest practice output, accounting passed and all 200 files were inspectable. The verifier found 492 NAME candidates and returned failure. A candidate is not necessarily a confirmed PII leak, but this result requires review and means the verifier cannot approve the current output. It does not prove anonymity, assess quasi-identifier risk, inspect OCR-only image pixels, or validate all FHIR references. A clean result would only mean no known patterns survived in the channels the verifier can read.

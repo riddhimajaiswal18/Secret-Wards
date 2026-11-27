@@ -1,27 +1,13 @@
 # Identity linkage and pseudonyms
 
-`SPEC.md §6` wants one line per patient-bearing record with a token like `PSN-7Q2K9D`.
+## Current mechanism
 
-## Mechanism
+`src/privacy/pseudonyms.py` derives deterministic patient tokens using HMAC-SHA256 keyed by `RAKSHA_SECRET`, with domain separation. The secret is not persisted. Records with insufficient or conflicting evidence may remain unlinked. Available identifier evidence is included in sanitized records and `records.jsonl` according to the current output contract.
 
-`src/privacy/pseudonyms.py` computes `PSN-` + 6 chars from `HMAC-SHA256(secret, scope|kind|identifier)`
-on a base32 alphabet without `I O 0 1`. Properties: deterministic for a fixed `RAKSHA_SECRET`, different
-for a different secret, no mapping table stored, no identifier recoverable from the token.
-A name is never evidence: name-only linkage was measured at 96 false merges elsewhere.
+## Practice-set measurement
 
-## Granularity, decided by measurement
+The Team Kit self-check reports precision **1.00**, recall **0.51**, F0.5 **0.84**, and zero observed false merges on the 200-file development set. The current pipeline emitted identifier-derived tokens for 609 records; that count is not itself an accuracy result. These measurements do not establish hidden-set performance or complete resolution across aliases, hospitals, scripts, homonyms and conflicting identifiers.
 
-| Approach | Result on the dev corpus |
-|---|---|
-file-level, first identifier | 419 linked, precision **0.06**, **7 wrong merges** |
-row-level, first id-looking column | recall 0.26, precision **0.03**, **1 wrong merge** |
-single-identifier-or-null (shipped) | **0 wrong merges**, links only unambiguous records |
+## Remaining work
 
-A wrong merge corrupts two patients' histories, which is worse than no link. The shipped rule
-therefore answers ambiguity with `patient: null`. On a corpus of multi-patient exports this yields
-**few or no links** — that is the honest outcome, not a solved feature.
-
-## Not implemented
-
-Per-row patient-key identification (the missing piece), probabilistic linkage, date shifting,
-cross-release consistency. Listed in `config/capabilities.json` as `not_implemented`.
+Build a more complete conservative record-level linker with stronger blocking, independent evidence, conflict detection, cluster-level checks, and explicit ambiguity. Improve the 0.51 practice recall without introducing false merges, then measure on renamed/held-out examples. Do not merge on name alone. Date shifting and cross-release linkage are not implemented. See [BASELINE_RESULTS.md](BASELINE_RESULTS.md) and [KNOWN_LIMITATIONS.md](KNOWN_LIMITATIONS.md).

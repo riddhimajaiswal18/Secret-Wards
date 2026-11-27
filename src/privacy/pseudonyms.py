@@ -53,7 +53,7 @@ def pseudonym_for(secret: str | None, evidence: str | None) -> str | None:
     return _digest(secret, kind, value)
 
 
-def identity_evidence(ir: Any) -> str | None:
+def _identity_evidence_from(node: Any) -> str | None:
     """The single identifier in a record, or None when the record is ambiguous.
 
     A batch export contains one identifier per row. Assigning the first one to every row produced
@@ -75,13 +75,17 @@ def identity_evidence(ir: Any) -> str | None:
             for child in node[:400]:
                 walk(child, key_hint, depth + 1)
         elif isinstance(node, str):
-            for match in _ID_VALUE.finditer(node):
+            matches = list(_ID_VALUE.finditer(node))
+            for match in matches:
                 (labelled if _ID_KEYS.search(key_hint) else bare).append(match.group(0))
-            if _ID_KEYS.search(key_hint):
+            # A prefixed identifier such as JJH-0077112 contains a digit run too. Count the
+            # complete labelled token once; treating its suffix as a second ID made every
+            # prefixed UHID ambiguous and forced patient=null.
+            if _ID_KEYS.search(key_hint) and not matches:
                 for match in _BARE_ID.finditer(node):
                     labelled.append(match.group(0))
 
-    walk(getattr(ir, "structure", None).data if getattr(ir, "structure", None) else {})
+    walk(node)
     for group in (labelled, bare):
         distinct = {value.strip().upper() for value in group if value.strip()}
         if len(distinct) == 1:
@@ -89,6 +93,12 @@ def identity_evidence(ir: Any) -> str | None:
         if len(distinct) > 1:
             return None                     # several patients in one file: no defensible answer
     return None
+
+
+def identity_evidence(ir: Any) -> str | None:
+    """Best single identifier in a whole parsed document; ambiguity returns None."""
+    structure = getattr(ir, "structure", None)
+    return _identity_evidence_from(structure.data if structure else {})
 
 
 def secret_from_environment() -> str | None:
@@ -124,4 +134,13 @@ def pseudonym_for_locator(ir: Any, locator: str, secret: str | None) -> str | No
         row = rows[index] if index < len(rows) else rows[-1]
         value = row[column] if isinstance(row, (list, tuple)) and column < len(row) else None
         return pseudonym_for(secret, str(value) if value not in (None, "") else None)
+    if fmt == "json" and locator.startswith("/"):
+        node = data
+        try:
+            for part in locator.split("/")[1:]:
+                key = part.replace("~1", "/").replace("~0", "~")
+                node = node[int(key)] if isinstance(node, list) else node[key]
+        except (KeyError, IndexError, TypeError, ValueError):
+            return None
+        return pseudonym_for(secret, _identity_evidence_from(node))
     return pseudonym_for(secret, identity_evidence(ir))

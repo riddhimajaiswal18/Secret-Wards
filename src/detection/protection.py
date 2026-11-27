@@ -2,9 +2,9 @@
 
 Two sources, both derived at run time so nothing is hard-coded to one dataset:
 
-* **lexicon** — drug names, analyte names and units are read from whatever reference files the
-  input ships (formulary, lab ranges, ward census, protocol text). A different hospital with
-  different drugs is handled by reading *its* files, not by editing code.
+* **lexicon** — drug names and analytes are read from files explicitly identified as a drug
+  formulary or lab reference. General notes, protocols and census exports are not clinical
+  lexicons: they can contain patient and staff names.
 * **shape** — numeric-with-unit, ratios, frequency codes, dose courses and eponyms are clinical by
   form alone, so they are protected even when the lexicon is empty.
 
@@ -63,7 +63,11 @@ class ProtectionIndex:
             index.sources.append(path.name)
             for token in _LEXICON_SPLIT.split(text):
                 lowered = token.lower()
-                if len(lowered) >= 4 and lowered not in _STOP and not lowered.isdigit():
+                # Uppercase tokens in notes/protocols are commonly role acronyms (for example,
+                # ASHA workers), not clinical vocabulary. Treating them as case-insensitive drug
+                # terms can veto a real person named Asha in an unrelated document.
+                if (len(lowered) >= 4 and lowered not in _STOP and not lowered.isdigit()
+                        and not token.isupper()):
                     index.lexicon.add(lowered)
         return index
 
@@ -76,7 +80,7 @@ class ProtectionIndex:
             if not path.is_file():
                 continue
             lowered = path.name.lower()
-            if any(marker in lowered for marker in ("formulary", "reference", "census", "protocol")):
+            if any(marker in lowered for marker in ("formulary", "reference")):
                 wanted.append(path)
         index = cls.from_reference_documents(wanted)
         index.places = harvest_places(root)
@@ -93,8 +97,6 @@ class ProtectionIndex:
             return True
         if _RATIO.search(window) and _VITALS.search(text[max(0, start - 18):start]):
             return True
-            return True
-        if _TIME.search(window) or _DURATION_WORDS.search(window):
             return True
         tokens = _LEXICON_SPLIT.split(text[start:end])
         return any(token.lower() in self.lexicon for token in tokens if len(token) >= 4)
@@ -126,7 +128,8 @@ class ProtectionIndex:
 # ── place harvesting ─────────────────────────────────────────────────────────
 _GEO_LABEL = re.compile(r"(district|state|region)\b", re.IGNORECASE)
 _INSTITUTION = re.compile(r"\b(hospital|clinic|centre|center|institute|nursing\s*home|"
-                          r"medical\s*college|pharmacy|laborator(y|ies)|labs?)\b", re.IGNORECASE)
+                          r"medical\s*college|pharmacy|laborator(y|ies)|labs?|patholog(?:y|ies)|"
+                          r"diagnostic\s+(?:centre|center|lab|laboratory))\b", re.IGNORECASE)
 
 
 def is_institution(text: str) -> bool:

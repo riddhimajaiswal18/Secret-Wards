@@ -186,6 +186,17 @@ def _files(root: Path) -> dict[str, Path]:
     return {p.relative_to(root).as_posix(): p for p in sorted(root.rglob("*")) if p.is_file()}
 
 
+def _sha256(path: Path) -> str | None:
+    digest = hashlib.sha256()
+    try:
+        with path.open("rb") as stream:
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(chunk)
+    except OSError:
+        return None
+    return digest.hexdigest()
+
+
 def verify_tree(input_root: str | Path, output_root: str | Path, *,
                 require_caps: tuple[str, ...] = ()) -> dict:
     """Verify released output. Returns a machine-readable report with an `overall` verdict."""
@@ -202,14 +213,50 @@ def verify_tree(input_root: str | Path, output_root: str | Path, *,
 
     input_files = _files(inputs)
     released = {rel: p for rel, p in _files(outputs / "sanitized").items()}
-    entries = {e["path"]: e for e in report.get("files", []) if isinstance(e, dict) and "path" in e}
+    # The submission contract intentionally identifies inputs by content hash because their
+    # paths can contain PII. Keep compatibility with older reports that used `path`, while
+    # mapping current hash-only entries back to local input files for verification.
+    inputs_by_hash: dict[str, list[str]] = {}
+    for rel, path in input_files.items():
+        digest = _sha256(path)
+        if digest is not None:
+            inputs_by_hash.setdefault(digest, []).append(rel)
+
+    entries: dict[str, dict] = {}
+    extra_entries: list[dict] = []
+    for entry in report.get("files", []):
+        if not isinstance(entry, dict):
+            continue
+        if isinstance(entry.get("path"), str):
+            key = entry["path"]
+        elif isinstance(entry.get("input_sha256"), str):
+            candidates = inputs_by_hash.get(entry["input_sha256"], [])
+            out_path = entry.get("output")
+            preferred = (out_path.removeprefix("sanitized/")
+                         if isinstance(out_path, str) and out_path.startswith("sanitized/")
+                         else None)
+            key = preferred if preferred in candidates else (candidates.pop(0) if candidates else "")
+            if preferred in candidates:
+                candidates.remove(preferred)
+            if not key:
+                extra_entries.append(entry)
+                continue
+        else:
+            extra_entries.append(entry)
+            continue
+        if key in entries:
+            extra_entries.append(entry)
+        else:
+            entries[key] = entry
     checks: dict[str, dict] = {}
     findings: list[dict] = []
     per_file: list[dict] = []
 
     # ── V1 accounting: every input file has exactly one recorded fate ──────────────────────
     unaccounted = sorted(set(input_files) - set(entries))
-    phantom = sorted(set(entries) - set(input_files))
+    phantom = sorted((set(entries) - set(input_files)) | {
+        f"unmapped:{entry.get('input_sha256', 'missing-hash')}" for entry in extra_entries
+    })
     duplicated = sorted({e["path"] for e in report.get("files", [])
                          if isinstance(e, dict) and "path" in e and
                          sum(1 for x in report["files"] if x.get("path") == e["path"]) > 1})

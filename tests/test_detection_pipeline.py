@@ -35,7 +35,11 @@ def test_identifier_shapes(index):
     assert "UHID" in kinds("JJH-0077112 Zainab", index)          # 7 digits must not be trunc
     assert "UHID" in kinds("IP/26/00130", index)
     assert "PHONE" in kinds("Mob 9812345678", index)
+    assert "PHONE" in kinds("Mobile +91 80697 73173", index)
     assert "AADHAAR" in kinds("uid 1234 5678 9012", index)
+    assert "PHONE" in kinds("Koi problem ho to call karo 9812345678", index)
+    assert "UHID" in kinds("adm000161", index)
+    assert "UHID" in kinds("DHH2026-084999", index)
 
 
 def test_vitals_are_not_identifiers(index):
@@ -64,6 +68,8 @@ def test_institutions_and_places_survive(index):
     assert redact("Jeevan Jyoti Charitable Hospital", index, DEFAULT_TOKENS)[0] == \
         "Jeevan Jyoti Charitable Hospital"
     assert redact("Rae Bareli", index, DEFAULT_TOKENS)[0] == "Rae Bareli"
+    assert is_institution("Lifeline Pathology")
+    assert redact("Lifeline Pathology", index, DEFAULT_TOKENS)[0] == "Lifeline Pathology"
 
 
 def test_clinician_role_is_kept(index):
@@ -78,6 +84,19 @@ def test_anchored_and_bare_names_are_redacted(index):
     assert "[NAME]" in redact("admitted; Anita Deshmukh stable", index, DEFAULT_TOKENS)[0]
 
 
+def test_contextual_hinglish_patient_name_and_sample_source(index):
+    text = "Asha ka BP 128/72, raat ko neend theek se aayi."
+    assert "Asha" not in redact(text, index, DEFAULT_TOKENS)[0]
+    sample = "Sample received from Anand's attendant (W/o Rani). Sodium 138 mmol/L."
+    cleaned = redact(sample, index, DEFAULT_TOKENS)[0]
+    assert "Anand" not in cleaned and "Rani" not in cleaned
+    assert "Sodium 138 mmol/L" in cleaned
+    for complaint in ("C/O generalised weakness x 7 weeks",
+                      "C/O burning micturition x 6 days",
+                      "C/O loose stools x 3 days"):
+        assert redact(complaint, index, DEFAULT_TOKENS)[0] == complaint
+
+
 # ── structural ──────────────────────────────────────────────────────────────
 def test_column_labels_map_and_clinical_columns_do_not():
     assert columns.classify("Patient Name") == "NAME"
@@ -87,6 +106,28 @@ def test_column_labels_map_and_clinical_columns_do_not():
     assert columns.classify("District") is None          # utility, kept
     assert columns.classify("Diagnosis") is None
     assert columns.classify("Dose") is None
+
+
+def test_devanagari_structural_labels_map_without_redacting_institutions():
+    assert columns.classify("रोगी का नाम") == "NAME"
+    assert columns.classify("फोन नंबर") == "PHONE"
+    assert columns.classify("ग्राम") == "VILLAGE"
+    assert columns.classify("अस्पताल का नाम") is None
+    assert columns.classify("Village/Mohalla") == "VILLAGE"
+    assert columns.classify("Locality") == "HOUSE"
+    assert columns.classify("Age") is None
+    assert columns.classify("Patel") is None
+    assert columns.classify("Naam") == "NAME"
+    assert columns.classify("Pita/Pati ka Naam") == "RELATIVE"
+    assert columns.classify("Janm Tithi") == "DOB"
+    assert columns.classify("Gaon") == "VILLAGE"
+    assert columns.classify("Pata") == "ADDRESS"
+    assert columns.classify("Umar") is None
+    assert columns.classify("LastName") == "NAME"
+    assert columns.classify("Tehsil") is None
+    assert columns.classify("City") == "ADDRESS"
+    assert columns.classify("hospital_uhid") == "UHID"
+    assert columns.classify("hospital_name") is None
 
 
 def test_paths_lose_identity_but_keep_shape(index, tmp_path):

@@ -126,8 +126,11 @@ def measure(kit: Path, output: Path) -> dict:
             if truth["files"][rel].get("expect") == "either":
                 raw_copies_penalised += 1
 
-    fates = {entry.get("path") for entry in report.get("files") or []}
-    silent = [rel for rel in truth["files"] if rel not in fates]
+    # The contract deliberately forbids original paths in report.json. Reconcile input fate by
+    # the required SHA-256 instead of expecting a source filename there.
+    fates = {entry.get("input_sha256") for entry in report.get("files") or []}
+    silent = [rel for rel, meta in truth["files"].items()
+              if meta.get("sha256") not in fates]
 
     leak_total = sum(leaks.values())
     entity_total = sum(totals.values())

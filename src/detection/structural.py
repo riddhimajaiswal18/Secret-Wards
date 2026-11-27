@@ -184,11 +184,6 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                             node[key] = tokens.get("AADHAAR", "[AADHAAR]")
                             bump("AADHAAR")
                             continue
-
-
-                            node[key] = tokens.get("AADHAAR", "[AADHAAR]")
-                            child = node[key]
-                            bump("AADHAAR")
                         elif (_PATH_KEY.search(key) and ("\\" in child or "_" in child)
                               and _PATH_MRN.search(child)):
                             cleaned = _PATH_MRN.sub(tokens.get("MRN", "[MRN]"), child)
@@ -204,11 +199,11 @@ def sanitise_structure(ir: IntermediateRepresentation, index: ProtectionIndex,
                         bump(kind)
                     child = node[key]
                     if isinstance(child, str) and not _looks_like_base64(child) and (
-                            "_" in child or "-" in child) and 4 <= len(child) <= 400:
+                            _PATH_KEY.search(key)) and 4 <= len(child) <= 400:
                         # Export metadata embeds identity in path-shaped strings:
                         # "D:\\HIS\\exports\\opd\\Anita_Sharma_010565\\visits.json". Scan the
                         # separated form and replace the whole value, since it is one atomic field.
-                        separated = child.replace("_", " ").replace("\\", " ")
+                        separated = child.replace("_", " ").replace("\\", " ").replace("/", " ")
                         findings = find(separated, index)
                         if findings and findings[0].kind in {"NAME", "RELATIVE", "UHID",
                                                              "AADHAAR", "ABHA", "PAN", "PHONE"}:
