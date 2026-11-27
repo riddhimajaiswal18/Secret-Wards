@@ -35,6 +35,54 @@ python3 -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
+### Technology and dependency inventory
+
+This section distinguishes packages used by the current implementation from packages that are
+only declared for optional features, diagnostics, or future work. A package appearing in
+`requirements.txt` does not by itself mean the release path currently uses it. Optional imports
+are checked at runtime; when an optional backend is missing, the corresponding capability is
+reported and affected files or annotations may be degraded or quarantined.
+
+| Technology / package | Role and where it is used | Status |
+|---|---|---|
+| Python 3.10+ | Main implementation language, command-line application, tests and tools. `main.py` is the entry point; `src/` contains the processing pipeline. | Required |
+| Python standard library | `argparse`/`os`/`sys`/`pathlib` for the CLI and paths; `csv`, `json`, `xml.etree.ElementTree` and `io` for format parsing/rendering; `hashlib` and `hmac` for SHA-256 accounting and keyed pseudonyms; `unicodedata` and `re` for Unicode/script handling and deterministic pattern rules; `datetime`, `decimal`, `urllib.parse`, `base64`, `binascii`, `logging`, `shutil`, `subprocess`, `tempfile`, `time`, `zlib`, `math`, `collections`, `dataclasses`, `enum`, `typing`, `ast`, and `importlib` support normalization, bounded extraction, safe logging, validation, and development tools. | Used throughout runtime and tooling |
+| Pydantic 2 (`pydantic>=2,<3`) | Typed validation for the common intermediate representation and its nested source metadata in `src/ir.py`; validation errors are covered in `tests/test_ir.py`. | Required at runtime |
+| PyYAML (`PyYAML`, imported as `yaml`) | Loads `config/policy.yaml` in `src/pipeline.py`; if missing, the pipeline falls back to a limited flat key/value reader. Capability is recorded in `src/security/capabilities.py`. | Optional runtime backend; declared |
+| `indic-transliteration` (imported as `indic_transliteration`) | Optional Indic-script transliteration in `src/normalization/transliteration.py`, used by semantic normalization for cross-script comparison. A small approximate Devanagari fallback is implemented in the project when the package is absent. | Optional runtime backend; declared |
+| `phonenumbers` | Optional phone-number parsing, validation, region metadata, and E.164 formatting in `src/normalization/phones.py` and semantic normalization. Without it, phone handling has reduced validation capability. | Optional runtime backend; declared |
+| `pycountry` | Optional country-name/code lookup in `src/normalization/other.py`. | Optional runtime backend; declared |
+| `pypdf` | Reads text layers from PDF files in `src/ingestion/scanned.py`; lack of this package degrades PDF extraction. | Optional runtime backend; declared |
+| Pillow (`pillow`, imported as `PIL`) | Reads image metadata and opens image content for OCR in `src/ingestion/scanned.py`. | Optional runtime backend; declared |
+| `pytesseract` plus the external Tesseract executable | OCR for image pixels in `src/ingestion/scanned.py`. Both the Python wrapper and system executable are needed; their availability is separately reported. | Optional runtime backend; Python package declared, executable installed separately |
+| `pdftoppm` (Poppler command-line utility) | Optional PDF page rendering path for OCR in `src/ingestion/scanned.py`; checked as the `pdf_render` capability. | Optional system tool; not a Python package |
+| pytest | Runs the project test suite under `tests/` (`python -m pytest -q`). | Development dependency; used by tests, not listed in `requirements.txt` |
+| ReportLab | Builds the project brief PDF via `tools/build_project_brief.py`. | Documentation-build dependency; not listed in `requirements.txt` |
+| Bash | Runs `tools/run_dev.sh` for the development workflow in a Linux/Unix environment. | Development environment/tool |
+
+The following packages are present in `requirements.txt` but are **not imported by the current
+implementation**: `charset-normalizer` (text decoding is currently strict, explicit UTF-8,
+UTF-16 and cp1252 logic in `src/ingestion/encoding.py`), `rapidfuzz` and `jellyfish` (record
+comparison libraries; current linkage is limited and does not use these packages),
+`fhir.resources` (FHIR-shaped JSON is routed through the project's JSON/common-IR logic, without
+Pydantic FHIR model validation), `jsonschema` (no JSON Schema validation is currently wired in),
+and `cryptography` (HMAC pseudonyms use Python's standard-library `hmac`; encryption is not
+implemented). They are declared dependencies, not active features. The classical ML and privacy
+metric packages mentioned as deferred in `requirements.txt` are not installed or used.
+
+### Formats and project stack
+
+- **Input/output formats:** CSV and TSV, JSON, FHIR R4 Bundles represented as JSON, XML, and
+  decoded text. PDF and image files can be scanned through the optional local extraction tools.
+  The common intermediate representation and source locators are implemented in `src/ir.py`.
+- **Configuration and interfaces:** YAML policy (`config/policy.yaml`, with the fallback noted
+  above), TOML submission metadata (`raksha.toml`), a Python CLI (`main.py`), and JSON/JSONL
+  output (`report.json` and `records.jsonl`).
+- **Runtime model:** offline, CPU-only Python; deterministic rules and transformations; no web
+  framework, database, hosted service, LLM, or runtime network dependency is used.
+- **Testing and evaluation:** pytest unit/adversarial tests, the supplied Team Kit output
+  validator, and repository tools in `tools/` for verification, scoring, and the project brief.
+
 The required competition interface is:
 
 ```bash
